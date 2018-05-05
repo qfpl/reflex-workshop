@@ -1,0 +1,8 @@
+TAGS
+dist
+dist-newstyle
+cabal.project.local
+result
+result-2
+.dir-locals.el
+position.txt
