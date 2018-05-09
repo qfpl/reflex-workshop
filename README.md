@@ -10,9 +10,23 @@
   - Open a terminal
   - Checkout this repository
 
-```
-git clone https://github.com/qfpl/reflex-workshop
-```
+    ```
+    git clone https://github.com/qfpl/reflex-workshop
+    ```
+
+## Updating the repository
+
+**Note** This currently contains a skeleton of the repository so that you can configure your editor and check that everything is working as expected.  You will want to update this repository closer to the date of the workshop - I would suggest on the 17th or 18th of May.
+
+To do this:
+
+- Start the VM
+- From within the VM
+  - Open a terminal
+    ```
+    cd reflex-workshop
+    git pull
+    ```
 
 ## Editors and tools
 
@@ -38,11 +52,10 @@ The workshop is run from within the VM
 
 - Open a terminal
   - Run the workshop code under `ghcid`
-
-```
-cd reflex-workshop/code
-./dev.sh
-```
+    ```
+    cd reflex-workshop/code
+    ./dev.sh
+    ```
 
 - Open Chromium 
   - Visit http://localhost:9090 for the workshop
