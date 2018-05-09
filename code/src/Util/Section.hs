@@ -12,14 +12,18 @@ module Util.Section (
 
 import Data.Text (Text)
 
-data Section m = Section {
+import Reflex
+
+import Util.WorkshopState
+
+data Section t m = Section {
     sectionName :: Text
-  , sectionSubsections :: [SubSection m]
+  , sectionSubsections :: [SubSection t m]
   }
 
-data SubSection m = SubSection {
+data SubSection t m = SubSection {
     subSectionName :: Text
-  , subSectionContent :: m ()
+  , subSectionContent :: Dynamic t ExerciseState -> m (Event t ExerciseState)
   }
 
 

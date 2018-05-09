@@ -29,6 +29,7 @@ import Reflex.Server.Servant
 import Util.Ticket
 import Reflex.Server.Wai
 
+import Util.WorkshopState
 import Util.Log.Common
 
 serverApp :: (Application -> IO ()) -> IO ()
@@ -54,7 +55,7 @@ setupFile :: IO ()
 setupFile = do
   exists <- doesFileExist positionFile
   unless exists $
-    writeFile positionFile . show $ ((0,0) :: (Int, Int))
+    writeFile positionFile . show $ initialWorkshopState
 
 serverNetwork :: (Ord tag, Reflex t, BasicGuestConstraints t m)
               => EventsIn' t tag () API

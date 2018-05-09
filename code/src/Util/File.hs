@@ -37,20 +37,11 @@ stringDiv contents = do
   (e, _) <- el' "div" $ pure ()
   setInnerHTML (_element_raw e) contents
 
-{-
-loadHtml :: MonadWidget t m
-         => FilePath
-         -> m (Element EventResult (DomBuilderSpace m) t)
-loadHtml fp = do
-  contents <- liftIO $ readFile fp
-  stringDiv contents
--}
-
 markdownToHtml :: String -> String
 markdownToHtml cm =
   case readMarkdown def cm of
     Left e -> show e
-    Right x -> writeHtmlString def x
+    Right x -> writeHtmlString (def {writerHighlight = True}) x
 
 loadMarkdown :: MonadWidget t m
              => FilePath
@@ -93,5 +84,5 @@ loadMarkdownSplices fp = do
   s <- liftIO $ readFile fp
   pure $ (groupSplices (lines s)) >>= \x ->
     case x of
-      Right _ -> []
       Left l -> pure $ stringDiv (markdownToHtml l)
+      Right _ -> []

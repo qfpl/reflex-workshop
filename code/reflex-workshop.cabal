@@ -9,11 +9,18 @@ extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Workshop
+  exposed-modules:     Workshop.Demo.Problems.Toggle.Exercise
+                     , Workshop.Demo.Problems.Toggle.Solution
+                     , Workshop.Demo.Problems.Toggle
+                     , Workshop.Demo
+                     , Workshop
                      , Util.Run
                      , Util.Section
+                     , Util.Exercises
                      , Util.File
                      , Util.Bootstrap
+                     , Util.WorkshopState
+                     , Util.UI
                      , Util.Log.Common
                      , Util.Log.Client
                      , Util.Log.Server
