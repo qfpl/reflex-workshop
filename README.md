@@ -18,7 +18,7 @@
 
 ## Updating the repository
 
-**Note** This currently contains a skeleton of the repository so that you can configure your editor and check that everything is working as expected.  You will want to update this repository closer to the date of the workshop - I would suggest on the 17th or 18th of May.
+**Note** This currently contains a skeleton of the repository so that you can configure your editor and check that everything is working as expected.  You will want to update this repository closer to the date of the workshop - I would suggest on Friday the 18th of May.
 
 To do this:
 
