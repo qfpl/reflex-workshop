@@ -13,7 +13,6 @@ module Workshop.Demo (
 import Reflex.Dom.Core
 
 import Util.Exercises
-import Util.File
 import Util.Section
 
 import Workshop.Demo.Problems.Toggle
@@ -21,11 +20,8 @@ import Workshop.Demo.Problems.Toggle
 demoSection :: MonadWidget t m => Section t m
 demoSection =
   Section "Workshop Demo" [
-      SubSection "Testing out the workshop code" $ \is -> do
-        [a, b] <- loadMarkdownSplices "../pages/demo.md"
-        a
-        es <- runProblem 0 is $ toggleProblem
-        b
-        pure es
-    ]
+    SubSection "Testing out the workshop code" .
+      runProblems "../pages/demo.md" $
+      [ toggleProblem ]
+  ]
 

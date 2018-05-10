@@ -35,8 +35,8 @@ mk l r eb = card $ do
     divClass "col-6" $ text "Output 2"
     divClass "col-6" $ dynText dr
 
-toggleProblem :: MonadWidget t m => Problem t m
-toggleProblem = Problem toggleGoal toggleEx toggleSol
+toggleProblem :: MonadWidget t m => m (Problem t m)
+toggleProblem = pure $ Problem toggleGoal toggleEx toggleSol
 
 toggleGoal :: MonadWidget t m => m ()
 toggleGoal =
@@ -49,7 +49,7 @@ toggleEx = do
   dIn <- toggle False eTick
   let eIn = updated dIn
 
-  [a, b, c] <- loadMarkdownSplices "../pages/demo/problems/toggle/exercise.md"
+  [a, b, c] <- loadMarkdownSingle "../pages/demo/problems/toggle/exercise.md"
   a
   mk toggleExercise1 toggleExercise2 eIn
   b
@@ -59,5 +59,4 @@ toggleEx = do
 toggleSol :: MonadWidget t m => Int -> m (Event t Int)
 toggleSol =
   solution
-    "../pages/demo/problems/toggle/solution/code.md"
-    "../pages/demo/problems/toggle/solution/explanation.md"
+    "../pages/demo/problems/toggle/solution.md"

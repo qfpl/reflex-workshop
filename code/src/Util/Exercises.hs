@@ -11,13 +11,14 @@ Portability : non-portable
 {-# LANGUAGE FlexibleContexts #-}
 module Util.Exercises (
     Problem(..)
-  , runProblem
+  , runProblems
   , solution
   ) where
 
 import Data.Bool (bool)
 import Data.Maybe (isJust, fromMaybe)
 import Data.Monoid ((<>))
+import Data.List (transpose)
 
 import Control.Lens
 
@@ -36,12 +37,24 @@ data Problem t m =
   , esSolution :: Int -> m (Event t Int)
   }
 
+runProblems :: MonadWidget t m
+            => FilePath
+            -> [m (Problem t m)]
+            -> Dynamic t ExerciseState
+            -> m (Event t ExerciseState)
+runProblems fp ps des = do
+  mds <- fmap (fmap (\x -> x >> pure never)) . loadMarkdownSingle $ fp
+  let problems = zipWith (runProblem des) [0..] ps
+  es <- sequence . mconcat . transpose $ [mds, problems]
+  pure $ leftmost es
+
 runProblem :: MonadWidget t m
-                    => Int
-                    -> Dynamic t ExerciseState
-                    -> Problem t m
-                    -> m (Event t ExerciseState)
-runProblem i des (Problem goal ex sol) = do
+           => Dynamic t ExerciseState
+           -> Int
+           -> m (Problem t m)
+           -> m (Event t ExerciseState)
+runProblem des i p = do
+  Problem goal ex sol <- p
   let
     dis = fromMaybe Goal . IntMap.lookup i . getExerciseState <$> des
     mkChange es v = ExerciseState . IntMap.insert i v . getExerciseState $ es
@@ -92,12 +105,10 @@ problem dis goal ex sol = card $ mdo
 
 solution :: MonadWidget t m
          => FilePath
-         -> FilePath
          -> Int
          -> m (Event t Int)
-solution fpCode fpExplanations n = mdo
-  codes <- loadMarkdownSplices fpCode
-  explanations <- loadMarkdownSplices fpExplanations
+solution fp n = mdo
+  (codes, explanations) <- loadMarkdownAlternating fp
 
   let
     both = zip codes explanations
