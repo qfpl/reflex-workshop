@@ -1,9 +1,10 @@
 { mkDerivation, aeson, base, bytestring, containers, directory
-, errors, filepath, ghcjs-dom, http-types, jsaddle, jsaddle-warp
-, lens, mtl, pandoc, reflex, reflex-basic-host, reflex-dom-core
+, errors, filepath, ghcjs-dom, hashable, http-api-data, http-types
+, jsaddle, jsaddle-warp, lens, mtl, pandoc, reflex
+, reflex-basic-host, reflex-dom-core, reflex-model
 , reflex-server-servant, reflex-server-wai, servant, servant-reflex
-, servant-server, stdenv, stm, text, time, transformers, wai
-, wai-app-static, warp, websockets
+, servant-server, stdenv, stm, text, time, transformers, ttrie, wai
+, wai-app-static, wai-middleware-static, warp, websockets
 }:
 mkDerivation {
   pname = "reflex-workshop";
@@ -11,10 +12,11 @@ mkDerivation {
   src = ./.;
   libraryHaskellDepends = [
     aeson base bytestring containers directory errors filepath
-    ghcjs-dom http-types jsaddle jsaddle-warp lens mtl pandoc reflex
-    reflex-basic-host reflex-dom-core reflex-server-servant
-    reflex-server-wai servant servant-reflex servant-server stm text
-    time transformers wai wai-app-static warp websockets
+    ghcjs-dom hashable http-api-data http-types jsaddle jsaddle-warp
+    lens mtl pandoc reflex reflex-basic-host reflex-dom-core
+    reflex-model reflex-server-servant reflex-server-wai servant
+    servant-reflex servant-server stm text time transformers ttrie wai
+    wai-app-static wai-middleware-static warp websockets
   ];
   license = stdenv.lib.licenses.bsd3;
 }

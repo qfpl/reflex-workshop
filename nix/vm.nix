@@ -5,6 +5,8 @@ let
   pkgs = nixpkgs.pkgs;
   workshop-pkg = import ../code/default.nix {};
 
+  reflex-workshop = import ./reflex-workshop.nix;
+
   tools = with pkgs; [
     utillinux
     coreutils
@@ -19,18 +21,11 @@ let
 
     emacs
     vim
-    gnome3.gedit
   ];
 
   haskell-tools = reflex-platform.ghc.ghcWithPackages (hp: with hp; [
     cabal-install
     ghcid
-    hindent
-    hlint
-    stylish-haskell
-    hasktags
-    hoogle
-    (pkgs.haskell.lib.justStaticExecutables ghc-mod)
 
     workshop-pkg
   ]);
@@ -67,23 +62,23 @@ let
       environment.systemPackages =
         tools ++ [haskell-tools];
 
-      systemd.services.hoogle = {
-        description = "hoogle";
-        serviceConfig.User = "workshop";
-        serviceConfig.Restart = "on-failure";
+      systemd.services.workshop-setup = {
+        description = "Setup workshop";
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
         wantedBy = [ "multi-user.target" ];
-        path = [ haskell-tools ];
-        preStart = ''
-          if [ ! -e ~workshop/.hoogle-setup ]; then
-            hoogle generate --local
-            touch ~workshop/.hoogle-setup
+        # after = [ "network-active.target" ];
+        # requires = [ "network-active.target" ];
+        # path = [ pkgs.bash pkgs.gitAndTools.gitFull ];
+        script = ''
+          if [ ! -e ~workshop/reflex-workshop ]; then
+        #    cd ~workshop
+        #    git clone https://github.com/qfpl/reflex-workshop
+            mkdir ~workshop/reflex-worksop
+            cp -r "${reflex-workshop}/*" ~workshop/reflex-workshop/
           fi
         '';
-        script = ''
-            hoogle server --local
-        '';
       };
-
   };
 
   workshopVM = hydraJob ((import "${nixpkgs.path}/nixos/lib/eval-config.nix" {

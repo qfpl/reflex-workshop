@@ -11,7 +11,7 @@ let
     reflex-basic-host = import ../nix/reflex-basic-host.nix;
     reflex-server-servant = import ../nix/reflex-server-servant.nix;
     reflex-server-wai = import ../nix/reflex-server-wai.nix;
-    reflex-log = import ../nix/reflex-log.nix;
+    reflex-model = import ../nix/reflex-model.nix;
   };
 
   modifiedHaskellPackages = ghc.override {
@@ -22,7 +22,7 @@ let
       reflex-basic-host = self.callPackage sources.reflex-basic-host {};
       reflex-server-servant = self.callPackage sources.reflex-server-servant {};
       reflex-server-wai = self.callPackage sources.reflex-server-wai {};
-      reflex-log = self.callPackage sources.reflex-log {};
+      reflex-model = self.callPackage sources.reflex-model {};
       servant-reflex = self.callCabal2nix "servant-reflex" sources.servant-reflex {};
       pandoc = pkgs.haskell.lib.doJailbreak super.pandoc;
     };
