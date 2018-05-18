@@ -9,15 +9,27 @@ module Workshop (
     main
   ) where
 
+import Workshop.Initial
+import Workshop.Event
+import Workshop.Behavior
+import Workshop.DOM
+import Workshop.Collections
+import Workshop.EventWriter
+import Workshop.Miscellany
+import Workshop.Reference
+
 import Util.Run
 import Util.UI
 
-import Workshop.Demo
-
 main :: IO ()
 main =
-  run 9090 $
-    mkMainPanel [
-      demoSection
+  run 9090 $ mkMainPanel
+    [ initialSection
+    , eventSection
+    , behaviorSection
+    , domSection
+    , collectionsSection
+    , eventWriterSection
+    -- , miscellanySection
+    , referenceSection
     ]
-

@@ -3,7 +3,7 @@
 ## Getting set up
 
 - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-- Download the OVA file from [here](https://hydra.qfpl.io/job/reflex-workshop/reflex-workshop/reflex-workshop-vm/latest/download/1)
+- Download the OVA file from [here](https://hydra.qfpl.io/job/reflex-workshop/reflex-workshop/reflex-workshop-vm/latest/download/1) (Right click and select "Save As")
   - The file is around 1.6 GB in size, so you probably don't want to download this from your mobile phone
 - Import the OVA into VirtualBox
   - The menu option should be something like: File > Import Appliance
@@ -17,8 +17,6 @@
     ```
 
 ## Updating the repository
-
-**Note** This currently contains a skeleton of the repository so that you can configure your editor and check that everything is working as expected.  You will want to update this repository closer to the date of the workshop - I would suggest on Friday the 18th of May.
 
 To do this:
 
@@ -62,3 +60,4 @@ The workshop is run from within the VM
 - Open Chromium 
   - Visit http://localhost:9090 for the workshop
   - Visit http://localhost:8080 for a local Hoogle instance
+

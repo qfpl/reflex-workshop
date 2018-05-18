@@ -57,6 +57,7 @@ bootstrapHead = do
   stylesheet "css/font-awesome.min.css"
   stylesheet "css/syntax.css"
   stylesheet "css/style.css"
+  stylesheet "css/todo.css"
 
 bootstrapTail :: MonadWidget t m => m ()
 bootstrapTail =

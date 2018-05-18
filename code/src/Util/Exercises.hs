@@ -12,7 +12,6 @@ Portability : non-portable
 module Util.Exercises (
     Problem(..)
   , runProblems
-  , solution
   ) where
 
 import Data.Bool (bool)
@@ -34,7 +33,7 @@ data Problem t m =
   Problem {
     esGoal :: m ()
   , esExercise :: m ()
-  , esSolution :: Int -> m (Event t Int)
+  , esSolution :: FilePath
   }
 
 runProblems :: MonadWidget t m
@@ -54,11 +53,11 @@ runProblem :: MonadWidget t m
            -> m (Problem t m)
            -> m (Event t ExerciseState)
 runProblem des i p = do
-  Problem goal ex sol <- p
+  Problem goal ex solFp <- p
   let
     dis = fromMaybe Goal . IntMap.lookup i . getExerciseState <$> des
     mkChange es v = ExerciseState . IntMap.insert i v . getExerciseState $ es
-  e <- problem dis goal ex sol
+  e <- problem dis goal ex (solution solFp)
   pure $ mkChange <$> current des <@> e
 
 problem :: MonadWidget t m

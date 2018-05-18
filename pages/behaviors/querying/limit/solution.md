@@ -1,0 +1,67 @@
+```haskell
+limitSolution :: Reflex t
+              => Behavior t Int
+              -> Behavior t Int
+              -> Event t ()
+              -> Event t ()
+              -> Event t Int
+limitSolution bCount bLimit eAdd eReset =
+
+
+
+
+    _
+```
+=====
+We've done part of this before, so we'll focus on the part that is new.
+=====
+```haskell
+limitSolution :: Reflex t
+              => Behavior t Int
+              -> Behavior t Int
+              -> Event t ()
+              -> Event t ()
+              -> Event t Int
+limitSolution bCount bLimit eAdd eReset =
+  let
+    bAtLimit = (<) <$> bCount <*> bLimit
+
+  in
+    _
+```
+=====
+It would be handy to know if `bCount` is less than `bLimit`, so we track that.
+=====
+```haskell
+limitSolution :: Reflex t
+              => Behavior t Int
+              -> Behavior t Int
+              -> Event t ()
+              -> Event t ()
+              -> Event t Int
+limitSolution bCount bLimit eAdd eReset =
+  let
+    bAtLimit = (<) <$> bCount <*> bLimit
+    eAddOK   = gate bAtLimit eAdd
+  in
+    _
+```
+=====
+We can use that to filter the firings of `eAdd` ...
+=====
+```haskell
+limitSolution :: Reflex t
+              => Behavior t Int
+              -> Behavior t Int
+              -> Event t ()
+              -> Event t ()
+              -> Event t Int
+limitSolution bCount bLimit eAdd eReset =
+  let
+    bAtLimit = (<) <$> bCount <*> bLimit
+    eAddOK   = gate bAtLimit eAdd
+  in
+    counterSolution bCount eAddOK eReset
+```
+=====
+... which we use with the counter code that we wrote previously.

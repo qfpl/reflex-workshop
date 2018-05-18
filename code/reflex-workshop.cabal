@@ -9,11 +9,142 @@ extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     Workshop.Demo.Problems.Toggle.Exercise
-                     , Workshop.Demo.Problems.Toggle.Solution
-                     , Workshop.Demo.Problems.Toggle
-                     , Workshop.Demo
+  exposed-modules:     Workshop.Initial
+                     , Workshop.Event.Intro
+                     , Workshop.Event.Transforming.Fmap.Exercise
+                     , Workshop.Event.Transforming.Fmap.Solution
+                     , Workshop.Event.Transforming.Fmap
+                     , Workshop.Event.Transforming.FmapConst.Exercise
+                     , Workshop.Event.Transforming.FmapConst.Solution
+                     , Workshop.Event.Transforming.FmapConst
+                     , Workshop.Event.Transforming
+                     , Workshop.Event.Filtering.Ffilter.Exercise
+                     , Workshop.Event.Filtering.Ffilter.Solution
+                     , Workshop.Event.Filtering.Ffilter
+                     , Workshop.Event.Filtering.FmapMaybe.Exercise
+                     , Workshop.Event.Filtering.FmapMaybe.Solution
+                     , Workshop.Event.Filtering.FmapMaybe
+                     , Workshop.Event.Filtering
+                     , Workshop.Event.Combining.MergeWith.Exercise
+                     , Workshop.Event.Combining.MergeWith.Solution
+                     , Workshop.Event.Combining.MergeWith
+                     , Workshop.Event.Combining.Leftmost.Exercise
+                     , Workshop.Event.Combining.Leftmost.Solution
+                     , Workshop.Event.Combining.Leftmost
+                     , Workshop.Event.Combining
+                     , Workshop.Event
+                     , Workshop.Behavior.Intro
+                     , Workshop.Behavior.Instances.Fmap.Exercise
+                     , Workshop.Behavior.Instances.Fmap.Solution
+                     , Workshop.Behavior.Instances.Fmap
+                     , Workshop.Behavior.Instances.Apply.Exercise
+                     , Workshop.Behavior.Instances.Apply.Solution
+                     , Workshop.Behavior.Instances.Apply
+                     , Workshop.Behavior.Instances
+                     , Workshop.Behavior.Querying.Tag.Exercise
+                     , Workshop.Behavior.Querying.Tag.Solution
+                     , Workshop.Behavior.Querying.Tag
+                     , Workshop.Behavior.Querying.Counter.Exercise
+                     , Workshop.Behavior.Querying.Counter.Solution
+                     , Workshop.Behavior.Querying.Counter
+                     , Workshop.Behavior.Querying.CounterText.Exercise
+                     , Workshop.Behavior.Querying.CounterText.Solution
+                     , Workshop.Behavior.Querying.CounterText
+                     , Workshop.Behavior.Querying.Limit.Exercise
+                     , Workshop.Behavior.Querying.Limit.Solution
+                     , Workshop.Behavior.Querying.Limit
+                     , Workshop.Behavior.Querying
+                     , Workshop.Behavior.Creating.Fmap.Exercise
+                     , Workshop.Behavior.Creating.Fmap.Solution
+                     , Workshop.Behavior.Creating.Fmap
+                     , Workshop.Behavior.Creating.Apply.Exercise
+                     , Workshop.Behavior.Creating.Apply.Solution
+                     , Workshop.Behavior.Creating.Apply
+                     , Workshop.Behavior.Creating.Text.Exercise
+                     , Workshop.Behavior.Creating.Text.Solution
+                     , Workshop.Behavior.Creating.Text
+                     , Workshop.Behavior.Creating.Counter.Exercise
+                     , Workshop.Behavior.Creating.Counter.Solution
+                     , Workshop.Behavior.Creating.Counter
+                     , Workshop.Behavior.Creating.Limit.Exercise
+                     , Workshop.Behavior.Creating.Limit.Solution
+                     , Workshop.Behavior.Creating.Limit
+                     , Workshop.Behavior.Creating
+                     , Workshop.Behavior.Dynamics.Counter.Exercise
+                     , Workshop.Behavior.Dynamics.Counter.Solution
+                     , Workshop.Behavior.Dynamics.Counter
+                     , Workshop.Behavior.Dynamics.Unique.Exercise
+                     , Workshop.Behavior.Dynamics.Unique.Solution
+                     , Workshop.Behavior.Dynamics.Unique
+                     , Workshop.Behavior.Dynamics
+                     , Workshop.Behavior.Components
+                     , Workshop.Behavior
+                     , Workshop.DOM.Elements.Text.Exercise
+                     , Workshop.DOM.Elements.Text.Solution
+                     , Workshop.DOM.Elements.Text
+                     , Workshop.DOM.Elements.Class.Exercise
+                     , Workshop.DOM.Elements.Class.Solution
+                     , Workshop.DOM.Elements.Class
+                     , Workshop.DOM.Elements.Attributes.Exercise
+                     , Workshop.DOM.Elements.Attributes.Solution
+                     , Workshop.DOM.Elements.Attributes
+                     , Workshop.DOM.Elements.Events.Exercise
+                     , Workshop.DOM.Elements.Events.Solution
+                     , Workshop.DOM.Elements.Events
+                     , Workshop.DOM.Elements.Button.Exercise
+                     , Workshop.DOM.Elements.Button.Solution
+                     , Workshop.DOM.Elements.Button
+                     , Workshop.DOM.Elements.Todo.Solution
+                     , Workshop.DOM.Elements.Todo
+                     , Workshop.DOM.Elements
+                     , Workshop.DOM.Inputs.Checkbox
+                     , Workshop.DOM.Inputs.TextInput
+                     , Workshop.DOM.Inputs
+                     , Workshop.DOM.Switching.HigherOrder.Exercise
+                     , Workshop.DOM.Switching.HigherOrder.Solution
+                     , Workshop.DOM.Switching.HigherOrder
+                     , Workshop.DOM.Switching.WidgetHold.Exercise
+                     , Workshop.DOM.Switching.WidgetHold.Solution
+                     , Workshop.DOM.Switching.WidgetHold
+                     , Workshop.DOM.Switching.Workflow.Exercise
+                     , Workshop.DOM.Switching.Workflow.Solution
+                     , Workshop.DOM.Switching.Workflow
+                     , Workshop.DOM.Switching.Todo
+                     , Workshop.DOM.Switching
+                     , Workshop.DOM
+                     , Workshop.Collections.Lists.Displaying
+                     , Workshop.Collections.Lists.Adding
+                     , Workshop.Collections.Lists.Removing
+                     , Workshop.Collections.Lists.Model
+                     , Workshop.Collections.Lists
+                     , Workshop.Collections
+                     , Workshop.EventWriter.Collections.Removing
+                     , Workshop.EventWriter.Collections
+                     , Workshop.EventWriter.State
+                     , Workshop.EventWriter.Errors
+                     , Workshop.EventWriter
+                     , Workshop.Miscellany.IO
+                     , Workshop.Miscellany.Time
+                     , Workshop.Miscellany.Servant
+                     , Workshop.Miscellany.Websockets
+                     , Workshop.Miscellany
+                     , Workshop.Reference
                      , Workshop
+                     , Todo.Common
+                     , Todo.Exercise.Item
+                     , Todo.Exercise.List
+                     , Todo.Solution.Item.Part1
+                     , Todo.Solution.Item.Part2
+                     , Todo.Solution.Item.Part3
+                     , Todo.Solution.Item.Part4
+                     , Todo.Solution.Item.Part5
+                     , Todo.Solution.Item.Part11
+                     , Todo.Solution.List.Part6
+                     , Todo.Solution.List.Part7
+                     , Todo.Solution.List.Part8
+                     , Todo.Solution.List.Part9
+                     , Todo.Solution.List.Part10
+                     , Todo.Solution.List.Part11
                      , Util.Run
                      , Util.Section
                      , Util.Exercises
@@ -28,6 +159,8 @@ library
                      , aeson >= 1.2 && < 1.3
                      , bytestring >= 0.10 && < 0.11
                      , containers >= 0.5 && < 0.6
+                     , dependent-sum >= 0.4 && < 0.5
+                     , dependent-map >= 0.2 && < 0.3
                      , directory >=1.3 && <1.4
                      , errors >= 2.2 && < 2.3
                      , filepath >=1.4 && <1.5

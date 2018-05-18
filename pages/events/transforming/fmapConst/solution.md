@@ -1,0 +1,79 @@
+```haskell
+fmapConstExercise3 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise3 eIn =
+  never
+
+fmapConstExercise5 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise5 eIn =
+  never
+```
+=====
+The `never` `Event`s aren't what we want.
+=====
+```haskell
+fmapConstExercise3 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise3 eIn =
+       eIn
+
+fmapConstExercise5 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise5 eIn =
+       eIn
+```
+=====
+We're going to do something based on the input `Event`s.
+=====
+```haskell
+fmapConstExercise3 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise3 eIn =
+  _ <$ eIn
+
+fmapConstExercise5 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise5 eIn =
+  _ <$ eIn
+```
+=====
+This time we are going to use `<$`, since we aren't interested in the value in the input `Event`s.
+=====
+```haskell
+fmapConstExercise3 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise3 eIn =
+  3 <$ eIn
+
+fmapConstExercise5 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise5 eIn =
+  _ <$ eIn
+```
+=====
+For the first button, we set the output value to `3`.
+=====
+```haskell
+fmapConstExercise3 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise3 eIn =
+  3 <$ eIn
+
+fmapConstExercise5 :: Reflex t 
+                   => Event t () 
+                   -> Event t Int
+fmapConstExercise5 eIn =
+  5 <$ eIn
+```
+=====
+For the second button, we set the output value to `5`.

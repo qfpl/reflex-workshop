@@ -1,0 +1,91 @@
+```haskell
+workflowSolution :: MonadWidget t m
+                 => Event t ()
+                 -> m (Dynamic t Int)
+workflowSolution eChange = do
+  let
+    wReset =            do
+      eClick <- button "Wait..."
+      pure (const 0 <$ eClick                 )
+
+    wAdd =            do
+      eClick <- button "Click me"
+      pure ((+ 1) <$ eClick                   )
+
+  deScore <- widgetHold wReset ewMode
+  let
+    eScore = switchDyn deScore
+
+  foldDyn ($) 0 eScore
+```
+=====
+We start with what we had in the last exercise.
+=====
+```haskell
+workflowSolution :: MonadWidget t m
+                 => Event t ()
+                 -> m (Dynamic t Int)
+workflowSolution eChange = do
+  let
+    wReset = Workflow $ do
+      eClick <- button "Wait..."
+      pure (const 0 <$ eClick                 )
+
+    wAdd = Workflow $ do
+      eClick <- button "Click me"
+      pure ((+ 1) <$ eClick                   )
+
+  deScore <- widgetHold wReset ewMode
+  let
+    eScore = switchDyn deScore
+
+  foldDyn ($) 0 eScore
+```
+=====
+We wrap our widgets up in the `Workflow` type ...
+=====
+```haskell
+workflowSolution :: MonadWidget t m
+                 => Event t ()
+                 -> m (Dynamic t Int)
+workflowSolution eChange = do
+  let
+    wReset = Workflow $ do
+      eClick <- button "Wait..."
+      pure (const 0 <$ eClick, wAdd <$ eChange)
+
+    wAdd = Workflow $ do
+      eClick <- button "Click me"
+      pure ((+ 1) <$ eClick, wReset <$ eChange)
+
+  deScore <- widgetHold wReset ewMode
+  let
+    eScore = switchDyn deScore
+
+  foldDyn ($) 0 eScore
+```
+=====
+... include the change `Event` in the return value ...
+=====
+```haskell
+workflowSolution :: MonadWidget t m
+                 => Event t ()
+                 -> m (Dynamic t Int)
+workflowSolution eChange = do
+  let
+    wReset = Workflow $ do
+      eClick <- button "Wait..."
+      pure (const 0 <$ eClick, wAdd <$ eChange)
+
+    wAdd = Workflow $ do
+      eClick <- button "Click me"
+      pure ((+ 1) <$ eClick, wReset <$ eChange)
+
+  deScore <- workflow wReset
+  let
+    eScore = switchDyn deScore
+
+  foldDyn ($) 0 eScore
+```
+=====
+... and then kick the workflow off with from the waiting state.

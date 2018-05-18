@@ -1,5 +1,5 @@
 {-|
-Copyright   : (c) Dave Laing, 2018
+Copyright   : (c) 2018, Commonwealth Scientific and Industrial Research Organisation
 License     : BSD3
 Maintainer  : dave.laing.80@gmail.com
 Stability   : experimental
