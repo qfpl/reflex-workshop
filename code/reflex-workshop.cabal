@@ -136,13 +136,11 @@ library
                      , Todo.Solution.Item.Part3
                      , Todo.Solution.Item.Part4
                      , Todo.Solution.Item.Part5
-                     , Todo.Solution.Item.Part11
                      , Todo.Solution.List.Part6
                      , Todo.Solution.List.Part7
                      , Todo.Solution.List.Part8
                      , Todo.Solution.List.Part9
                      , Todo.Solution.List.Part10
-                     , Todo.Solution.List.Part11
                      , Util.Run
                      , Util.Section
                      , Util.Exercises
