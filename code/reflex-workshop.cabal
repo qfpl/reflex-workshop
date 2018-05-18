@@ -120,8 +120,6 @@ library
                      , Workshop.Collections
                      , Workshop.EventWriter.Collections.Removing
                      , Workshop.EventWriter.Collections
-                     , Workshop.EventWriter.State
-                     , Workshop.EventWriter.Errors
                      , Workshop.EventWriter
                      , Workshop.Miscellany.IO
                      , Workshop.Miscellany.Time
