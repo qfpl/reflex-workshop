@@ -6,7 +6,7 @@ One of the most commonly used instances is the `Functor` instance:
 ```
 which lets us transform a `Behavior` at every point in time.
 =====
-Another commonly instance is the `Applicative` instance which gives us:
+Another commonly used instance is the `Applicative` instance which gives us:
 ```haskell
 pure  :: Reflex t => a -> Behavior t a
 (<*>) :: Reflex t => Behavior t (a -> b) -> Behavior t a -> Behavior t b
