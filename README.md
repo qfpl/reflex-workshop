@@ -56,8 +56,32 @@ The workshop is run from within the VM
     cd reflex-workshop/code
     ./dev.sh
     ```
+  - Run `hoogle server --local` for a hoogle server for all of the packages that the workshop uses
 
 - Open Chromium 
   - Visit http://localhost:9090 for the workshop
   - Visit http://localhost:8080 for a local Hoogle instance
+
+## For those using NixOS
+
+You'll want to add the QFPL and reflex caches to `/etc/nix/configuration.nix`:
+```
+  nix.binaryCaches = [
+    "https://cache.nixos.org/"
+    "https://nixcache.reflex-frp.org"
+    "http://hydra.qfpl.io"
+  ];
+  nix.binaryCachePublicKeys = [
+    "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+    "qfpl.io:xME0cdnyFcOlMD1nwmn6VrkkGgDNLLpMXoMYl58bz5g="
+  ];
+```
+and then rebuild with `nixos-rebuild switch`.
+
+After that you'll want to run the `./dev.sh` and `hoogle` commands from a nix-shell in the `code` subdirectory:
+```
+cd code
+nix-shell
+```
+
 

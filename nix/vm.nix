@@ -26,6 +26,7 @@ let
   haskell-tools = reflex-platform.ghc.ghcWithPackages (hp: with hp; [
     cabal-install
     ghcid
+    hoogle
 
     workshop-pkg
   ]);
