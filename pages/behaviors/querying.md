@@ -24,7 +24,7 @@ If we want to use the value of the `Event` as well, there is a related operator:
                 -> Event t a 
                 -> Event t b
 ```
-a function that lets be explicit about how we will combine the `Behavior` and `Event` values:
+a function that lets us be explicit about how we will combine the `Behavior` and `Event` values:
 ```haskell
 attachWith      :: Reflex t 
                 => (a -> b -> c) 
