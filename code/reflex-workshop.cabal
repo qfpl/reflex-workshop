@@ -94,7 +94,6 @@ library
                      , Workshop.DOM.Elements.Button.Exercise
                      , Workshop.DOM.Elements.Button.Solution
                      , Workshop.DOM.Elements.Button
-                     , Workshop.DOM.Elements.Todo.Solution
                      , Workshop.DOM.Elements.Todo
                      , Workshop.DOM.Elements
                      , Workshop.DOM.Inputs.Checkbox
