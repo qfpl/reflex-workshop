@@ -41,7 +41,7 @@ mk fn fnOld d = card $ do
     collect = holdDyn "" . fmap (Text.pack .show)
 
   divClass "row" $ do
-    divClass "col-6" $ text "Behavior in"
+    divClass "col-6" $ text "Event in"
     divClass "col-6" $ do
       dIn <- collect eIn
       dynText dIn
