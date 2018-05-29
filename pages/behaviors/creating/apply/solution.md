@@ -8,12 +8,10 @@ applySolution eIn = do
 
 
 
-
-
   pure (_ , _ )
 ```
 =====
-This exercise is more about `Event` wrangling.
+We need to start with some `Event` wrangling.
 =====
 ```haskell
 applySolution :: (Reflex t, MonadHold t m)
@@ -21,16 +19,14 @@ applySolution :: (Reflex t, MonadHold t m)
               -> m (Behavior t Int, Behavior t Int)
 applySolution eIn = do
   let
-    multiple n =
-      (== 0) . (`mod` n)
-      
-      
-      
-      
+    e2 = (`div` 2) <$> eIn
+    e3 = (`div` 3) <$> eIn
+    
+    
   pure (_ , _ )
 ```
 =====
-We make use of the `multiple` function that we wrote for the FizzBuzz example.
+We can get away with just dividing the input `Event` by 2 and 3 ...
 =====
 ```haskell
 applySolution :: (Reflex t, MonadHold t m)
@@ -38,16 +34,59 @@ applySolution :: (Reflex t, MonadHold t m)
               -> m (Behavior t Int, Behavior t Int)
 applySolution eIn = do
   let
-    multiple n =
-      (== 0) . (`mod` n)
-    downsample n =
-      fmap (`div` n) . ffilter (multiple n)
-      
-      
+    e2 = (`div` 2) <$> eIn
+    e3 = (`div` 3) <$> eIn
+  h2 <- hold 0 e2
+  h3 <- hold 0 e3
   pure (_ , _ )
 ```
 =====
-We write another function that filters an `Event t Int` to allow through multiples of `n` before dividing the values by `n`.
+... using `hold` to turn those `Event`s into `Behavior`s ...
+=====
+```haskell
+applySolution :: (Reflex t, MonadHold t m)
+              => Event t Int
+              -> m (Behavior t Int, Behavior t Int)
+applySolution eIn = do
+  let
+    e2 = (`div` 2) <$> eIn
+    e3 = (`div` 3) <$> eIn
+  h2 <- hold 0 e2
+  h3 <- hold 0 e3
+  pure (h2, h3)
+```
+=====
+... and then returning the pair of `Behavior`s.
+=====
+```haskell
+applySolution :: (Reflex t, MonadHold t m)
+              => Event t Int
+              -> m (Behavior t Int, Behavior t Int)
+applySolution eIn = do
+  let
+    e2 = (`div` 2) <$> eIn
+    e3 = (`div` 3) <$> eIn
+  (,) <$>
+    hold 0 ((`div` 2) <$> eIn) <*>
+    hold 0 ((`div` 3) <$> eIn)
+```
+=====
+We can use `Applicative` style if we want ...
+=====
+```haskell
+applySolution :: (Reflex t, MonadHold t m)
+              => Event t Int
+              -> m (Behavior t Int, Behavior t Int)
+applySolution eIn = do
+
+
+
+  (,) <$>
+    hold 0 ((`div` 2) <$> eIn) <*>
+    hold 0 ((`div` 3) <$> eIn)
+```
+=====
+... and could even inline the `Event` definitions.
 =====
 ```haskell
 applySolution :: (Reflex t, MonadHold t m)
@@ -64,4 +103,4 @@ applySolution eIn = do
   pure (b2 , b3)
 ```
 =====
-Then we can create our `Behavior`s and return them.
+We can also create a version that updates less frequently, but the reasons we might want such a thing have not been revealed yet...
