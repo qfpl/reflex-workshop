@@ -133,7 +133,7 @@ handleOtherThing :: (Reflex t, MonadFix m, MonadHold t m)
                  => Dynamic t OtherThing 
                  -> m (Event t (OtherThing -> OtherThing))
 ```
-then you could so something like this to combine them:
+then you could do something like this to combine them:
 ```haskell
 handleThing      :: (Reflex t, MonadFix m, MonadHold t m) 
                  => Dynamic t Thing
