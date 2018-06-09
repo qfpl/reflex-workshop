@@ -31,7 +31,7 @@ useThing = mdo
    dThing   <- foldDyn ($) initialThing eThingFn
    ...
 ```
-and we usually try to do this as close to component as makes sense.
+and we usually try to do this as close to the component as makes sense.
 
 That will partly depend on how much cross-pollination there is between components and how much information we want to share or hide.
 
