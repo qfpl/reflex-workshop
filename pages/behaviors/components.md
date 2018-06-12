@@ -31,7 +31,7 @@ useThing = mdo
    dThing   <- foldDyn ($) initialThing eThingFn
    ...
 ```
-and we usually try to do this as close to component as makes sense.
+and we usually try to do this as close to the component as makes sense.
 
 That will partly depend on how much cross-pollination there is between components and how much information we want to share or hide.
 
@@ -133,7 +133,7 @@ handleOtherThing :: (Reflex t, MonadFix m, MonadHold t m)
                  => Dynamic t OtherThing 
                  -> m (Event t (OtherThing -> OtherThing))
 ```
-then you could so something like this to combine them:
+then you could do something like this to combine them:
 ```haskell
 handleThing      :: (Reflex t, MonadFix m, MonadHold t m) 
                  => Dynamic t Thing
