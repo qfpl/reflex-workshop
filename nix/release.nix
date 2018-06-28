@@ -18,6 +18,8 @@ let
   obelisk = 
     import (pkgs.fetchFromGitHub (pkgs.lib.importJSON ../.obelisk/impl/github.json)) {};
 
+  workshopBase = import ../. {};
+
   workshop = 
     let
       static = mkStatic true;
@@ -98,8 +100,20 @@ let
         emacs
         vim
 
+        workshopBase
+        obelisk.shell
         obelisk.command
         workshop
+      ];
+
+      nix.binaryCaches = [
+        "https://cache.nixos.org/"
+        "https://nixcache.reflex-frp.org"
+        "http://hydra.qfpl.io"
+      ];
+      nix.binaryCachePublicKeys = [
+        "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+        "qfpl.io:xME0cdnyFcOlMD1nwmn6VrkkGgDNLLpMXoMYl58bz5g="
       ];
 
       systemd.services.workshop-setup = {
