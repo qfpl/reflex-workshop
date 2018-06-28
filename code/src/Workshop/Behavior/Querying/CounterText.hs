@@ -65,7 +65,7 @@ mk fn eTextIn eAddIn eClearIn = card $ mdo
   pure (eTextOut, eAddOut, eClearOut)
 
 counterTextProblem :: MonadWidget t m => m (Problem t m)
-counterTextProblem = 
+counterTextProblem =
   pure $ Problem counterTextGoal counterTextEx "../pages/behaviors/querying/counterText/solution.md"
 
 counterTextGoal :: MonadWidget t m => m ()

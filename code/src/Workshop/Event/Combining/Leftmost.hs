@@ -64,7 +64,7 @@ mk fn eIn = card $ do
     divClass "col-6" $ dynText dSolution
 
 leftmostProblem :: MonadWidget t m => m (Problem t m)
-leftmostProblem = 
+leftmostProblem =
   pure $ Problem leftmostGoal leftmostEx "../pages/events/combining/leftmost/solution.md"
 
 leftmostGoal :: MonadWidget t m => m ()

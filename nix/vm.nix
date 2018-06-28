@@ -68,14 +68,9 @@ let
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         wantedBy = [ "multi-user.target" ];
-        # after = [ "network-active.target" ];
-        # requires = [ "network-active.target" ];
-        # path = [ pkgs.bash pkgs.gitAndTools.gitFull ];
         script = ''
           if [ ! -e ~workshop/reflex-workshop ]; then
-        #    cd ~workshop
-        #    git clone https://github.com/qfpl/reflex-workshop
-            mkdir ~workshop/reflex-worksop
+            mkdir ~workshop/reflex-workshop
             cp -r "${reflex-workshop}/*" ~workshop/reflex-workshop/
           fi
         '';

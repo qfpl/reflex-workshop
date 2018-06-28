@@ -69,7 +69,7 @@ mk fn eAddIn eClearIn = card $ mdo
   pure (eAddOut, eClearOut)
 
 limitProblem :: MonadWidget t m => m (Problem t m)
-limitProblem = 
+limitProblem =
   pure $ Problem limitGoal limitEx "../pages/behaviors/querying/limit/solution.md"
 
 limitGoal :: MonadWidget t m => m ()
