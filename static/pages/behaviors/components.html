@@ -1,0 +1,120 @@
+<p>One of the things that <code>reflex</code> is less opinionated about is how you should structure your components.</p>
+<p>There are a few common patterns that come up though, and I've found that they're a good starting point for when you find yourself staring at the screen and wondering what to do.</p>
+<p>The main pattern has two parts to it.</p>
+<p>If we're writing a component, we normally pass in <code>Dynamic</code>s that represent the state of our application that we need to access, and we return <code>Event</code>s to indicate what we would like to change.</p>
+<p>Like this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleThing ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Config</span> 
+            <span class="ot">-&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Thing</span> 
+            <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span>))</code></pre></div>
+<p>We have some good information hiding here. If you need to create new <code>Event</code>s, fire off and handle some network requests, or make use of other components internally, you are free to do so. It won't clutter up any global state or have any effect on the reasoning that will have to be done by whoever uses your component.</p>
+<p>Eventually we'll have to use those <code>Event</code>s to create that <code>Dynamic</code>, like this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">...</span>
+<span class="ot">useThing ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Config</span>
+         <span class="ot">-&gt;</span> m ()
+useThing <span class="fu">=</span> mdo
+   <span class="fu">...</span>
+   eThingFn <span class="ot">&lt;-</span> handleThing dConfig dThing
+   dThing   <span class="ot">&lt;-</span> foldDyn (<span class="fu">$</span>) initialThing eThingFn
+   <span class="fu">...</span></code></pre></div>
+<p>and we usually try to do this as close to component as makes sense.</p>
+<p>That will partly depend on how much cross-pollination there is between components and how much information we want to share or hide.</p>
+<p>Sometimes we might want the option of managing the state of our component internally, in which case we can supply an initial value instead of a <code>Dynamic</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleThing ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Config</span> 
+            <span class="ot">-&gt;</span> <span class="dt">Thing</span> 
+            <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span>))</code></pre></div>
+<p>and we can use that to build a <code>Dynamic</code> later on if something else needs it:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="fu">...</span>
+<span class="ot">useThing ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Config</span>
+         <span class="ot">-&gt;</span> m ()
+useThing <span class="fu">=</span> mdo
+   <span class="fu">...</span>
+   eThingFn <span class="ot">&lt;-</span> handleThing dConfig initialThing
+   dThing   <span class="ot">&lt;-</span> foldDyn (<span class="fu">$</span>) initialThing eThingFn
+   <span class="fu">...</span></code></pre></div>
+<p>or we can roll that step into our main function if it is always going to be done anyhow:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleThing ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Config</span> 
+            <span class="ot">-&gt;</span> <span class="dt">Thing</span> 
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Thing</span>)</code></pre></div>
+<p>Any of these approaches can be a good starting point, and we'll see its influence throughout the remainder of the workshop.</p>
+<p>We can get more mileage out of this pattern if we have lenses for our data types, so we'll take a brief detour through the world of lenses before we continue.</p>
+<p>If we set up a data type like so:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Thing</span> <span class="fu">=</span> 
+  <span class="dt">Thing</span> {
+<span class="ot">    _subthing   ::</span> <span class="dt">SubThing</span>
+  ,<span class="ot"> _otherthing ::</span> <span class="dt">OtherThing</span>
+  }</code></pre></div>
+<p>and invoke some Template Haskell</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">makeLenses <span class="ch">&#39;&#39;</span><span class="dt">Thing</span></code></pre></div>
+<p>we will end up with a <code>Lens</code> for each of the components of our data type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">subthing   ::</span> <span class="dt">Lens&#39;</span> <span class="dt">Thing</span> <span class="dt">SubThing</span>
+<span class="ot">otherthing ::</span> <span class="dt">Lens&#39;</span> <span class="dt">Thing</span> <span class="dt">OtherThing</span></code></pre></div>
+<p>What does this give us? It gives us composable getters and setters and a pile of related tools.</p>
+<p>We can turn a <code>lens</code> into a getter with <code>view</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">view<span class="ot"> subthing ::</span> <span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">SubThing</span></code></pre></div>
+<p>In operator form,</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">view subthing t</code></pre></div>
+<p>will look like:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">t <span class="fu">^.</span> subthing</code></pre></div>
+<p>We can turn a <code>lens</code> into a setter with <code>set</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">set<span class="ot"> subthing ::</span> <span class="dt">SubThing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span></code></pre></div>
+<p>We use <code>(&amp;)</code> to combine these, and so in operator form,</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">set otherthing ot <span class="fu">.</span> 
+set subthing st <span class="fu">$</span> 
+t</code></pre></div>
+<p>will look like:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">t <span class="fu">&amp;</span> subthing <span class="fu">.~</span> st
+  <span class="fu">&amp;</span> otherthing <span class="fu">.~</span> ot</code></pre></div>
+<p>We can also use a <code>lens</code> to build something that will apply a function to a subpart of our data type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">over<span class="ot"> subthing ::</span> (<span class="dt">SubThing</span> <span class="ot">-&gt;</span> <span class="dt">SubThing</span>) <span class="ot">-&gt;</span> <span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span></code></pre></div>
+<p>If we have the above lenses and have components written for the subparts:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleSubThing   ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+                 <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">SubThing</span> 
+                 <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">SubThing</span> <span class="ot">-&gt;</span> <span class="dt">SubThing</span>))
+
+<span class="ot">handleOtherThing ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+                 <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">OtherThing</span> 
+                 <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">OtherThing</span> <span class="ot">-&gt;</span> <span class="dt">OtherThing</span>))</code></pre></div>
+<p>then you could so something like this to combine them:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleThing      ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+                 <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Thing</span>
+                 <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span>))
+handleThing dThing <span class="fu">=</span> <span class="kw">do</span>
+  dSubThing   <span class="ot">&lt;-</span> holdUniqDyn <span class="fu">$</span> view subthing   <span class="fu">&lt;$&gt;</span> dThing
+  dOtherThing <span class="ot">&lt;-</span> holdUniqDyn <span class="fu">$</span> view otherthing <span class="fu">&lt;$&gt;</span> dThing
+  
+  eSubThingFn   <span class="ot">&lt;-</span> handleSubThing   dSubThing
+  eOtherThingFn <span class="ot">&lt;-</span> handleOtherThing dOtherThing
+  
+  pure <span class="fu">$</span> mergeWith (<span class="fu">.</span>) [
+      over subthing   <span class="fu">&lt;$&gt;</span> eSubThingFn
+    , over otherthing <span class="fu">&lt;$&gt;</span> eOtherThingFn
+    ]</code></pre></div>
+<p>or this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleThing      ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+                 <span class="ot">=&gt;</span> <span class="dt">Thing</span>
+                 <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Thing</span> <span class="ot">-&gt;</span> <span class="dt">Thing</span>))
+handleThing initialThing <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    initialSubThing   <span class="fu">=</span> view subthing   initialThing
+    initialOtherThing <span class="fu">=</span> view otherthing initialThing
+  
+  eSubThingFn   <span class="ot">&lt;-</span> handleSubThing   initialSubThing
+  eOtherThingFn <span class="ot">&lt;-</span> handleOtherThing initialOtherThing
+  
+  pure <span class="fu">$</span> mergeWith (<span class="fu">.</span>) [
+      over subthing   <span class="fu">&lt;$&gt;</span> eSubThingFn
+    , over otherthing <span class="fu">&lt;$&gt;</span> eOtherThingFn
+    ]</code></pre></div>
+<p>This give us the ability to combine these components, and lets us decide which state is important enough to gather up with a <code>holdDyn</code> and pass around our application.</p>
+<p>As an aside, we could have had our components return changed values instead of functions:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">handleSubThing   ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+                 <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">SubThing</span> 
+                 <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t <span class="dt">SubThing</span>)</code></pre></div>
+<p>and then use <code>set</code> instead of <code>over</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">      set subthing <span class="fu">&lt;$&gt;</span> eSubThingFn</code></pre></div>
+<p>but we would lose the ability to cleanly merge updates of different subparts when the updated were driven by the same event.</p>

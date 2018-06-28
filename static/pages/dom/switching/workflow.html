@@ -1,0 +1,9 @@
+<p>This is an extension of the previous exercise.</p>
+<p>The goal is to alter that exercise so that it uses the <code>Workflow</code> machinery to manage the widgets and the switching between them.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">workflowExercise ::</span> <span class="dt">MonadWidget</span> t m
+                 <span class="ot">=&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+workflowExercise eChange <span class="fu">=</span> <span class="kw">do</span>
+  pure (pure <span class="dv">0</span>)</code></pre></div>
+<p>to make this happen.</p>

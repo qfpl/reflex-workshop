@@ -1,0 +1,16 @@
+<p>This exercise has a text box as an input, which gives us an <code>Event t Text</code> whenever the contents of the text box changes.</p>
+<p>The goal is to produce two <code>Event</code>s:</p>
+<ul>
+<li>an <code>Event t Text</code> which fires with the value &quot;Not an Int&quot; if the contents of the text box was not an integer</li>
+<li>an <code>Event t Int</code> which fires when the contents of the text box could be converted to an integer</li>
+</ul>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeExercise ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeExercise eIn <span class="fu">=</span>
+  (never, never)</code></pre></div>
+<p>to make this happen.</p>
+<p>The file already contains a relevant helper function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">convert ::</span> <span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
+convert <span class="fu">=</span> readMaybe <span class="fu">.</span> Text.unpack</code></pre></div>

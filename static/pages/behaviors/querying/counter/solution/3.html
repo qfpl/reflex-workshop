@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution&#39; ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+counterSolution&#39; bCount eAdd eReset <span class="fu">=</span>
+  leftmost [
+      <span class="dv">0</span>   <span class="fu">&lt;$</span>             eReset
+    , (<span class="fu">+</span>) <span class="fu">&lt;$&gt;</span> bCount <span class="fu">&lt;@&gt;</span> eAdd
+    ]</code></pre></div>
+<p>If <code>eAdd</code> fires, we want to fire the result with the sum of the value of the <code>Event</code> and the value of <code>bCount</code> at the moment that <code>eAdd</code> fired.</p>

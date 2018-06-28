@@ -1,0 +1,18 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">leftmostSolution ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> ( <span class="dt">Event</span> t <span class="dt">Text</span>
+                    , <span class="dt">Event</span> t <span class="dt">Text</span>
+                    , <span class="dt">Event</span> t <span class="dt">Text</span>
+                    , <span class="dt">Event</span> t <span class="dt">Text</span>
+                    )
+leftmostSolution eIn <span class="fu">=</span>
+  <span class="kw">let</span>
+    multiple n <span class="fu">=</span> (<span class="fu">==</span> <span class="dv">0</span>) <span class="fu">.</span> (<span class="ot">`mod`</span> n)
+    eFizz <span class="fu">=</span> <span class="st">&quot;Fizz&quot;</span> <span class="fu">&lt;$</span> ffilter (multiple <span class="dv">3</span>) eIn
+    eBuzz <span class="fu">=</span> <span class="st">&quot;Buzz&quot;</span> <span class="fu">&lt;$</span> ffilter (multiple <span class="dv">5</span>) eIn
+    eFizzBuzz <span class="fu">=</span> eFizz <span class="fu">&lt;&gt;</span> eBuzz
+
+
+  <span class="kw">in</span>
+    (eFizz, eBuzz, eFizzBuzz, _        )</code></pre></div>
+<p>We use the <code>Monoid</code> instance for <code>Text</code> to combine these into <code>eFizzBuzz</code>.</p>

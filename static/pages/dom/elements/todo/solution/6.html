@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())
+todoItem item <span class="fu">=</span> 
+  divClass <span class="st">&quot;d-flex flex-row align-items-center&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    <span class="kw">let</span> iText <span class="fu">=</span> item <span class="fu">^.</span> todoItem_text
+    divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span>
+      text iText
+    divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span>
+      button <span class="st">&quot;x&quot;</span></code></pre></div>
+<p>If you're familiar with Bootstrap, we can add some classes to make this a little prettier with Flexbox and friends.</p>

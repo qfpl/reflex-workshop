@@ -1,0 +1,15 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterTextSolution ::</span> <span class="dt">Reflex</span> t
+                    <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                    <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Text</span>
+                    <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                    <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                    <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+counterTextSolution bCount bText eAdd eReset <span class="fu">=</span>
+  <span class="kw">let</span>
+    (eError, eIn) <span class="fu">=</span>
+      fmapMaybeSolution <span class="fu">$</span> bText <span class="fu">&lt;@</span> eAdd
+      
+      
+  <span class="kw">in</span>
+    (eError, _     )</code></pre></div>
+<p>First we get the value of <code>bText</code> when the &quot;Add&quot; button was pressed, then we separate the errors from the successful conversions to <code>Int</code>s.</p>

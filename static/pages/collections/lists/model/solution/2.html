@@ -1,0 +1,30 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoListSolution ::</span> <span class="dt">MonadWidget</span> t m
+                 <span class="ot">=&gt;</span> [<span class="dt">TodoItem</span>]
+                 <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t [<span class="dt">TodoItem</span>])
+todoListSolution items <span class="fu">=</span> mdo
+  eItem <span class="ot">&lt;-</span> addItem
+  eAdd  <span class="ot">&lt;-</span> numberOccurrencesFrom (length items) eItem
+  <span class="kw">let</span>
+    eInsert <span class="fu">=</span> (\(k,v) <span class="ot">-&gt;</span> k <span class="fu">=:</span> <span class="dt">Just</span> v) <span class="fu">&lt;$&gt;</span> eAdd
+    m <span class="fu">=</span> Map.fromList <span class="fu">.</span> zip [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> items
+  dmes <span class="ot">&lt;-</span> listHoldWithKey m eListChange <span class="fu">$</span> \_ item <span class="ot">-&gt;</span> <span class="kw">do</span>
+    (eChange, eRemove) <span class="ot">&lt;-</span> todoItem item
+    dTodo <span class="ot">&lt;-</span> foldDyn (<span class="fu">$</span>) item eChange
+    pure (dTodo, eRemove)
+
+  <span class="kw">let</span>
+    eRemoves <span class="fu">=</span>
+      fmap (<span class="dt">Nothing</span> <span class="fu">&lt;$</span>) <span class="fu">.</span>
+      switchDyn <span class="fu">.</span>
+      fmap (mergeMap <span class="fu">.</span> fmap snd) <span class="fu">$</span>
+      dmes
+    eListChange <span class="fu">=</span>
+      leftmost [eInsert, eRemoves]
+      
+      
+      
+      
+      
+
+  pure ()</code></pre></div>
+<p>This means we need to alter the definition of <code>eRemoves</code> to grab the right part of the <code>Dynamic t (Map Int (Dynamic t TodoItem, Event t ()))</code>.</p>

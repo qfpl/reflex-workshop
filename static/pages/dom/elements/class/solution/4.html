@@ -1,0 +1,12 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">classSolution ::</span> <span class="dt">MonadWidget</span> t m
+              <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+              <span class="ot">-&gt;</span> m a
+              <span class="ot">-&gt;</span> m a
+classSolution dIn w <span class="fu">=</span>
+  <span class="kw">let</span>
+    dClass <span class="fu">=</span> bool <span class="st">&quot;&quot;</span> <span class="st">&quot; invisible&quot;</span> <span class="fu">&lt;$&gt;</span> dIn
+  <span class="kw">in</span>
+    elDynClass <span class="st">&quot;div&quot;</span> (<span class="st">&quot;text-uppercase&quot;</span> <span class="fu">&lt;&gt;</span> dClass) <span class="fu">$</span>
+      w</code></pre></div>
+<p>The <code>IsString</code> and <code>Semigroup</code> instances for <code>Dynamic</code> allow us to combine the <code>Dynamic</code> and non-<code>Dynamic</code> classes.</p>
+<p>The space at the start of &quot; invisible&quot; is important, so that we end up with two separate classes rather than a single class name that we don't want.</p>

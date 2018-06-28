@@ -1,0 +1,14 @@
+<p>The second type that we will use will be <code>Behavior</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Behavior</span> t a </code></pre></div>
+<p>The semantics are often expressed as:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Behavior</span> t a <span class="fu">~</span> (t <span class="ot">-&gt;</span> a)</code></pre></div>
+<p>which roughly means that a <code>Behavior</code> of type <code>a</code> is equivalent to function from time to values of <code>a</code>.</p>
+<p><code>Behavior</code>s give us first class values that represent time-varying state. Like any other value, these can be passed to function, returned from functions, or stored in data structures. We also have the ability to combine them and to take them apart whenever we like.</p>
+<p>It is worth noting that <code>Behavior</code>s have values at every point of time -- including before the time when your application's first <code>Event</code> fires.</p>
+<p>Some examples of <code>Behavior</code>s are:</p>
+<ul>
+<li><code>bIsAdminUser           :: Behavior t Bool</code></li>
+<li><code>bTextInputContents     :: Behavior t Text</code></li>
+<li><code>bNumRequestsInProgress :: Behavior t Int</code></li>
+</ul>
+<p>We interact with <code>Behavior</code>s through the use of <code>Event</code>s. The firings of the <code>Event</code>s are used to determine at which time we want to know or prepare to alter a <code>Behavior</code>. We can also combine and manipulate other <code>Behavior</code>s, which is what we're going to look at first.</p>

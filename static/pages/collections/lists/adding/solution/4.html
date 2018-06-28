@@ -1,0 +1,12 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoListSolution ::</span> <span class="dt">MonadWidget</span> t m
+                 <span class="ot">=&gt;</span> [<span class="dt">TodoItem</span>]
+                 <span class="ot">-&gt;</span> m ()
+todoListSolution items <span class="fu">=</span> <span class="kw">do</span>
+  eItem <span class="ot">&lt;-</span> addItem
+  eAdd  <span class="ot">&lt;-</span> numberOccurrencesFrom (length items) eItem
+
+  <span class="kw">let</span>
+    m <span class="fu">=</span> Map.fromList <span class="fu">.</span> zip [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> items
+  void <span class="fu">.</span> listHoldWithKey m never   <span class="fu">$</span> 
+    const todoItem</code></pre></div>
+<p>We want unique IDs for these items, so we count the number of additions that we see, starting at the length of the input list.</p>

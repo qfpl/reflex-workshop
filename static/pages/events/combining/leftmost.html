@@ -1,0 +1,26 @@
+<p>In this exercise we are going to complete the FizzBuzz exercise.</p>
+<p>The input <code>Event t Int</code> will be monotonically increasing. There will be four output <code>Event t Text</code>s:</p>
+<ul>
+<li>the first output will fire with the text &quot;Fizz&quot; whenever the input fires with a multiple of <code>3</code></li>
+<li>the second output will fire with the text &quot;Buzz&quot; whenever the input fires with a multiple of <code>5</code></li>
+<li>the third output will combine the first two outputs, except
+<ul>
+<li>it will fire with the text &quot;FizzBuzz&quot; whenever the input fires with a value that is a multiple of <code>3</code> <em>and</em> a multiple of <code>5</code></li>
+</ul></li>
+<li>the fourth output will fire with the value of the third output, or
+<ul>
+<li>it will fire with the text corresponding to the input whenever the third output is not firing</li>
+</ul></li>
+</ul>
+<p>If that is confusing, perhaps watch the sample outputs in the &quot;Progress&quot; tag for a while to work out what is going on.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">leftmostExercise ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> ( <span class="dt">Event</span> t <span class="dt">Text</span>
+                    , <span class="dt">Event</span> t <span class="dt">Text</span>
+                    , <span class="dt">Event</span> t <span class="dt">Text</span>
+                    , <span class="dt">Event</span> t <span class="dt">Text</span>
+                    )
+leftmostExercise eIn <span class="fu">=</span>
+  (never, never, never, never)</code></pre></div>
+<p>to make this happen.</p>

@@ -1,0 +1,30 @@
+<p>In this exercise we will start making a component for TODO items.</p>
+<p>The first goal is to create a TODO item that:</p>
+<ul>
+<li>displays the text of the item</li>
+<li>has a button which can be pressed to indicate that the item should be removed</li>
+</ul>
+<p>The second goal is to create a test harness for the item. This test harness should create a sample TODO item and also display how many times the remove button has been pressed.</p>
+<p>You can write your own counting function if you like, but there is a helper function for counting occurrences of <code>Event</code>s:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">count ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m, <span class="dt">MonadFix</span> m, <span class="dt">Num</span> b) 
+      <span class="ot">=&gt;</span> <span class="dt">Event</span> t a 
+      <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t b)</code></pre></div>
+<p>You should fill out these functions:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())
+todoItem ti <span class="fu">=</span> <span class="kw">do</span>
+  pure never
+
+<span class="ot">todoExercise ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">TodoItem</span> 
+             <span class="ot">-&gt;</span> m ()
+todoExercise ti <span class="fu">=</span> <span class="kw">do</span>
+  pure ()</code></pre></div>
+<p>using this data structure from <code>Common.Todo</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">TodoItem</span> <span class="fu">=</span>
+  <span class="dt">TodoItem</span> {
+<span class="ot">    _todoItem_complete ::</span> <span class="dt">Bool</span>
+  ,<span class="ot"> _todoItem_text     ::</span> <span class="dt">Text</span>
+  }</code></pre></div>
+<p>You don't have to get the spacing and layout right - we'll cover bits of that when we go through the solution.</p>

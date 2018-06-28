@@ -1,0 +1,12 @@
+<p>This exercise will extend the counter so that it takes the number to add to counter from a text box. The text box value is provided as a <code>Behavior t Text</code>.</p>
+<p>The output should be a pair of <code>Event</code>s. The first of these should fire with an error message when the user clicks &quot;Add&quot; when the text box does not contain a number. The second of these should fire with the new value of the counter whenever that should be updated.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterTextExercise ::</span> <span class="dt">Reflex</span> t
+                    <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                    <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Text</span>
+                    <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                    <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                    <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+counterTextExercise bCount bText eAdd eReset <span class="fu">=</span>
+  (never, never)</code></pre></div>
+<p>to make this happen.</p>

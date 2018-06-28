@@ -1,0 +1,42 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoComplete ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Bool</span>
+             <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>))
+todoComplete iComplete <span class="fu">=</span>
+  divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    cb <span class="ot">&lt;-</span> checkbox iComplete def
+    pure <span class="fu">$</span> const <span class="fu">&lt;$&gt;</span> cb <span class="fu">^.</span> checkbox_change</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoText ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+         <span class="ot">-&gt;</span> <span class="dt">Text</span>
+         <span class="ot">-&gt;</span> m ()
+todoText dComplete iText <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    dCompleteClass <span class="fu">=</span> bool <span class="st">&quot;&quot;</span> <span class="st">&quot; completed&quot;</span> <span class="fu">&lt;$&gt;</span> dComplete
+  elDynClass <span class="st">&quot;div&quot;</span> (pure <span class="st">&quot;p-1&quot;</span> <span class="fu">&lt;&gt;</span> dCompleteClass) <span class="fu">$</span>
+    text iText</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoRemove ::</span> <span class="dt">MonadWidget</span> t m
+           <span class="ot">=&gt;</span> m (<span class="dt">Event</span> t ())
+todoRemove <span class="fu">=</span>
+  divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span>
+     button <span class="st">&quot;x&quot;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">TodoItem</span> <span class="ot">-&gt;</span> <span class="dt">TodoItem</span>), <span class="dt">Event</span> t ())
+todoItem item <span class="fu">=</span>
+  divClass <span class="st">&quot;d-flex flex-row align-items-center&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    <span class="kw">let</span>
+      iComplete <span class="fu">=</span> item <span class="fu">^.</span> todoItem_complete
+      iText     <span class="fu">=</span> item <span class="fu">^.</span> todoItem_text
+
+    eComplete <span class="ot">&lt;-</span> todoComplete iComplete
+
+    dComplete <span class="ot">&lt;-</span> foldDyn (<span class="fu">$</span>) iComplete eComplete
+
+    todoText dComplete iText
+    eRemove <span class="ot">&lt;-</span> todoRemove
+
+    <span class="kw">let</span>
+      eChange <span class="fu">=</span> set todoItem_complete <span class="fu">&lt;$&gt;</span> updated dComplete
+
+    pure (eChange, eRemove)</code></pre></div>
+<p>We can break this up into a number of sub-components.</p>

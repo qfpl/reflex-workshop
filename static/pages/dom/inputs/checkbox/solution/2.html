@@ -1,0 +1,28 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">TodoItem</span> <span class="ot">-&gt;</span> <span class="dt">TodoItem</span>), <span class="dt">Event</span> t ())
+todoItem item <span class="fu">=</span>
+  divClass <span class="st">&quot;d-flex flex-row align-items-center&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    <span class="kw">let</span>
+      iComplete <span class="fu">=</span> item <span class="fu">^.</span> todoItem_complete
+      iText     <span class="fu">=</span> item <span class="fu">^.</span> todoItem_text
+
+    eComplete <span class="ot">&lt;-</span> divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+      cb <span class="ot">&lt;-</span> checkbox iComplete def
+      pure <span class="fu">$</span> const <span class="fu">&lt;$&gt;</span> cb <span class="fu">^.</span> checkbox_change
+
+     
+     
+     
+     
+     
+      
+
+
+
+
+
+
+
+    pure (_      , _      )</code></pre></div>
+<p>We add a checkbox with the right initial value, and have it return an <code>Event t (Bool -&gt; Bool)</code>.</p>

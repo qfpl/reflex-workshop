@@ -1,0 +1,72 @@
+<p>We have already seen ways to create <code>Behavior</code>s from values (with <code>pure</code>) and from other <code>Behavior</code>s (with <code>(&lt;$&gt;)</code> and <code>(&lt;*&gt;)</code>).</p>
+<p>We can also create <code>Behavior</code>s from <code>Event</code>s.</p>
+<p>We do this using a function called <code>hold</code>, which is a method of the <code>MonadHold</code> typeclass:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">MonadHold</span> t m <span class="kw">where</span>
+  <span class="fu">...</span>
+<span class="ot">  hold ::</span> a <span class="ot">-&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t a)
+  <span class="fu">...</span></code></pre></div>
+<p>The first argument is the initial value of the <code>Behavior</code> and the second argument is an <code>Event</code> which will update the <code>Behavior</code>.</p>
+<p>There are a few points to note here.</p>
+<p>The first point is that there is only one <code>Event</code> driving the changes to the <code>Behavior</code>. If we want to create a <code>Behavior</code> from multiple <code>Event</code>s, we first have to combine those <code>Event</code>s.</p>
+<p>This means we don't have to worry about different <code>Event</code>s competing with each other to make a change to a <code>Behavior</code>.</p>
+<p>The second point is that any change to the <code>Behavior</code> will not be visible in the same frame as the firing of <code>Event</code> that is causing the change. Instead the changes are recorded, and applied starting from the next frame. This is why some people refer to frames as transactions.</p>
+<p>If we query a <code>Behavior</code> with multiple <code>Event</code>s that are firing in the same frame, we will always get the same value out of it.</p>
+<p>If this were not the case, we would be able to observe something about the order in which <code>Event</code>s fire <em>within</em> the processing of a frame, and we'd have to keep that in mind all of the time when we were reasoning about our code.</p>
+<p>Instead, we can reason about our how our code behaves on a frame-by-frame basis. Once you get used to it, it makes working with time-varying state feel similar to using STM for working with concurrency.</p>
+<div id="exercise-fmap">
+
+</div>
+<div id="exercise-apply">
+
+</div>
+<p>Now that we have the ability to query and to create <code>Behavior</code>s by using <code>Event</code>s, we may end up in the situation where a <code>Behavior</code> and an <code>Event</code> end up depending on each other.</p>
+<p>This isn't as alarming as it may first seem, but it does mean that we need to be able to describe these cycles of dependence in the network.</p>
+<p>We do this via the <code>RecursiveDo</code> language extension:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE RecursiveDo #-}</span>
+
+<span class="kw">import </span><span class="dt">Control.Monad.Fix</span> (<span class="dt">MonadFix</span>)
+<span class="kw">import </span><span class="dt">Reflex</span></code></pre></div>
+<p>which allows us to use <code>mdo</code> in the place of <code>do</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">myFunction ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+           <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+           <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>)
+myFunction eIn <span class="fu">=</span> mdo
+  <span class="kw">let</span> 
+    e <span class="fu">=</span> someFunction b eIn
+  b <span class="ot">&lt;-</span> hold <span class="dv">0</span> e
+  
+  <span class="kw">let</span>
+    bOut <span class="fu">=</span> b <span class="fu">+</span> pure <span class="dv">2</span>
+
+  pure bOut</code></pre></div>
+<p>in order to define cycles in the network.</p>
+<p>In these cycles, if your <code>Behavior</code>s only mutually depend on <code>Event</code>s and your <code>Event</code>s only mutually depend on <code>Behavior</code>s then you should be fine.</p>
+<p>You <em>can</em> do other things, but you have to think a bit more about whether your are describing a causal paradox. That would be bad.</p>
+<p>We can use the <code>rec</code> keyword to provide a tighter scope around the recursive parts of our code:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">myFunction ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+           <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+           <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>)
+myFunction eIn <span class="fu">=</span> <span class="kw">do</span>
+  rec
+    <span class="kw">let</span> 
+      e <span class="fu">=</span> someFunction b eIn
+    b <span class="ot">&lt;-</span> hold <span class="dv">0</span> e
+
+  <span class="kw">let</span>
+    bOut <span class="fu">=</span> b <span class="fu">+</span> pure <span class="dv">2</span>
+
+  pure bOut</code></pre></div>
+<p>Before we get into the next set of exercises, there is another FRP pattern worth knowing about.</p>
+<p>Sometimes we will have functions return both a <code>Behavior t a</code> along with the <code>Event t a</code> that was used to build it (or <code>never</code> if the <code>Behavior</code> was created with <code>pure</code>).</p>
+<p>The idea is that anything that wants to know about the current state can interrogate the <code>Behavior</code>, and anything that wants to know about updates to the state can deal with the <code>Event</code>.</p>
+<p>This is related to <code>Behavior</code>s being pull-based and <code>Event</code>s being push-based, for those who are familiar with the distinction.</p>
+<div id="exercise-counter">
+
+</div>
+<div id="exercise-limit">
+
+</div>
+<div id="exercise-text">
+
+</div>
+<p>Now, if only there was some way to avoid the need to return that <code>Behavior</code> / <code>Event</code> pair...</p>

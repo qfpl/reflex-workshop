@@ -1,0 +1,10 @@
+<p>We are going to extend on the previous exercise to use <code>EventWriterT</code> to pass the remove <code>Event</code>s up through the collection handling code.</p>
+<p>Part of your code should look like this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  (dmd, eRemoves) <span class="ot">&lt;-</span> runEventWriterT <span class="fu">.</span> listHoldWithKey m eListChange <span class="fu">$</span> \k item <span class="ot">-&gt;</span> <span class="kw">do</span>
+    <span class="fu">...</span>
+
+  <span class="kw">let</span>
+    eListChange <span class="fu">=</span> leftmost [eRemoves, eInsert]
+
+  pure <span class="fu">$</span> joinDynThroughMap dmd</code></pre></div>
+<p>You should make the changes to <code>todoListModelExercise</code> required to make this happen.</p>

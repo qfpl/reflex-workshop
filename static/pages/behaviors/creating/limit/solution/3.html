@@ -1,0 +1,22 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">limitSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>)
+limitSolution bCount eAdd eReset <span class="fu">=</span> mdo
+  <span class="kw">let</span>
+    defaultLimit <span class="fu">=</span> <span class="dv">5</span>
+
+    bLimitIncrease <span class="fu">=</span> (<span class="fu">==</span>) <span class="fu">&lt;$&gt;</span> bCount <span class="fu">&lt;*&gt;</span> bLimit
+    eLimitIncrease <span class="fu">=</span> gate bLimitIncrease eReset
+
+
+
+
+  bLimit <span class="ot">&lt;-</span> _
+  
+  
+  
+
+  pure bLimit</code></pre></div>
+<p>We allow for a limit increase if the user presses the &quot;Reset&quot; button while the counter is at the limit.</p>

@@ -1,0 +1,12 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapConstExercise3 ::</span> <span class="dt">Reflex</span> t 
+                   <span class="ot">=&gt;</span> <span class="dt">Event</span> t () 
+                   <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+fmapConstExercise3 eIn <span class="fu">=</span>
+  _ <span class="fu">&lt;$</span> eIn
+
+<span class="ot">fmapConstExercise5 ::</span> <span class="dt">Reflex</span> t 
+                   <span class="ot">=&gt;</span> <span class="dt">Event</span> t () 
+                   <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+fmapConstExercise5 eIn <span class="fu">=</span>
+  _ <span class="fu">&lt;$</span> eIn</code></pre></div>
+<p>This time we are going to use <code>&lt;$</code>, since we aren't interested in the value in the input <code>Event</code>s.</p>

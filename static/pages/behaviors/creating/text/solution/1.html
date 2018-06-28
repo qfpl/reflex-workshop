@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">textSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+             <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+             <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span>
+             <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t [<span class="dt">Text</span>], <span class="dt">Event</span> t [<span class="dt">Text</span>])
+textSolution bIn eIn <span class="fu">=</span> mdo
+  <span class="kw">let</span>
+    add n xs x <span class="fu">=</span> take n (x <span class="fu">:</span> xs)
+    
+  b <span class="ot">&lt;-</span> _
+  pure (b, _)</code></pre></div>
+<p>If we can sort out what we want to do if we had all of the relevant values at a given instant ...</p>

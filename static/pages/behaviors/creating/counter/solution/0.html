@@ -1,0 +1,8 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+                <span class="ot">=&gt;</span> <span class="dt">Event</span> t (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>)
+                <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+counterSolution eFn <span class="fu">=</span> mdo
+
+
+  pure (_, _)</code></pre></div>
+<p>If we had the <code>Event t Int</code> we could use <code>hold</code> to create the <code>Behavior t Int</code>, and if we had the <code>Behavior t Int</code>, we could sample it with the <code>Event t (Int -&gt; Int)</code> and combine the two to create the <code>Event t Int</code>.</p>

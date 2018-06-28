@@ -1,0 +1,25 @@
+<p>The other thing we often want to do with <code>Event</code>s is to combine them.</p>
+<p>Externally triggered <code>Event</code>s all happen in separate frames/transactions, but when we start deriving <code>Event</code>s from them we can end up with <code>Event</code>s that are firing in the same frame as each other.</p>
+<p>In this situation</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  eOut <span class="fu">=</span> (<span class="fu">*</span> <span class="dv">100</span>) <span class="fu">&lt;$&gt;</span> eIn</code></pre></div>
+<p>both <code>eIn</code> and <code>eOut</code> are always firing in the same frame, and here</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  eOut <span class="fu">=</span> (<span class="fu">*</span> <span class="dv">100</span>) <span class="fu">&lt;$&gt;</span> ffilter even eIn</code></pre></div>
+<p>we have <code>eOut</code> firing only in frames where <code>eIn</code> is firing.</p>
+<p>As <code>Event</code>s are modified and passed through our program, we might lose track of whether a given <code>Event</code> may or may not be firing in the same frame. That is a good thing!</p>
+<p>We want to be able to reason about our programs with just the locally available information. To that end, <code>reflex</code> provides functions that allow us to combine values from <code>Event</code>s that occur in the same frame while not making any assumptions about when or whether the input <code>Event</code>s will fire.</p>
+<p>The most general of these functions is <code>mergeWith</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">mergeWith ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> [<span class="dt">Event</span> t a] <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>This will use the function to do something akin to <code>foldl1</code> over all of the <code>Event</code>s in the list that are firing in the current frame.</p>
+<p>If we have a <code>Monoid</code> instance for <code>a</code>, then we can use this instance as a convenience:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">instance</span> (<span class="dt">Reflex</span> t, <span class="dt">Monoid</span> a) <span class="ot">=&gt;</span> <span class="dt">Monoid</span> (<span class="dt">Event</span> t a) <span class="kw">where</span>
+  <span class="fu">...</span></code></pre></div>
+<p>which is implemented in terms of <code>mergeWith (&lt;&gt;)</code>.</p>
+<div id="exercise-mergeWith">
+
+</div>
+<p>There is a convenience function, which is more-or-less equivalent to <code>mergeWith const</code> in <code>reflex</code>, called <code>leftmost</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">leftmost ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> [<span class="dt">Event</span> t a] <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>This is particularly handy for giving some <code>Event</code>s priority over others when they fire in the same frame. If multiple <code>Event</code>s are firing, the one closest to the start of the list will be used for the output.</p>
+<div id="exercise-leftmost">
+
+</div>

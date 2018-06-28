@@ -1,0 +1,10 @@
+<p>In this exercise we have the same old <code>Event t Int</code> ticking once a second.</p>
+<p>The goal is to create two <code>Behavior</code>s from this <code>Event</code>. Both of them should start at <code>0</code>, the first one should increment every <code>2</code> seconds, and the second one should increment every <code>3</code> seconds.</p>
+<p>This <code>Behavior</code> is going to drive your solution to <code>src/Exercises/Behavior/Instances/Apply.hs</code>, so make sure you have finished that exercise first. If you get this exercise right you should see familiar results.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">applyExercise ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Behavior</span> t <span class="dt">Int</span>)
+applyExercise eIn <span class="fu">=</span>
+  pure (pure <span class="dv">0</span>, pure <span class="dv">0</span>)</code></pre></div>
+<p>to make this happen.</p>

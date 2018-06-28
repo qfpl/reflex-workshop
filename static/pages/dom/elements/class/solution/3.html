@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">classSolution ::</span> <span class="dt">MonadWidget</span> t m
+              <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+              <span class="ot">-&gt;</span> m a
+              <span class="ot">-&gt;</span> m a
+classSolution dIn w <span class="fu">=</span>
+  <span class="kw">let</span>
+    dClass <span class="fu">=</span> bool <span class="st">&quot;&quot;</span> <span class="st">&quot;invisible&quot;</span> <span class="fu">&lt;$&gt;</span> dIn
+  <span class="kw">in</span>
+    elDynClass <span class="st">&quot;div&quot;</span>                      dClass  <span class="fu">$</span>
+      w</code></pre></div>
+<p>We can use the <code>bool</code> function from <code>Data.Bool</code> to help create the necessary <code>Dynamic t Text</code>.</p>

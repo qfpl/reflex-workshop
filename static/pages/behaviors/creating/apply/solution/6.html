@@ -1,0 +1,13 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">applySolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Behavior</span> t <span class="dt">Int</span>)
+applySolution eIn <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    multiple n <span class="fu">=</span>
+      (<span class="fu">==</span> <span class="dv">0</span>) <span class="fu">.</span> (<span class="ot">`mod`</span> n)
+    downsample n <span class="fu">=</span>
+      fmap (<span class="ot">`div`</span> n) <span class="fu">.</span> ffilter (multiple n)
+  b2 <span class="ot">&lt;-</span> hold <span class="dv">0</span> <span class="fu">$</span> downsample <span class="dv">2</span> eIn
+  b3 <span class="ot">&lt;-</span> hold <span class="dv">0</span> <span class="fu">$</span> downsample <span class="dv">3</span> eIn
+  pure (b2 , b3)</code></pre></div>
+<p>We can also create a version that updates less frequently, but the reasons we might want such a thing have not been revealed yet...</p>

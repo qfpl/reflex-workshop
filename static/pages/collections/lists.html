@@ -1,0 +1,68 @@
+<p>If we a collection of things that we want to display or manage, there are functions that can help us.</p>
+<p>The main function we will be looking at is:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">listHoldWithKey ::</span> (<span class="dt">Ord</span> k, <span class="dt">MonadWidget</span> t m) 
+                <span class="ot">=&gt;</span> <span class="dt">Map</span> k v 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t (<span class="dt">Map</span> k (<span class="dt">Maybe</span> v)) 
+                <span class="ot">-&gt;</span> (k <span class="ot">-&gt;</span> v <span class="ot">-&gt;</span> m a) 
+                <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t (<span class="dt">Map</span> k a))</code></pre></div>
+<p>It takes a <code>Map</code> as the initial value of the collection, an <code>Event</code> which fires on insertions and deletions (and possibly also on externally driven alterations), and a function to display a member of the <code>Map</code> given the key and value. It collects the results of the supplied function up in a <code>Dynamic t (Map k a)</code>.</p>
+<p>If we are using <code>listHoldWithKey</code>, we manage the state of our collection elements from the inside of the elements themselves. This means we have work to do if we want to model the state of the whole collection as a <code>Dynamic t (Map k v)</code> and pass it to another part of our program.</p>
+<div id="exercise-displaying">
+
+</div>
+<p>There are same handy functions we can use when adding to these collections:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">numberOccurrences     ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m, <span class="dt">MonadFix</span> m, <span class="dt">Num</span> b) 
+                      <span class="ot">=&gt;</span> <span class="dt">Event</span> t a 
+                      <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (b, a))
+
+<span class="ot">numberOccurrencesFrom ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m, <span class="dt">MonadFix</span> m, <span class="dt">Num</span> b) 
+                      <span class="ot">=&gt;</span> b 
+                      <span class="ot">-&gt;</span> <span class="dt">Event</span> t a 
+                      <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (b, a))</code></pre></div>
+<div id="exercise-adding">
+
+</div>
+<p>There is another function which can be handy when working with the output from <code>listHoldWithKey</code> and other functions like it:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">mergeMap ::</span> (<span class="dt">Reflex</span> t, <span class="dt">Ord</span> k) 
+         <span class="ot">=&gt;</span> <span class="dt">Map</span> k (<span class="dt">Event</span> t a) 
+         <span class="ot">-&gt;</span> <span class="dt">Event</span> t (<span class="dt">Map</span> k a)</code></pre></div>
+<div id="exercise-removing">
+
+</div>
+<p>This function is also handy when dealing with the output of the collection functions:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">joinDynThroughMap ::</span> (<span class="dt">Reflex</span> t, <span class="dt">Ord</span> k) 
+                  <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> (<span class="dt">Map</span> k (<span class="dt">Dynamic</span> a)) 
+                  <span class="ot">-&gt;</span>  <span class="dt">Dynamic</span> (<span class="dt">Map</span> k a)</code></pre></div>
+<div id="exercise-model">
+
+</div>
+<p>There are other functions for handling lists:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">listWithKey ::</span> (<span class="dt">Ord</span> k, <span class="dt">MonadWidget</span> t m) 
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Map</span> k v) 
+            <span class="ot">-&gt;</span> (k <span class="ot">-&gt;</span> <span class="dt">Dynamic</span> t v <span class="ot">-&gt;</span> m a) 
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t (<span class="dt">Map</span> k a))
+
+<span class="ot">list        ::</span> (<span class="dt">Ord</span> k, <span class="dt">MonadWidget</span> t m) 
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Map</span> k v) 
+            <span class="ot">-&gt;</span> (<span class="dt">Dynamic</span> t v <span class="ot">-&gt;</span> m a) 
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t (<span class="dt">Map</span> k a))
+
+<span class="ot">simpleList  ::</span> <span class="dt">MonadWidget</span> t m
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t [v] 
+            <span class="ot">-&gt;</span> (<span class="dt">Dynamic</span> t v <span class="ot">-&gt;</span> m a) 
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t [a])</code></pre></div>
+<p>I recommend using <code>listHoldWithKey</code> when you are building up or manipulating some kind of dynamic collection, and to use the other functions when you have a dynamic collection that you need to display.</p>
+<p>As an example, the harness that runs the previous exercise is using <code>simpleList</code> to display the completed items:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  divClass <span class="st">&quot;row&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    dItems <span class="ot">&lt;-</span> divClass <span class="st">&quot;col&quot;</span> <span class="fu">$</span>
+      fn items
+
+    <span class="kw">let</span>
+      dComplete <span class="fu">=</span>
+        fmap (view todoItem_text) <span class="fu">.</span> filter (view todoItem_complete) <span class="fu">&lt;$&gt;</span> dItems
+
+    divClass <span class="st">&quot;col&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+      el <span class="st">&quot;div&quot;</span> <span class="fu">.</span> text <span class="fu">$</span> <span class="st">&quot;Completed items&quot;</span>
+      el <span class="st">&quot;ul&quot;</span> <span class="fu">.</span> simpleList dComplete <span class="fu">$</span>
+        el <span class="st">&quot;li&quot;</span> <span class="fu">.</span> dynText</code></pre></div>
+<p>You can use these functions to build up your collection, but you'll have to do some contortions to make it work. If you find yourself fighting the API, try something else.</p>

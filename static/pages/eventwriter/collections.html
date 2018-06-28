@@ -1,0 +1,65 @@
+<p>Sometimes we'd like to pass an <code>Event</code> &quot;up&quot;. This happens if we're collecting errors to displayed in the one place.</p>
+<p>There is a newtype that assists with this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">newtype</span> <span class="dt">EventWriterT</span> t w m a</code></pre></div>
+<p>via an associated typeclass and its instances:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> (<span class="dt">Monad</span> m, <span class="dt">Semigroup</span> w) <span class="ot">=&gt;</span> <span class="dt">EventWriter</span> t w m <span class="fu">|</span> m <span class="ot">-&gt;</span> t w <span class="kw">where</span>
+<span class="ot">  tellEvent ::</span> <span class="dt">Event</span> t w <span class="ot">-&gt;</span> m ()</code></pre></div>
+<p>All of the <code>Event</code>s that get passed to <code>tellEvent</code> are merged with the <code>Semigroup</code> instance, and we can access them using <code>runEventWriter</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">runEventWriterT ::</span> (<span class="dt">Reflex</span> t, <span class="dt">Monad</span> m, <span class="dt">Semigroup</span> w) <span class="ot">=&gt;</span> <span class="dt">EventWriterT</span> t w m a <span class="ot">-&gt;</span> m (a, <span class="dt">Event</span> t w)</code></pre></div>
+<div id="exercise-removing">
+
+</div>
+<p>We could push the usage of this through to our components.</p>
+<p>The change to <code>todoRemove</code> is pretty straightforward:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoRemove ::</span> <span class="dt">MonadWidget</span> t m
+           <span class="ot">=&gt;</span> <span class="dt">EventWriterT</span> t () m ()
+todoRemove <span class="fu">=</span>
+  divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+     eRemove <span class="ot">&lt;-</span> button <span class="st">&quot;x&quot;</span>
+     tellEvent eRemove</code></pre></div>
+<p>We have all the right instances we need to just change the type of <code>todoTextRead</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoTextRead ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+             <span class="ot">-&gt;</span> <span class="dt">Text</span>
+             <span class="ot">-&gt;</span> <span class="dt">Workflow</span> t (<span class="dt">EventWriterT</span> t () m) (<span class="dt">Event</span> t (<span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Text</span>))</code></pre></div>
+<p>which eventually leads to:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoText ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+         <span class="ot">-&gt;</span> <span class="dt">Text</span>
+         <span class="ot">-&gt;</span> <span class="dt">EventWriterT</span> t () m (<span class="dt">Event</span> t (<span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Text</span>))</code></pre></div>
+<p>The fact the <code>MonadWidget</code> is a set of constraints means that we can use <code>todoComplete</code> unchanged:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoComplete ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Bool</span>
+             <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>))</code></pre></div>
+<p>We could go even further and use <code>EventWriter</code> for all of our output.</p>
+<p>We would need to create a data type that has a <code>Monoid</code> instance:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">ItemState</span> <span class="fu">=</span>
+  <span class="dt">ItemState</span> (<span class="dt">Endo</span> <span class="dt">TodoItem</span>) <span class="dt">Any</span>
+
+<span class="kw">instance</span> <span class="dt">Semigroup</span> <span class="dt">ItemState</span> <span class="kw">where</span> <span class="fu">...</span>
+<span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">ItemState</span> <span class="kw">where</span> <span class="fu">...</span></code></pre></div>
+<p>and probably helper functions like:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">tellRemove  ::</span> (<span class="dt">Reflex</span> t, <span class="dt">EventWriter</span> t <span class="dt">ItemState</span> m) 
+            <span class="ot">=&gt;</span> <span class="dt">Event</span> t a
+            <span class="ot">-&gt;</span> m ()
+tellRemove e <span class="fu">=</span>
+  tellEvent <span class="fu">$</span> <span class="dt">ItemState</span> mempty (<span class="dt">Any</span> <span class="dt">True</span>) <span class="fu">&lt;$</span> e
+  
+<span class="ot">tellChange ::</span> (<span class="dt">Reflex</span> t, <span class="dt">EventWriter</span> t <span class="dt">ItemState</span> m)
+           <span class="ot">=&gt;</span> <span class="dt">Lens&#39;</span> s a
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t a
+           <span class="ot">-&gt;</span> m ()
+tellChange l e <span class="fu">=</span>
+  tellEvent <span class="fu">$</span> (\x <span class="ot">-&gt;</span> <span class="dt">ItemState</span> (<span class="dt">Endo</span> (set l x)) mempty) <span class="fu">&lt;$&gt;</span> e</code></pre></div>
+<p>and then we could work towards a uniform output type for our components:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoRemove   ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">EventWriterT</span> t <span class="dt">ItemState</span> m ()
+
+<span class="ot">todoText     ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+             <span class="ot">-&gt;</span> <span class="dt">Text</span>
+             <span class="ot">-&gt;</span> <span class="dt">EventWriterT</span> t <span class="dt">ItemState</span> m ()
+
+<span class="ot">todoComplete ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Bool</span>
+             <span class="ot">-&gt;</span> <span class="dt">EventWriterT</span> t <span class="dt">ItemState</span> m ()</code></pre></div>

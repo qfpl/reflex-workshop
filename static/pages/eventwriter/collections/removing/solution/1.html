@@ -1,0 +1,19 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoListModelSolution ::</span> <span class="dt">MonadWidget</span> t m
+                      <span class="ot">=&gt;</span> [<span class="dt">TodoItem</span>]
+                      <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t (<span class="dt">Map</span> <span class="dt">Int</span> <span class="dt">TodoItem</span>))
+todoListModelSolution items <span class="fu">=</span> mdo
+  eItem <span class="ot">&lt;-</span> addItem
+  eAdd  <span class="ot">&lt;-</span> numberOccurrencesFrom (length items) eItem
+  <span class="kw">let</span>
+    eInsert <span class="fu">=</span> (\(k,v) <span class="ot">-&gt;</span> k <span class="fu">=:</span> <span class="dt">Just</span> v) <span class="fu">&lt;$&gt;</span> eAdd
+    m <span class="fu">=</span> Map.fromList <span class="fu">.</span> zip [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> items
+  (dmd          ) <span class="ot">&lt;-</span>                   listHoldWithKey m eListChange <span class="fu">$</span> \k item <span class="ot">-&gt;</span> <span class="kw">do</span>
+    (eChange, eRemove) <span class="ot">&lt;-</span> todoItem item
+    tellEvent <span class="fu">$</span> k <span class="fu">=:</span> <span class="dt">Nothing</span> <span class="fu">&lt;$</span> eRemove
+    foldDyn (<span class="fu">$</span>) item eChange
+
+  <span class="kw">let</span>
+    eListChange <span class="fu">=</span> leftmost [          eInsert]
+
+  pure <span class="fu">$</span> joinDynThroughMap dmd</code></pre></div>
+<p>We use <code>tellEvent</code> to start accumulating a <code>listHoldWithKey</code>-compatible <code>Event</code> from all of the remove <code>Event</code>s in the collection.</p>

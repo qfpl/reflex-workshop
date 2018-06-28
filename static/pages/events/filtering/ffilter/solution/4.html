@@ -1,0 +1,6 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">ffilterSolution ::</span> <span class="dt">Reflex</span> t 
+                <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span> 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+ffilterSolution eIn <span class="fu">=</span>
+  ffilter ((<span class="fu">==</span> <span class="dv">0</span>) <span class="fu">.</span> (<span class="ot">`mod`</span> <span class="dv">3</span>)) eIn</code></pre></div>
+<p>... and then check when that is equal to <code>0</code>.</p>

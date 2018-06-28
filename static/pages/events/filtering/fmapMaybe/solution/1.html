@@ -1,0 +1,15 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeSolution ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeSolution eIn <span class="fu">=</span>
+  <span class="kw">let</span>
+    eMaybe <span class="fu">=</span>  <span class="co">-- Event t (Maybe Int)</span>
+      convert <span class="fu">&lt;$&gt;</span> eIn
+
+
+
+
+  <span class="kw">in</span>
+    (_     , _   )</code></pre></div>
+<p>In the first approach, we're going to use <code>(&lt;$&gt;)</code> instead of <code>fmapMaybe</code> with <code>convert :: Text -&gt; Maybe Int</code>.</p>
+<p>We're doing this we need to do the conversion <em>and</em> report on errors.</p>

@@ -1,0 +1,16 @@
+<p>The first type that we will use will be <code>Event</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Event</span> t a </code></pre></div>
+<p>The semantics are often expressed as:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="dt">Event</span> t a <span class="fu">~</span> [(t, a)]</code></pre></div>
+<p>which roughly means that an <code>Event</code> of type <code>a</code> is equivalent to a list of pairs of times and values of type <code>a</code>.</p>
+<p>The time in this case is abstract, although you can think of the time values as being distinct and increasing. The moments of time at which <code>Event</code>s occur are often referred to as frames or transactions. For the most part, each <code>Event</code> that is triggered by <code>IO</code> occurs in its own frame and any changes to the FRP system caused by that <code>Event</code> will not happen until the next frame.</p>
+<p>Some example of <code>Event</code>s are:</p>
+<ul>
+<li><code>eButtonPress       :: Event t ()</code></li>
+<li><code>eTimeout           :: Event t ()</code></li>
+<li><code>eChangeIsAdminUser :: Event t Bool</code></li>
+</ul>
+<p>In a more traditional setting, if we needed to check whether a button was pressed at different times in an application or in different applications states we might poll for the button press.</p>
+<p>In an FRP system our <code>Event</code>s represent all of the occurrences of the <code>Event</code> in the application. In some senses <code>Event</code>s are a bit like an Observer pattern from the OO world, but upgraded to be more composable.</p>
+<p>One side-effect of having to deal with all of the occurrences of each <code>Event</code> is that it forces us to think about the various edge-cases that might effect when or whether are interested in an <code>Event</code>.</p>
+<p>We'll be looking at the various tools we have to detect and deal with those conditions in this section.</p>

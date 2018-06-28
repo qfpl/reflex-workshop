@@ -1,0 +1,7 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">applySolution ::</span> <span class="dt">Reflex</span> t
+              <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+applySolution bIn1 bIn2 <span class="fu">=</span>
+  _   <span class="fu">&lt;$&gt;</span> bIn1 <span class="fu">&lt;*&gt;</span> bIn2</code></pre></div>
+<p>... and we're going to need to use the usual <code>Applicative</code> machinery ...</p>

@@ -1,0 +1,126 @@
+<p>Now we'll start working with the DOM. This means that we'll be starting to work with <code>reflex-dom</code> as well as <code>reflex</code> itself.</p>
+<p>When we manipulate the DOM we work inside of a builder monad, and we access this builder monad through the <code>DomBuilder</code> typeclass.</p>
+<p>There is also a collection of typeclass constraints called <code>MonadWidget</code> that includes all of the typeclasses we have seen so far (and a few which we'll see before too long), which can be really useful.</p>
+<p>The widgets get added to the page in the order that they appear in our code. This adds another reason for <code>RecursiveDo</code> to enter the scene: sometimes the elements we won't have a cycle in our network, but the order that the network is laid out in will be different to the order in which we connect the <code>Event</code>s and <code>Behavior</code>s.</p>
+<p>The simplest thing we can add to the DOM is some text:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">text    ::</span> <span class="dt">DomBuilder</span> t m 
+        <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+        <span class="ot">-&gt;</span> m ()</code></pre></div>
+<p>The next simplest thing we can do is to wrap an element around some other widget:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">el      ::</span> <span class="dt">DomBuilder</span> t m 
+        <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+        <span class="ot">-&gt;</span> m a 
+        <span class="ot">-&gt;</span> m a</code></pre></div>
+<p>We can use that already:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  el <span class="st">&quot;div&quot;</span> <span class="fu">$</span> 
+    text <span class="st">&quot;Testing text&quot;</span></code></pre></div>
+<p>If things are going to change, we use <code>Dynamic</code>s to drive those changes. That means we can create some state while still having the ability to trigger updates in the DOM.</p>
+<p>For text that we want to update we have:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">dynText ::</span> <span class="dt">MonadWidget</span> t m 
+        <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Text</span>
+        <span class="ot">-&gt;</span> m ()</code></pre></div>
+<p>or, if we have something with a <code>Show</code> instance:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">display ::</span> (<span class="dt">MonadWidget</span> t m, <span class="dt">Show</span> a)
+        <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t a
+        <span class="ot">-&gt;</span> m ()</code></pre></div>
+<div id="exercise-text">
+
+</div>
+<p>There are a few variants on <code>el</code> that are useful.</p>
+<p>We can specify a class (or classes) for elements with:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">elClass    ::</span> <span class="dt">MonadWidget</span> t m 
+           <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+           <span class="ot">-&gt;</span> <span class="dt">Text</span> 
+           <span class="ot">-&gt;</span> m a 
+           <span class="ot">-&gt;</span> m a</code></pre></div>
+<p>or if they're going to be changing over time:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">elDynClass ::</span> <span class="dt">MonadWidget</span> t m 
+           <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+           <span class="ot">-&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Text</span> 
+           <span class="ot">-&gt;</span> m a 
+           <span class="ot">-&gt;</span> m a</code></pre></div>
+<div id="exercise-class">
+
+</div>
+<p>We can specify attributes for elements with:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">elAttr    ::</span> <span class="dt">MonadWidget</span> t m 
+          <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+          <span class="ot">-&gt;</span> <span class="dt">Map</span> <span class="dt">Text</span> <span class="dt">Text</span> 
+          <span class="ot">-&gt;</span> m a 
+          <span class="ot">-&gt;</span> m a</code></pre></div>
+<p>or if they're going to be changing over time:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">elDynAttr ::</span> <span class="dt">MonadWidget</span> t m 
+          <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+          <span class="ot">-&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Map</span> <span class="dt">Text</span> <span class="dt">Text</span>)
+          <span class="ot">-&gt;</span> m a 
+          <span class="ot">-&gt;</span> m a</code></pre></div>
+<p>There is a helper function which provides an inline version of <code>Map.singleton</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(=:) ::</span> <span class="dt">Ord</span> k <span class="ot">=&gt;</span> k <span class="ot">-&gt;</span> v <span class="ot">-&gt;</span> <span class="dt">Map</span> k v
+(<span class="fu">=:</span>) <span class="fu">=</span> Map.singleton</code></pre></div>
+<p>which we can use to get back to <code>elClass</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">elClass ::</span> <span class="dt">MonadWidget</span> t m 
+        <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+        <span class="ot">-&gt;</span> <span class="dt">Text</span> 
+        <span class="ot">-&gt;</span> m a 
+        <span class="ot">-&gt;</span> m a
+elClass e c w <span class="fu">=</span>
+  elAttr e (<span class="st">&quot;class&quot;</span> <span class="fu">=:</span> c) w</code></pre></div>
+<div id="exercise-attributes">
+
+</div>
+<p>If you take any of the <code>elXYZ</code> functions and turn it into <code>elXYZ'</code>, it will return an additional value that you can use to hook into the DOMs event handling.</p>
+<p>If we turn:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">el  ::</span> <span class="dt">MonadWidget</span> t m 
+    <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+    <span class="ot">-&gt;</span> m a 
+    <span class="ot">-&gt;</span> m a</code></pre></div>
+<p>into:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">el&#39; ::</span> <span class="dt">MonadWidget</span> t m 
+    <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+    <span class="ot">-&gt;</span> m a 
+    <span class="ot">-&gt;</span> m (<span class="dt">El</span>, a)</code></pre></div>
+<p>we can use <code>domEvent</code> on the <code>El</code> value to create a <code>reflex</code> <code>Event</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">clickMe ::</span> <span class="dt">MonadWidget</span> t m 
+        <span class="ot">=&gt;</span> m (<span class="dt">Event</span> t ())
+clickMe <span class="fu">=</span> <span class="kw">do</span>
+  (e, _) <span class="ot">&lt;-</span> el&#39; <span class="st">&quot;div&quot;</span> (text <span class="st">&quot;Click me&quot;</span>)
+  pure (domEvent <span class="dt">Click</span> e)</code></pre></div>
+<div id="exercise-events">
+
+</div>
+<p>There is a button input built-in to <code>reflex-dom</code></p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">button ::</span> <span class="dt">DomBuilder</span> t m 
+       <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+       <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())</code></pre></div>
+<p>In <code>src/Util/Bootstrap.hs</code>, we have:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">buttonClass ::</span> <span class="dt">MonadWidget</span> t m 
+            <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+            <span class="ot">-&gt;</span> <span class="dt">Text</span> 
+            <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())</code></pre></div>
+<p>to give you clickable <code>div</code>s.</p>
+<p>If you use <code>buttonClass &quot;Click me&quot; &quot;btn&quot;</code> you'll get a Bootstrap-styled <code>div</code>-based button, if that's something you'd prefer.</p>
+<div id="exercise-button">
+
+</div>
+<p>There is also a <code>reflex-dom</code> component for clickable links:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">link      ::</span> <span class="dt">DomBuilder</span> t m 
+          <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+          <span class="ot">-&gt;</span> m (<span class="dt">Link</span> t)
+
+<span class="ot">linkClass ::</span> <span class="dt">DomBuilder</span> t m 
+          <span class="ot">=&gt;</span> <span class="dt">Text</span> 
+          <span class="ot">-&gt;</span> <span class="dt">Text</span> 
+          <span class="ot">-&gt;</span> m (<span class="dt">Link</span> t)</code></pre></div>
+<p>The <code>Link</code> type is the first data structure we've come across for managing a <code>reflex-dom</code> component:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">newtype</span> <span class="dt">Link</span> t <span class="fu">=</span> <span class="dt">Link</span> {<span class="ot"> _link_clicked ::</span> <span class="dt">Event</span> t () }</code></pre></div>
+<p>It contains one value, which is the click <code>Event</code>, and we can access that value via the supplied <code>lens</code> like so:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  l <span class="ot">&lt;-</span> link <span class="st">&quot;Click me&quot;</span>
+  pure <span class="fu">$</span> view link_clicked l</code></pre></div>
+<p>or in the operator form:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  l <span class="ot">&lt;-</span> link <span class="st">&quot;Click me&quot;</span>
+  pure <span class="fu">$</span> l <span class="fu">^.</span> link_clicked</code></pre></div>
+<p>We'll be seeing more of these built-in components and data structures in the next section.</p>
+<p>Before that, we'll start creating one of our own.</p>
+<div id="exercise-todo">
+
+</div>

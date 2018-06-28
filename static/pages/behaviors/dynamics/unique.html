@@ -1,0 +1,8 @@
+<p>In this exercise you have a <code>Dynamic</code> of pairs, and the goal is to create a pair of <code>Dynamic</code>s and to make sure that neither of the <code>Dynamic</code>s has any spurious updates.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">uniqueExercise ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+               <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Int</span>, <span class="dt">Int</span>)
+               <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>, <span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+uniqueExercise dIn <span class="fu">=</span>
+  pure (fst <span class="fu">&lt;$&gt;</span> dIn, snd <span class="fu">&lt;$&gt;</span> dIn)</code></pre></div>
+<p>to make this happen.</p>

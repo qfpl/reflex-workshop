@@ -1,0 +1,19 @@
+<p>The goal of this exercise is to derive <code>Event</code>s from a pair of buttons, so that:</p>
+<ul>
+<li>the first <code>Event</code> will fire with a <code>3</code> whenever the first button is clicked</li>
+<li>the second <code>Event</code> will fire with a <code>5</code> whenever the second button is clicked</li>
+</ul>
+<p>You should fill out these functions:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapConstExercise3 ::</span> <span class="dt">Reflex</span> t 
+                   <span class="ot">=&gt;</span> <span class="dt">Event</span> t () 
+                   <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+fmapConstExercise3 eIn <span class="fu">=</span>
+  never
+
+<span class="ot">fmapConstExercise5 ::</span> <span class="dt">Reflex</span> t 
+                   <span class="ot">=&gt;</span> <span class="dt">Event</span> t () 
+                   <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+fmapConstExercise5 eIn <span class="fu">=</span>
+  never</code></pre></div>
+<p>to make this happen.</p>
+<p>The <code>fmapConstExercise3</code> function takes the <code>Event t ()</code> corresponding to the &quot;Click for 3&quot; button as input, and the <code>fmapConstExercise5</code> function takes the <code>Event t ()</code> corresponding to the &quot;Click for 5&quot; button as input.</p>

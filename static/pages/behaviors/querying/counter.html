@@ -1,0 +1,20 @@
+<p>The goal of this exercise is to build up functionality that will be used to create a counter.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterExercise&#39; ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+counterExercise&#39; bCount eAdd eReset <span class="fu">=</span>
+  never</code></pre></div>
+<p>The function takes the current value of the counter as a <code>Behavior t Int</code> along with an <code>Event t Int</code> which fires with the value to add to the counter and an <code>Event t ()</code> which signals when to reset the counter.</p>
+<p>The output <code>Event t Int</code> should fire with the new value of the counter whenever either of the input <code>Event</code>s fire.</p>
+<p>You should then use it to write this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterExercise ::</span> <span class="dt">Reflex</span> t
+                <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+counterExercise bCount eAdd eReset <span class="fu">=</span>
+  never</code></pre></div>
+<p>which is what is used in the next tab.</p>

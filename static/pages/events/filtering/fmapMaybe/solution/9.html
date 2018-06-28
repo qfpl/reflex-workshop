@@ -1,0 +1,14 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeSolution ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeSolution eIn <span class="fu">=</span>
+  <span class="kw">let</span>
+    eOut   <span class="fu">=</span> <span class="co">-- Event t Int</span>
+      fmapMaybe convert eIn
+    eError <span class="fu">=</span> <span class="co">-- Event t Text</span>
+      <span class="st">&quot;Not an Int&quot;</span> <span class="fu">&lt;$</span> difference (void eIn) (void eOut)
+  <span class="kw">in</span>
+    (eError, eOut)
+    
+    </code></pre></div>
+<p>... and then we just need to add the error message.</p>

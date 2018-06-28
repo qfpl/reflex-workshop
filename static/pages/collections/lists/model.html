@@ -1,0 +1,13 @@
+<p>You should copy your code from <code>todoListExercise</code> into <code>todoListModelExercise</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoListModelExercise ::</span> <span class="dt">MonadWidget</span> t m
+                      <span class="ot">=&gt;</span> [<span class="dt">TodoItem</span>]
+                      <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t [<span class="dt">TodoItem</span>])</code></pre></div>
+<p>The goal is to return a <code>Dynamic</code> which tracks the changes to the list of TODO items over the life of the application.</p>
+<p>This will be used to display the completed items beside the widget.</p>
+<p>Once you are done, you can also write</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoListExercise ::</span> <span class="dt">MonadWidget</span> t m
+                 <span class="ot">=&gt;</span> [<span class="dt">TodoItem</span>]
+                 <span class="ot">-&gt;</span> m ()
+todoListExercise <span class="fu">=</span> 
+  void <span class="fu">.</span> todoListModelExercise</code></pre></div>
+<p>to cut down on duplication.</p>

@@ -1,0 +1,9 @@
+<p>In this exercise we have an <code>Event t (Int -&gt; Int)</code> and want to create a <code>Behavior t Int</code> from it.</p>
+<p>The initial value should be <code>0</code>, and -- for reasons related to how the results are displayed -- you should return both the <code>Behavior</code> and the <code>Event</code> that is used to build the <code>Behavior</code>.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterExercise ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+                <span class="ot">=&gt;</span> <span class="dt">Event</span> t (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>)
+                <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+counterExercise eFn <span class="fu">=</span>
+  pure (pure <span class="dv">0</span>, never)</code></pre></div>
+<p>to make this happen.</p>

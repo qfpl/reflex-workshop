@@ -1,8 +1,9 @@
-TAGS
 dist
 dist-newstyle
+result*
+result-android
+result-ios
+.attr-cache
+ghcid-output.txt
+static
 cabal.project.local
-result
-result-2
-.dir-locals.el
-position.txt

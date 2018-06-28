@@ -1,0 +1,8 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+                <span class="ot">=&gt;</span> <span class="dt">Event</span> t (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>)
+                <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+counterSolution eFn <span class="fu">=</span> mdo
+  <span class="kw">let</span> e <span class="fu">=</span> flip (<span class="fu">$</span>) <span class="fu">&lt;$&gt;</span> b <span class="fu">&lt;@&gt;</span> eFn
+  b <span class="ot">&lt;-</span> hold <span class="dv">0</span> e
+  pure (b, e)</code></pre></div>
+<p>So we do that.</p>

@@ -1,0 +1,19 @@
+table, th, td {
+    border: 1px solid black;
+}
+
+.list-group-root {
+    min-width: 120px;
+}
+
+.list-group.list-group-root > .list-group > .list-group-item {
+    padding-left: 40px;
+}
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+    padding-left: 60px;
+}
+
+.list-group-item .fa {
+    margin-right: 5px;
+}

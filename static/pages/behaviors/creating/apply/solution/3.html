@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">applySolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Behavior</span> t <span class="dt">Int</span>)
+applySolution eIn <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    e2 <span class="fu">=</span> (<span class="ot">`div`</span> <span class="dv">2</span>) <span class="fu">&lt;$&gt;</span> eIn
+    e3 <span class="fu">=</span> (<span class="ot">`div`</span> <span class="dv">3</span>) <span class="fu">&lt;$&gt;</span> eIn
+  h2 <span class="ot">&lt;-</span> hold <span class="dv">0</span> e2
+  h3 <span class="ot">&lt;-</span> hold <span class="dv">0</span> e3
+  pure (h2, h3)</code></pre></div>
+<p>... and then returning the pair of <code>Behavior</code>s.</p>

@@ -1,0 +1,6 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m)
+             <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+             <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>)
+fmapSolution eIn <span class="fu">=</span>
+  hold <span class="dv">0</span> eIn</code></pre></div>
+<p>... so we use <code>hold</code>.</p>

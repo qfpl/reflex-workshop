@@ -1,0 +1,6 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapExercise ::</span> <span class="dt">Reflex</span> t 
+             <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span> 
+             <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+fmapExercise eIn <span class="fu">=</span> 
+  (<span class="fu">*</span> <span class="dv">2</span>) <span class="fu">&lt;$&gt;</span> eIn</code></pre></div>
+<p>The function that we are going to map over the <code>Event</code> is <code>(* 2)</code>.</p>

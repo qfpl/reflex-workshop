@@ -1,0 +1,19 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">buttonSolution ::</span> <span class="dt">MonadWidget</span> t m
+               <span class="ot">=&gt;</span> m ()
+buttonSolution <span class="fu">=</span> <span class="kw">do</span>
+  eAdd <span class="ot">&lt;-</span> el <span class="st">&quot;div&quot;</span> <span class="fu">$</span> 
+    button <span class="st">&quot;Add&quot;</span>
+  eReset <span class="ot">&lt;-</span> el <span class="st">&quot;div&quot;</span> <span class="fu">$</span> 
+    button <span class="st">&quot;Reset&quot;</span>
+
+  <span class="kw">let</span>
+    eChange <span class="fu">=</span>
+      mergeWith (<span class="fu">.</span>) [
+          (<span class="fu">+</span> <span class="dv">1</span>) <span class="fu">&lt;$</span> eAdd
+        , const <span class="dv">0</span> <span class="fu">&lt;$</span> eReset
+        ]
+  dCount <span class="ot">&lt;-</span> foldDyn (<span class="fu">$</span>) <span class="dv">0</span> eChange
+
+  el <span class="st">&quot;div&quot;</span> <span class="fu">$</span>
+    display dCount</code></pre></div>
+<p>We display the result.</p>

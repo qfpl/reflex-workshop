@@ -1,0 +1,13 @@
+<p>The goal of this exercise is to make the text content of the TODO item editable.</p>
+<p>You should change the text component from having this type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoText ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+         <span class="ot">-&gt;</span> <span class="dt">Text</span>
+         <span class="ot">-&gt;</span> m ()</code></pre></div>
+<p>to having this type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoText ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+         <span class="ot">-&gt;</span> <span class="dt">Text</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Text</span>), <span class="dt">Event</span> t ())</code></pre></div>
+<p>and to integrate this change into your existing <code>todoItem</code> widget.</p>
+<p>The text will be changed when the text input is focused and the user presses the Enter key. The text will be stripped of whitespace at that point. If the resulting text is non-empty, the <code>Event t (Text -&gt; Text)</code> will fire. Otherwise the second <code>Event</code> will fire, which signals that the item should be removed.</p>

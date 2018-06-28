@@ -1,0 +1,13 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">limitSolution ::</span> <span class="dt">Reflex</span> t
+              <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+limitSolution bCount bLimit eAdd eReset <span class="fu">=</span>
+  <span class="kw">let</span>
+    bAtLimit <span class="fu">=</span> (<span class="fu">&lt;</span>) <span class="fu">&lt;$&gt;</span> bCount <span class="fu">&lt;*&gt;</span> bLimit
+
+  <span class="kw">in</span>
+    _</code></pre></div>
+<p>It would be handy to know if <code>bCount</code> is less than <code>bLimit</code>, so we track that.</p>

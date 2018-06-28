@@ -1,0 +1,7 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">mergeWithSolution ::</span> <span class="dt">Reflex</span> t
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                  <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                  <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+mergeWithSolution eIn1 eIn2 <span class="fu">=</span>
+  mergeWith (<span class="fu">+</span>) [eIn1, eIn2]</code></pre></div>
+<p>The simplest approach is to use <code>mergeWith (+)</code>.</p>

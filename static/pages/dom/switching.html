@@ -1,0 +1,83 @@
+<p>So far we have only looked at static FRP networks. We can go beyond that with higher-order FRP.</p>
+<p>We can use <code>Event</code>s to trigger changes in the FRP network:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">switchHold ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m) 
+           <span class="ot">=&gt;</span> <span class="dt">Event</span> t a 
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t (<span class="dt">Event</span> t a) 
+           <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t a)
+           
+<span class="ot">switcher   ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m) 
+           <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t a 
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t (<span class="dt">Behavior</span> t a) 
+           <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t a)</code></pre></div>
+<p>or we can build <code>Behavior</code>s or <code>Dynamic</code>s that capture the changing meaning of an <code>Event</code> over time:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">switch     ::</span> <span class="dt">Reflex</span> t 
+           <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t (<span class="dt">Event</span> t a) 
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t a
+
+<span class="ot">switchDyn  ::</span> <span class="dt">Reflex</span> t 
+           <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Event</span> t a) 
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>The <code>Monad</code> instances for <code>Behavior</code> and <code>Dynamic</code> give us some other higher-order FRP functions:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">join       ::</span> <span class="dt">Reflex</span> t 
+           <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t (<span class="dt">Behavior</span> t a) 
+           <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a
+
+<span class="ot">join       ::</span> <span class="dt">Reflex</span> t 
+           <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Dynamic</span> t a) 
+           <span class="ot">-&gt;</span> <span class="dt">Dynamic</span> t a</code></pre></div>
+<p>and there is another related function which will come in handy soon:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">joinDynThroughMap ::</span> (<span class="dt">Reflex</span> t, <span class="dt">Ord</span> k) 
+                  <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> (<span class="dt">Map</span> k (<span class="dt">Dynamic</span> a)) 
+                  <span class="ot">-&gt;</span>  <span class="dt">Dynamic</span> (<span class="dt">Map</span> k a)</code></pre></div>
+<div id="exercise-higherOrder">
+
+</div>
+<p>If we want to switch out bits of the DOM based on <code>Event</code>s or <code>Dynamic</code>s, we can use:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">widgetHold ::</span> <span class="dt">MonadWidget</span> 
+           <span class="ot">=&gt;</span> m a 
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t (m a) 
+           <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t a)</code></pre></div>
+<p>or:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">dyn        ::</span> <span class="dt">MonadWidget</span> t m 
+           <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (m a) 
+           <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t a)</code></pre></div>
+<p>We usually try to use <code>widgetHold</code> if we can, since <code>dyn</code> has to do some work when it gets laid out on the page that can result in slightly less smooth initial rendering.</p>
+<div id="exercise-widgetHold">
+
+</div>
+<p>Some people might find the <code>Workflow</code> type helpful for their higher-order FRP needs:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">newtype</span> <span class="dt">Workflow</span> t m a <span class="fu">=</span> 
+  <span class="dt">Workflow</span> { 
+<span class="ot">    unWorkflow ::</span> m (a, <span class="dt">Event</span> t (<span class="dt">Workflow</span> t m a))
+  }
+
+<span class="ot">workflow ::</span> <span class="dt">MonadWidget</span> t m 
+         <span class="ot">=&gt;</span> <span class="dt">Workflow</span> t m a 
+         <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t a)</code></pre></div>
+<p>An example often helps, and I usually use pagination to explain it to people:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">page1 ::</span> <span class="dt">Workflow</span> t m (<span class="dt">Event</span> t <span class="dt">Int</span>)
+page1 <span class="fu">=</span> <span class="dt">Workflow</span> <span class="fu">$</span> <span class="kw">do</span>
+  <span class="fu">...</span>
+  pure (eResult, page2 <span class="fu">&lt;$</span> eNext)
+
+<span class="ot">page2 ::</span> <span class="dt">Workflow</span> t m (<span class="dt">Event</span> t <span class="dt">Int</span>)
+page2 <span class="fu">=</span> <span class="dt">Worklfow</span> <span class="fu">$</span> <span class="kw">do</span>
+  <span class="fu">...</span>
+  pure (eResult, leftmost [page1 <span class="fu">&lt;$</span> ePrev, page3 <span class="fu">&lt;$</span> eNext])
+
+<span class="ot">page3 ::</span> <span class="dt">Workflow</span> t m (<span class="dt">Event</span> t <span class="dt">Int</span>)
+page3 <span class="fu">=</span> <span class="dt">Workflow</span> <span class="fu">$</span> <span class="kw">do</span>
+  <span class="fu">...</span>
+  pure (eResult, page2 <span class="fu">&lt;$</span> ePrev)
+  
+<span class="ot">go ::</span> m (<span class="dt">Event</span> t <span class="dt">Int</span>)
+go <span class="fu">=</span> <span class="kw">do</span>
+  de <span class="ot">&lt;-</span> workflow page1
+  pure <span class="fu">$</span> switchDyn de</code></pre></div>
+<p>It is worth remembering that we can use the values in the <code>Event</code>s to make more interesting choices of how to move through the <code>Workflow</code>.</p>
+<div id="exercise-workflow">
+
+</div>
+<div id="exercise-todo">
+
+</div>

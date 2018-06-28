@@ -1,0 +1,15 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">addItem ::</span> <span class="dt">MonadWidget</span> t m
+        <span class="ot">=&gt;</span> m (<span class="dt">Event</span> t <span class="dt">TodoItem</span>)
+addItem <span class="fu">=</span> mdo
+  ti <span class="ot">&lt;-</span> textInput <span class="fu">$</span>
+    def <span class="fu">&amp;</span> setValue <span class="fu">.~</span> (<span class="st">&quot;&quot;</span> <span class="fu">&lt;$</span> eEnter)
+
+  <span class="kw">let</span>
+    eEnter    <span class="fu">=</span> keypress <span class="dt">Enter</span> ti
+    bText     <span class="fu">=</span> current <span class="fu">$</span> value ti
+    eStripped <span class="fu">=</span> Text.strip <span class="fu">&lt;$&gt;</span> bText <span class="fu">&lt;@</span> eEnter
+    eText     <span class="fu">=</span> ffilter (not <span class="fu">.</span> Text.null) eStripped
+    eAdd      <span class="fu">=</span> <span class="dt">TodoItem</span> <span class="dt">False</span> <span class="fu">&lt;$&gt;</span> eText
+
+  pure eAdd</code></pre></div>
+<p>We just need to use <code>RecursiveDo</code> to clear the inputs on Enter.</p>

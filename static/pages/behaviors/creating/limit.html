@@ -1,0 +1,11 @@
+<p>The goal of this exercise is to create the <code>Behavior</code> that was used as the limit in <code>src/Exercises/Behavior/Querying/Limit.hs</code>. The <code>Behavior</code> you create is going to be used with your solution to that exercise, so make sure you have finished that exercise first.</p>
+<p>The &quot;Progress&quot; tab will show you what you saw in the previous exercise, but this time you are supplying the logic that drives the limit <code>Behavior</code> instead of having it provided for you.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">limitExercise ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>)
+limitExercise bCount eAdd eReset <span class="fu">=</span> mdo
+  pure (pure <span class="dv">0</span>)</code></pre></div>
+<p>to make this happen.</p>

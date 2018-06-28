@@ -1,0 +1,11 @@
+<p>In this exercise you are given a <code>Behavior t Int</code> and an <code>Event t Text</code> that is tied to updates to a text input.</p>
+<p>The goals is to create a <code>Behavior t [Text]</code> that contains the last <code>n</code> changes to the <code>Event t Text</code>, where <code>n</code> is being passed in as a <code>Behavior</code> and the list is culled to the length <code>n</code> whenever the <code>Event t Text</code> fires.</p>
+<p>The initial value should be the empty list, and -- for reasons related to how the results are displayed -- you should return both the <code>Behavior</code> and the <code>Event</code> that is used to build the <code>Behavior</code>.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">textExercise ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+             <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+             <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span>
+             <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t [<span class="dt">Text</span>], <span class="dt">Event</span> t [<span class="dt">Text</span>])
+textExercise bIn eIn <span class="fu">=</span> mdo
+  pure (pure [], never)</code></pre></div>
+<p>to make this happen.</p>

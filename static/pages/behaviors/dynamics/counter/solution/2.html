@@ -1,0 +1,6 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+                <span class="ot">=&gt;</span> <span class="dt">Event</span> t (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>)
+                <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+counterSolution <span class="fu">=</span>
+  foldDyn (<span class="fu">$</span>) <span class="dv">0</span> </code></pre></div>
+<p>We could also just use <code>foldDyn</code> ...</p>

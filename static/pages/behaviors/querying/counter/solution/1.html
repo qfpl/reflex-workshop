@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution&#39; ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+counterSolution&#39; bCount eAdd eReset <span class="fu">=</span>
+  leftmost [
+  
+  
+    ]</code></pre></div>
+<p>We're working with inputs from two buttons and, since they are mutually exclusive, we can combine them using <code>leftmost</code>.</p>

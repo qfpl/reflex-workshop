@@ -1,0 +1,9 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">uniqueSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+               <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Int</span>, <span class="dt">Int</span>)
+               <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>, <span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+uniqueSolution dIn <span class="fu">=</span>
+
+
+
+  pure (fst <span class="fu">&lt;$&gt;</span> dIn, snd <span class="fu">&lt;$&gt;</span> dIn)</code></pre></div>
+<p>We can do this in two moves.</p>

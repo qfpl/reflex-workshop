@@ -1,0 +1,12 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())
+todoItem item <span class="fu">=</span> 
+  el <span class="st">&quot;div&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    <span class="kw">let</span> iText <span class="fu">=</span> item <span class="fu">^.</span> todoItem_text
+    el <span class="st">&quot;div&quot;</span> <span class="fu">$</span>
+      text iText
+        
+        
+        </code></pre></div>
+<p>... or the operator form if we are comfortable with that.</p>

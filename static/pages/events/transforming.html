@@ -1,0 +1,19 @@
+<p>One of the most common tasks we have when writing FRP code is to transform the values of an <code>Event</code>.</p>
+<p>There is a <code>Functor</code> instance for <code>Event</code> which gives us:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t b</code></pre></div>
+<p>where <code>Reflex</code> is a typeclass that contains a lot of the core <code>reflex</code>.</p>
+<p>This output <code>Event</code> will fire in the same frames as the input <code>Event</code>, but the values will be transformed by the supplied function.</p>
+<div id="exercise-fmap">
+
+</div>
+<p>We will also be using another <code>Functor</code>-based function frequently:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(&lt;$) ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t b</code></pre></div>
+<div id="exercise-fmapConst">
+
+</div>
+<p>As an aside, if you find yourself writing</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">() <span class="fu">&lt;$</span> myEvent</code></pre></div>
+<p>often, then you might want to use <code>void</code> instead:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Control.Monad</span> (void)
+
+<span class="ot">void ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()</code></pre></div>

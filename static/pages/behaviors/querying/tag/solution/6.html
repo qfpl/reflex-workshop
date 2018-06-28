@@ -1,0 +1,7 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">tagExercise ::</span> <span class="dt">Reflex</span> t
+            <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+tagExercise bIn eIn <span class="fu">=</span>
+  attachWithMaybe (\b _ <span class="ot">-&gt;</span> <span class="dt">Just</span> (b <span class="fu">*</span> <span class="dv">5</span>)) bIn eIn</code></pre></div>
+<p>... particularly if we <em>really</em> stretch the example.</p>

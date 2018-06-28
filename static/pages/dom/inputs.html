@@ -1,0 +1,115 @@
+<p>We're now going to look at a couple of the more involved components that come with <code>reflex-dom</code>.</p>
+<p>The first of these is the checkbox:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">checkbox ::</span> <span class="dt">MonadWidget</span> t m 
+         <span class="ot">=&gt;</span> <span class="dt">Bool</span> 
+         <span class="ot">-&gt;</span> <span class="dt">CheckboxConfig</span> t 
+         <span class="ot">-&gt;</span> m (<span class="dt">Checkbox</span> t)</code></pre></div>
+<p>We supply an initial value and some configuration, and a checkbox gets added to the page.</p>
+<p>There is an instance of <code>Default</code> for the configuration:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">instance</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Default</span> (<span class="dt">CheckboxConfig</span> t) <span class="kw">where</span></code></pre></div>
+<p>so we can do something as simple as:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  cb <span class="ot">&lt;-</span> checkbox <span class="dt">False</span> def</code></pre></div>
+<p>to get started.</p>
+<p>If we want to alter things we can modify the configuration:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">CheckboxConfig</span> t <span class="fu">=</span> 
+  <span class="dt">CheckboxConfig</span> { 
+<span class="ot">      _checkboxConfig_setValue   ::</span> <span class="dt">Event</span> t <span class="dt">Bool</span>
+    ,<span class="ot"> _checkboxConfig_attributes ::</span> <span class="dt">Dynamic</span> t (<span class="dt">Map</span> <span class="dt">Text</span> <span class="dt">Text</span>)
+    }</code></pre></div>
+<p>either directly or through lenses.</p>
+<p>There are lenses defined based on the above record definition -- <code>checkboxConfig_setValue</code> and <code>checkboxConfig_attributes</code> -- but there is also some typeclasses in play that mean that we can use the more generic lenses <code>setValue</code> and <code>attributes</code>.</p>
+<p>Between the <code>Default</code> instance and these lenses, we can do things like:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">def <span class="fu">&amp;</span> setValue   <span class="fu">.~</span> eToggle
+    <span class="fu">&amp;</span> attributes <span class="fu">.~</span> pure (<span class="st">&quot;class&quot;</span> <span class="fu">=:</span> <span class="st">&quot;highlight&quot;</span>)</code></pre></div>
+<p>to set up the configuration object.</p>
+<p>Once we have built a checkbox, we can extract some information from it via the data type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Checkbox</span> t <span class="fu">=</span> 
+  <span class="dt">Checkbox</span> { 
+<span class="ot">      _checkbox_value  ::</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+    ,<span class="ot"> _checkbox_change ::</span> <span class="dt">Event</span> t <span class="dt">Bool</span>
+    }</code></pre></div>
+<p>The <code>_checkbox_value</code> <code>Dynamic</code> tracks the state of the checkbox and lets us know about any updates. There is a typeclass that lets us get hold of that with the <code>value</code> function, so</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  cb <span class="fu">^.</span> checkbox_value</code></pre></div>
+<p>is the same as</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  value cb</code></pre></div>
+<p>The <code>_checkbox_change</code> <code>Event</code> lets us know when there has been a UI-driven change to the checkbox. The distinction between UI-driven changes and program-driven changes is handy, and lets us do things like this:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  rec
+    cb1 <span class="ot">&lt;-</span> checkbox <span class="dt">False</span> <span class="fu">$</span> 
+      def <span class="fu">&amp;</span> setValue <span class="fu">.~</span> (not <span class="fu">&lt;$&gt;</span> cb2 <span class="fu">^.</span> checkbox_change)
+    cb2 <span class="ot">&lt;-</span> checkbox <span class="dt">True</span> <span class="fu">$</span> 
+      def <span class="fu">&amp;</span> setValue <span class="fu">.~</span> (not <span class="fu">&lt;$&gt;</span> cb1 <span class="fu">^.</span> checkbox_change)</code></pre></div>
+<p>without any problems.</p>
+<div id="exercise-checkbox">
+
+</div>
+<p>As a brief aside, sometimes you might want to drive a checkbox or something similar from an existing <code>Dynamic</code>. There are two ways to do this, but one is strictly better than the other.</p>
+<p>There is a typeclass which gives us access to an <code>Event</code> which fires as soon as we have finished building whatever we are working on:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">PostBuild</span> t m <span class="kw">where</span>
+<span class="ot">  getPostBuild ::</span> m (<span class="dt">Event</span> t ())</code></pre></div>
+<p>We <em>could</em> use this to get the value of the <code>Dynamic</code> just after the checkbox is rendered and use that to set the value of the checkbox:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">linkCheckbox ::</span> <span class="dt">MonadWidget</span> t m 
+             <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span> 
+             <span class="ot">-&gt;</span> m (<span class="dt">Checkbox</span>)
+linkCheckbox dBool <span class="fu">=</span> <span class="kw">do</span>
+  ePostBuild <span class="ot">&lt;-</span> getPostBuild
+  <span class="kw">let</span> 
+    eChange <span class="fu">=</span> 
+      leftmost [
+          current dBool <span class="fu">&lt;@</span> ePostBuild
+        , updated dBool
+        ]
+  checkbox <span class="dt">False</span> <span class="fu">$</span> 
+    def <span class="fu">&amp;</span> setValue <span class="fu">.~</span> eChange</code></pre></div>
+<p>This is not great -- if the <code>Dynamic</code> has the value <code>True</code> when the checkbox is rendered, it will start out unchecked for a frame and then quickly become checked.</p>
+<p>There is another typeclass which hasn't been mentioned so far, because it's easy to misuse until you have a good example of where it is useful.</p>
+<p>The <code>MonadSample</code> typeclass:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">MonadSample</span> t m <span class="kw">where</span>
+<span class="ot">  sample ::</span> <span class="dt">Behavior</span> t a <span class="ot">-&gt;</span> m a</code></pre></div>
+<p>gets hold of the value of a <code>Behavior</code> at the moment <code>sample</code> is called.</p>
+<p>This gives us an initial value for the checkbox. We only need an initial value and an update <code>Event</code> to drive the <code>Dynamic</code> hiding inside of the checkbox, so we are good to go:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">linkCheckbox ::</span> <span class="dt">MonadWidget</span> t m 
+             <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span> 
+             <span class="ot">-&gt;</span> m (<span class="dt">Checkbox</span>)
+linkCheckbox dBool <span class="fu">=</span> <span class="kw">do</span>
+  initial <span class="ot">&lt;-</span> sample <span class="fu">.</span> current <span class="fu">$</span> dBool
+  checkbox initial <span class="fu">$</span> 
+    def <span class="fu">&amp;</span> setValue <span class="fu">.~</span> updated dBool</code></pre></div>
+<p>With that out of the way, we'll start to look at a more complicated component -- a text input:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">textInput ::</span> <span class="dt">MonadWidget</span> t m 
+          <span class="ot">=&gt;</span> <span class="dt">TextInputConfig</span> t 
+          <span class="ot">-&gt;</span> m (<span class="dt">TextInput</span> t)</code></pre></div>
+<p>We have a <code>Default</code> instance for <code>TextInputConfig</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">instance</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Default</span> (<span class="dt">TextInputConfig</span> t) <span class="kw">where</span></code></pre></div>
+<p>so we can get started quickly.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  ti <span class="ot">&lt;-</span> textInput def</code></pre></div>
+<p>The configuration data type is similar to that for a checkbox, although we can alter the input type and the initial value is in the data type rather than being and argument to the <code>textInput</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">TextInputConfig</span> t <span class="fu">=</span> 
+  <span class="dt">TextInputConfig</span> { 
+<span class="ot">      _textInputConfig_inputType    ::</span> <span class="dt">Text</span>
+    ,<span class="ot"> _textInputConfig_initialValue ::</span> <span class="dt">Text</span>
+    ,<span class="ot"> _textInputConfig_setValue     ::</span> <span class="dt">Event</span> t <span class="dt">Text</span>
+    ,<span class="ot"> _textInputConfig_attributes   ::</span> <span class="dt">Dynamic</span> t (<span class="dt">Map</span> <span class="dt">Text</span> <span class="dt">Text</span>)
+    }</code></pre></div>
+<p>There is quite a bit more going on in the <code>TextInput</code> type itself:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">TextInput</span> t <span class="fu">=</span> 
+  <span class="dt">TextInput</span> { 
+<span class="ot">      _textInput_value          ::</span> <span class="dt">Dynamic</span> t <span class="dt">Text</span>
+    ,<span class="ot"> _textInput_input          ::</span> <span class="dt">Event</span> t <span class="dt">Text</span>
+    ,<span class="ot"> _textInput_keypress       ::</span> <span class="dt">Event</span> t <span class="dt">Word</span>
+    ,<span class="ot"> _textInput_keydown        ::</span> <span class="dt">Event</span> t <span class="dt">Word</span>
+    ,<span class="ot"> _textInput_keyup          ::</span> <span class="dt">Event</span> t <span class="dt">Word</span>
+    ,<span class="ot"> _textInput_hasFocus       ::</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+    ,<span class="ot"> _textInput_builderElement ::</span> <span class="dt">InputElement</span> <span class="dt">EventResult</span> <span class="dt">GhcjsDomSpace</span> t
+    }</code></pre></div>
+<p>although <code>_textInput_value</code> and <code>_textInput_input</code> seem to be used the most, and are similar to <code>_checkbox_value</code> and <code>_checkbox_change</code> in how they function.</p>
+<p>There is a typeclass that lets us easily access DOM events on the text input:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">instance</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">HasDomEvent</span> t (<span class="dt">TextInput</span> t) en <span class="kw">where</span></code></pre></div>
+<p>like so:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  ti <span class="ot">&lt;-</span> textInput def
+  domEvent <span class="dt">Dblclick</span> ti</code></pre></div>
+<p>and there are convenience functions for working with <code>keypress</code>, <code>keydown</code> and <code>keyup</code> <code>Events</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">  ti <span class="ot">&lt;-</span> textInput def
+  keypress <span class="dt">Enter</span> ti</code></pre></div>
+<div id="exercise-textInput">
+
+</div>

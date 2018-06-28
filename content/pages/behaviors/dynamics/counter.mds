@@ -1,0 +1,44 @@
+```haskell
+counterSolution :: (Reflex t, MonadFix m, MonadHold t m)
+                => Event t (Int -> Int)
+                -> m (Dynamic t Int)
+counterSolution eFn = mdo
+
+
+  pure _
+```
+ 
+This is already similar to what we have done before ...
+=====
+```haskell
+counterSolution :: (Reflex t, MonadFix m, MonadHold t m)
+                => Event t (Int -> Int)
+                -> m (Dynamic t Int)
+counterSolution eFn = mdo
+  let e = (&) <$> current d <@> eFn
+  d <- holdDyn 0 e
+  pure d
+```
+ 
+... so we can make use of our old tricks.
+=====
+```haskell
+counterSolution :: (Reflex t, MonadFix m, MonadHold t m)
+                => Event t (Int -> Int)
+                -> m (Dynamic t Int)
+counterSolution =
+  foldDyn ($) 0 
+```
+ 
+We could also just use `foldDyn` ...
+=====
+```haskell
+counterSolution :: (Reflex t, MonadFix m, MonadHold t m)
+                => Event t (Int -> Int)
+                -> m (Dynamic t Int)
+counterSolution =
+  accum (&) 0
+```
+ 
+... or `accum`.
+

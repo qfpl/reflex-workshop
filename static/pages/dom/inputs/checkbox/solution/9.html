@@ -1,0 +1,23 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">firings ::</span> <span class="dt">MonadWidget</span> t m
+        <span class="ot">=&gt;</span> <span class="dt">Text</span>
+        <span class="ot">-&gt;</span> <span class="dt">Event</span> t a
+        <span class="ot">-&gt;</span> m ()
+firings label e <span class="fu">=</span>
+  el <span class="st">&quot;div&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    dCount <span class="ot">&lt;-</span> count e
+
+    text label
+    text <span class="st">&quot; has been fired &quot;</span>
+    display dCount
+    text <span class="st">&quot; time&quot;</span>
+    dynText <span class="fu">$</span> bool <span class="st">&quot;s&quot;</span> <span class="st">&quot;&quot;</span> <span class="fu">.</span> (<span class="fu">==</span> <span class="dv">1</span>) <span class="fu">&lt;$&gt;</span> dCount</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItemSolution ::</span> <span class="dt">MonadWidget</span> t m
+                 <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+                 <span class="ot">-&gt;</span> m ()
+todoItemSolution item <span class="fu">=</span> <span class="kw">do</span>
+  (eChange, eRemove) <span class="ot">&lt;-</span> el <span class="st">&quot;div&quot;</span> <span class="fu">$</span>
+    todoItem item
+
+  firings <span class="st">&quot;Change&quot;</span> eChange
+  firings <span class="st">&quot;Remove&quot;</span> eRemove</code></pre></div>
+<p>... and we can factor out the duplication.</p>

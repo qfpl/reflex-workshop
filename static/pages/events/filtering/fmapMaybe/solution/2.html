@@ -1,0 +1,14 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeSolution ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeSolution eIn <span class="fu">=</span>
+  <span class="kw">let</span>
+    eMaybe <span class="fu">=</span>  <span class="co">-- Event t (Maybe Int)</span>
+      convert <span class="fu">&lt;$&gt;</span> eIn
+    eOut   <span class="fu">=</span>  <span class="co">-- Event t Int</span>
+      fmapMaybe id eMaybe
+
+
+  <span class="kw">in</span>
+    (_     , eOut)</code></pre></div>
+<p>We then use <code>fmapMaybe id</code> to filter out and remove the <code>Nothing</code> values for the success case...</p>

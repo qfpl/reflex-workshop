@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution&#39; ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+counterSolution&#39; bCount eAdd eReset <span class="fu">=</span>
+  never 
+  
+
+  </code></pre></div>
+<p>We'll work on the more general solution first.</p>

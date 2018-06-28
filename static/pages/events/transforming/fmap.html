@@ -1,0 +1,13 @@
+<p>In this exercise, we are working with an <code>Event t Int</code> that fires once a second, where the value of the <code>Event</code> will be the number of seconds since the panel was loaded.</p>
+<p>The event looks like this:</p>
+<div id="demonstration-count">
+
+</div>
+<p>The goal of this exercise is to create an <code>Event</code> that fires every time that <code>eIn</code> fires, where the value of the output <code>Event</code> is double the value of the input <code>Event</code>.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapExercise ::</span> <span class="dt">Reflex</span> t 
+             <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span> 
+             <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+fmapExercise eIn <span class="fu">=</span> 
+  never</code></pre></div>
+<p>to make this happen.</p>

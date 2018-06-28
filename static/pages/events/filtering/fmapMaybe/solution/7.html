@@ -1,0 +1,15 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeSolution ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeSolution eIn <span class="fu">=</span>
+  <span class="kw">let</span>
+    eOut   <span class="fu">=</span> <span class="co">-- Event t Int</span>
+      fmapMaybe convert eIn
+    eError <span class="fu">=</span> <span class="co">-- Event t Text</span>
+      _            <span class="fu">&lt;$</span> difference       eIn        eOut
+  <span class="kw">in</span>
+    (eError, eOut)
+    
+    </code></pre></div>
+<p>We want an <code>Event</code> which fires every time that <code>eIn</code> fires, as long as <code>eOut</code> isn't firing at the same time.</p>
+<p>The types don't quite line up though.</p>

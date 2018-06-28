@@ -1,0 +1,12 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">eventsSolution ::</span> <span class="dt">MonadWidget</span> t m
+               <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+               <span class="ot">-&gt;</span> m a
+               <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())
+eventsSolution dIn w <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    dAttrs <span class="fu">=</span> bool mempty (<span class="st">&quot;hidden&quot;</span> <span class="fu">=:</span> <span class="st">&quot;&quot;</span>) <span class="fu">&lt;$&gt;</span> dIn
+    attrs <span class="fu">=</span> <span class="st">&quot;class&quot;</span> <span class="fu">=:</span> <span class="st">&quot;text-uppercase&quot;</span>
+  (e, _) <span class="ot">&lt;-</span> elDynAttr&#39; <span class="st">&quot;div&quot;</span> (pure attrs <span class="fu">&lt;&gt;</span> dAttrs) <span class="fu">$</span>
+    w
+  pure <span class="fu">$</span> domEvent <span class="dt">Click</span> e</code></pre></div>
+<p>... and get hold of an <code>Event</code> that fires when we click on the <code>div</code>.</p>

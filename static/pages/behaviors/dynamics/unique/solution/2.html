@@ -1,0 +1,9 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">uniqueSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+               <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t (<span class="dt">Int</span>, <span class="dt">Int</span>)
+               <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>, <span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+uniqueSolution dIn <span class="fu">=</span> <span class="kw">do</span>
+
+  dOut1 <span class="ot">&lt;-</span> holdUniqDyn <span class="fu">$</span> fst <span class="fu">&lt;$&gt;</span> dIn
+  dOut2 <span class="ot">&lt;-</span> holdUniqDyn <span class="fu">$</span> snd <span class="fu">&lt;$&gt;</span> dIn
+  pure (dOut1      , dOut2      )</code></pre></div>
+<p>... and we wrap them in <code>holdUniqDyn</code>.</p>

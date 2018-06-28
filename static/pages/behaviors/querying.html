@@ -1,0 +1,67 @@
+<p><code>Behavior</code>s have values at all points in time and <code>Event</code>s have values at particular instants in time.</p>
+<p>We can use an <code>Event</code> to sample a <code>Behavior</code> at all of the points of time when the <code>Event</code> is firing.</p>
+<p>We can grab the value of the <code>Behavior</code> when the <code>Event</code> fires:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">tag             ::</span> <span class="dt">Reflex</span> t 
+                <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t a 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t b 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>and there is an operator form:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(&lt;@)            ::</span> <span class="dt">Reflex</span> t 
+                <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t a 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t b 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>If we want to use the value of the <code>Event</code> as well, there is a related operator:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(&lt;@&gt;)           ::</span> <span class="dt">Reflex</span> t 
+                <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t (a <span class="ot">-&gt;</span> b) 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t a 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t b</code></pre></div>
+<p>a function that lets us be explicit about how we will combine the <code>Behavior</code> and <code>Event</code> values:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">attachWith      ::</span> <span class="dt">Reflex</span> t 
+                <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) 
+                <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t b 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t c</code></pre></div>
+<p>and a version that allows us to filter out some results at the same time:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">attachWithMaybe ::</span> <span class="dt">Reflex</span> t 
+                <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> <span class="dt">Maybe</span> c) 
+                <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t b 
+                <span class="ot">-&gt;</span> <span class="dt">Event</span> t c</code></pre></div>
+<p>The operators are often used with <code>Applicative</code> style code to sample a number of <code>Behavior</code>s with an <code>Event</code>.</p>
+<p>We do things like this if we want the value from the <code>Event</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">fn <span class="fu">&lt;$&gt;</span> bArg1 <span class="fu">&lt;*&gt;</span> bArg2 <span class="fu">&lt;@&gt;</span> eArg3</code></pre></div>
+<p>or otherwise:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">fn <span class="fu">&lt;$&gt;</span> bArg1 <span class="fu">&lt;*&gt;</span> bArg2 <span class="fu">&lt;@</span> eArg3</code></pre></div>
+<div id="exercise-tag">
+
+</div>
+<p>Now that we've warmed up, let's build something a little more useful.</p>
+<div id="exercise-counter">
+
+</div>
+<p>In the above exercise, we were passing a <code>Behavior t Int</code> into the function and getting an <code>Event t Int</code> as an output, which is being used behind the scenes to update the <code>Behavior</code>.</p>
+<p>It is worth noting that we don't need to pass in the <code>Behavior</code> to achieve the same result. To do this, we need to move from returning an <code>Event t Int</code> to returning an <code>Event t (Int -&gt; Int)</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterAlt ::</span> <span class="dt">Reflex</span> t
+           <span class="ot">=&gt;</span> <span class="dt">Event</span> t ()
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+           <span class="ot">-&gt;</span> <span class="dt">Event</span> t (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>)
+counterAlt eAdd eReset <span class="fu">=</span>
+  mergeWith (<span class="fu">.</span>) [
+      const <span class="dv">0</span> <span class="fu">&lt;$</span> eReset
+    , (<span class="fu">+</span> <span class="dv">1</span>)   <span class="fu">&lt;$</span> eAdd
+    ]</code></pre></div>
+<p>We could have used <code>leftmost</code> here, if we were sure that the input events were always going to be mutually exclusive. If you can use <code>mergeWith</code> it is worth doing, since it will make your functions more robust in the face of change (and will force you to think about edge cases in the process).</p>
+<p>We'll put that aside for a moment, but we'll be coming back to it.</p>
+<div id="exercise-counterText">
+
+</div>
+<p>We have one last function to cover in this section.</p>
+<p>We can use <code>gate</code> as a time-varying filter for <code>Event</code>s:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">gate ::</span> <span class="dt">Reflex</span> t 
+     <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Bool</span> 
+     <span class="ot">-&gt;</span> <span class="dt">Event</span> t a 
+     <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<div id="exercise-limit">
+
+</div>
+<p>Next up, we'll look at how to create <code>Behavior</code>s from <code>Event</code>s...</p>

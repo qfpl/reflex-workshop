@@ -1,0 +1,22 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">limitSolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>)
+limitSolution bCount eAdd eReset <span class="fu">=</span> mdo
+  <span class="kw">let</span>
+    defaultLimit <span class="fu">=</span> <span class="dv">5</span>
+
+    bLimitIncrease <span class="fu">=</span> (<span class="fu">==</span>) <span class="fu">&lt;$&gt;</span> bCount <span class="fu">&lt;*&gt;</span> bLimit
+    eLimitIncrease <span class="fu">=</span> gate bLimitIncrease eReset
+
+    bLimitReset <span class="fu">=</span> (<span class="fu">==</span> <span class="dv">0</span>) <span class="fu">&lt;$&gt;</span> bCount
+    eLimitReset <span class="fu">=</span> gate bLimitReset eReset
+
+  bLimit <span class="ot">&lt;-</span> hold defaultLimit <span class="fu">.</span> leftmost <span class="fu">$</span> [
+      (<span class="fu">+</span><span class="dv">1</span>) <span class="fu">&lt;$&gt;</span> bLimit <span class="fu">&lt;@</span> eLimitIncrease
+    , defaultLimit    <span class="fu">&lt;$</span> eLimitReset
+    ]
+
+  pure bLimit</code></pre></div>
+<p>We then use these two <code>Event</code>s to adjust the limit.</p>

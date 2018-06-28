@@ -1,0 +1,139 @@
+```haskell
+todoListSolution :: MonadWidget t m
+                 => [TodoItem]
+                 -> m ()
+todoListSolution items = mdo
+  eItem <- addItem
+  eAdd  <- numberOccurrencesFrom (length items) eItem
+  let
+    eInsert = (\(k,v) -> k =: Just v) <$> eAdd
+    m = Map.fromList . zip [0..] $ items
+  dmes <- listHoldWithKey m eInsert     $ \_ item -> do
+    _ <-  todoItem item
+    pure ()
+
+
+
+
+
+
+
+
+
+
+  pure ()
+```
+ 
+We previously had something like this.
+=====
+```haskell
+todoListSolution :: MonadWidget t m
+                 => [TodoItem]
+                 -> m ()
+todoListSolution items = mdo
+  eItem <- addItem
+  eAdd  <- numberOccurrencesFrom (length items) eItem
+  let
+    eInsert = (\(k,v) -> k =: Just v) <$> eAdd
+    m = Map.fromList . zip [0..] $ items
+  dmes <- listHoldWithKey m eInsert     $ \_ item -> do
+    (_, eRemove) <- todoItem item
+    pure eRemove
+
+
+
+
+
+
+
+
+
+
+  pure ()
+```
+ 
+We're going to change that so that we get hold of the remove `Event` for each item.
+=====
+```haskell
+todoListSolution :: MonadWidget t m
+                 => [TodoItem]
+                 -> m ()
+todoListSolution items = mdo
+  eItem <- addItem
+  eAdd  <- numberOccurrencesFrom (length items) eItem
+  let
+    eInsert = (\(k,v) -> k =: Just v) <$> eAdd
+    m = Map.fromList . zip [0..] $ items
+  dmes <- listHoldWithKey m eInsert     $ \_ item -> do
+    (_, eRemove) <- todoItem item
+    pure eRemove
+
+  let
+    eRemoves = 
+      fmap (Nothing <$) .
+      switchDyn .
+      fmap mergeMap $
+      dmes
+
+
+
+  pure ()
+```
+ 
+Then we're going to turn our `Dynamic t (Map Int (Event t ()))` into an `Event t (Map Int (Maybe TodoItem))`, to make it compatible with what `listHoldWithKey` is expecting.
+=====
+```haskell
+todoListSolution :: MonadWidget t m
+                 => [TodoItem]
+                 -> m ()
+todoListSolution items = mdo
+  eItem <- addItem
+  eAdd  <- numberOccurrencesFrom (length items) eItem
+  let
+    eInsert = (\(k,v) -> k =: Just v) <$> eAdd
+    m = Map.fromList . zip [0..] $ items
+  dmes <- listHoldWithKey m eInsert     $ \_ item -> do
+    (_, eRemove) <- todoItem item
+    pure eRemove
+
+  let
+    eRemoves = 
+      fmap (Nothing <$) .
+      switchDyn .
+      fmap mergeMap $
+      dmes
+    eListChange = 
+      leftmost [eRemoves, eInsert]
+
+  pure ()
+```
+ 
+Then we combine that `Event` with the insertion `Event` ...
+=====
+```haskell
+todoListSolution :: MonadWidget t m
+                 => [TodoItem]
+                 -> m ()
+todoListSolution items = mdo
+  eItem <- addItem
+  eAdd  <- numberOccurrencesFrom (length items) eItem
+  let
+    eInsert = (\(k,v) -> k =: Just v) <$> eAdd
+    m = Map.fromList . zip [0..] $ items
+  dmes <- listHoldWithKey m eListChange $ \_ item -> do
+    (_, eRemove) <- todoItem item
+    pure eRemove
+
+  let
+    eRemoves = 
+      fmap (Nothing <$) .
+      switchDyn .
+      fmap mergeMap $
+      dmes
+    eListChange = 
+      leftmost [eRemoves, eInsert]
+
+  pure ()
+```
+ 
+... and pass it to `listHoldWithKey`.

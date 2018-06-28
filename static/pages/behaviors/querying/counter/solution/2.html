@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">counterSolution&#39; ::</span> <span class="dt">Reflex</span> t
+                 <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+counterSolution&#39; bCount eAdd eReset <span class="fu">=</span>
+  leftmost [
+      <span class="dv">0</span>   <span class="fu">&lt;$</span>             eReset
+
+    ]</code></pre></div>
+<p>If <code>eReset</code> fires, we want to fire the result with the value <code>0</code>.</p>

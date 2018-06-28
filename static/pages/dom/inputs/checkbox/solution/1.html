@@ -1,0 +1,28 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">TodoItem</span> <span class="ot">-&gt;</span> <span class="dt">TodoItem</span>), <span class="dt">Event</span> t ())
+todoItem item <span class="fu">=</span>
+  divClass <span class="st">&quot;d-flex flex-row align-items-center&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    <span class="kw">let</span>
+      iComplete <span class="fu">=</span> item <span class="fu">^.</span> todoItem_complete
+      iText     <span class="fu">=</span> item <span class="fu">^.</span> todoItem_text
+
+
+
+
+
+     
+     
+     
+     
+     
+      
+
+
+
+
+
+
+
+    pure (_      , _      )</code></pre></div>
+<p>We break apart the initial values.</p>

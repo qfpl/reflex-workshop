@@ -1,0 +1,9 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">textSolution ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Int</span>
+             <span class="ot">-&gt;</span> m ()
+textSolution dIn <span class="fu">=</span> <span class="kw">do</span>
+  el <span class="st">&quot;div&quot;</span> <span class="fu">$</span>
+    text <span class="st">&quot;Input&quot;</span>
+  el <span class="st">&quot;div&quot;</span> <span class="fu">$</span>
+    dynText <span class="st">&quot;&quot;</span></code></pre></div>
+<p>We can then use <code>dynText</code> ...</p>

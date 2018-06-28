@@ -1,0 +1,13 @@
+<p>In this exercise we're making a silly game that involves clicking a button as fast as you can.</p>
+<p>The game cycles between two modes of operation. There is a countdown that is displayed to indicate when the mode of operation is next going to change.</p>
+<p>While the game is in the clicking mode, any clicks will add to the score. While the game is in the waiting mode, any clicks will reset the score.</p>
+<p>You will be given an <code>Event t Bool</code> that fires with <code>False</code> when the game is moving into waiting mode and fires with <code>True</code> when the game is moving into click mode.</p>
+<p>You will also be given an <code>Event t ()</code> which fires when the button is clicked.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">higherOrderExercise ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m)
+                    <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Bool</span>
+                    <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+                    <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+higherOrderExercise eClickable eClick <span class="fu">=</span>
+  pure (pure <span class="dv">0</span>)</code></pre></div>
+<p>to make this happen.</p>

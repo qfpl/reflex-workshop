@@ -1,0 +1,7 @@
+<p>We are going to extend on the previous exercise to add the ability to add new TODO items to the list.</p>
+<p>First we'll need a widget that provides a text input, and fires an <code>Event</code> whenever the user presses Enter and the text is not empty after trimming. The widget should clear its text after the user presses Enter.</p>
+<p>You should write:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">addItem ::</span> <span class="dt">MonadWidget</span> t m
+        <span class="ot">=&gt;</span> m (<span class="dt">Event</span> t <span class="dt">TodoItem</span>)</code></pre></div>
+<p>to do this.</p>
+<p>Once you have done that, you should extend <code>todoListExercise</code>. It should include the <code>addItem</code> widget, and make use of the output from <code>addItem</code> to add items to our list.</p>

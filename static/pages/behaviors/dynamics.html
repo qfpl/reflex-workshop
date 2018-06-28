@@ -1,0 +1,54 @@
+<p>A <code>Dynamic t a</code> is like a <code>Behavior t a</code> that has been upgraded to includ an <code>Event t a</code> that signals when it is going to change.</p>
+<p>Creating a <code>Behavior</code> / <code>Event</code> pair like this was a common pattern in FRP code in the wild, and it has proved particularly useful when working with the DOM. <code>Behavior</code>s manage our state, but without a way to signal when they were updating we would need to poll them to detect and react to changes. With a <code>Dynamic</code> we can use the <code>Behavior</code> for state management, and let the <code>Event</code> notify the DOM of any changes.</p>
+<p>You can get hold of the <code>Behavior</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">current ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t a <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a</code></pre></div>
+<p>or the <code>Event</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">updated ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>although something has probably gone a bit wrong if you are making more use of <code>updated</code> than <code>current</code>.</p>
+<p>There are <code>Functor</code>, <code>Applicative</code>, <code>Monad</code>, <code>Semigroup</code>, <code>Monoid</code> and <code>IsString</code> instances which behave much like the instances for <code>Behavior</code>.</p>
+<p>There is a function in the <code>MonadHold</code> typeclass for building <code>Dynamic</code>s from <code>Event</code>s:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">MonadHold</span> t m <span class="kw">where</span>
+  <span class="fu">...</span>
+<span class="ot">  holdDyn ::</span> a <span class="ot">-&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t a)
+  <span class="fu">...</span></code></pre></div>
+<p>There is a really handy function called <code>foldDyn</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">foldDyn     ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+            <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> b) 
+            <span class="ot">-&gt;</span> b 
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t a 
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t b)</code></pre></div>
+<p>which I often use with <code>($)</code>, which specializes to:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">foldDyn<span class="ot"> ($) ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m) 
+            <span class="ot">=&gt;</span> a
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t (a <span class="ot">-&gt;</span> a)
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t a)</code></pre></div>
+<p>This is picked up in the <code>Accumulator</code> class:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Accumulator</span> t f <span class="fu">|</span> f <span class="ot">-&gt;</span> t <span class="kw">where</span>
+  <span class="fu">...</span>
+<span class="ot">  accum ::</span> (<span class="dt">MonadHold</span> t m, <span class="dt">MonadFix</span> m) 
+        <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> a) 
+        <span class="ot">-&gt;</span> a 
+        <span class="ot">-&gt;</span> <span class="dt">Event</span> t b 
+        <span class="ot">-&gt;</span> m (f a)
+  <span class="fu">...</span></code></pre></div>
+<p>which has instances for <code>Event</code>, <code>Behavior</code> and <code>Dynamic</code>.</p>
+<p>The function has the arguments around the other way, so I tend to use <code>(&amp;)</code> from <code>Data.Function</code> with <code>accum</code>, because it is quicker to type than <code>(flip ($))</code>.</p>
+<div id="exercise-counter">
+
+</div>
+<p>There is another handy function worth pointing out.</p>
+<p>We can use the <code>Applicative</code> instance to group together various <code>Dynamic</code>s, and then we can pass that <code>Dynamic</code> around our program.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Foo</span> <span class="fu">=</span> <span class="dt">Foo</span> {<span class="ot"> bar ::</span> <span class="dt">Int</span>,<span class="ot"> baz ::</span> <span class="dt">Bool</span> }
+<span class="kw">let</span> dState <span class="fu">=</span> <span class="dt">Foo</span> <span class="fu">&lt;$&gt;</span> dBar <span class="fu">&lt;*&gt;</span> dBaz</code></pre></div>
+<p>Some other part of our program might only be interested in part of that result, and we can use the <code>Functor</code> instance to project that out.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">let</span> dInterestingBit <span class="fu">=</span> bar <span class="fu">&lt;$&gt;</span> dState</code></pre></div>
+<p>The problem is that if <code>baz</code> gets updated in <code>dState</code>, <code>dInterestingBit</code> is going to see <code>Event</code>s firing to indicate an update has occurred even though that value isn't changing.</p>
+<p>The function <code>holdUniqDyn</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">holdUniqDyn ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadFix</span> m, <span class="dt">MonadHold</span> t m, <span class="dt">Eq</span> a) 
+            <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t a 
+            <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t a)</code></pre></div>
+<p>will take a <code>Dynamic</code> and build a similar <code>Dynamic</code>, where the internal <code>Event</code> will not fire if the value of the <code>Dynamic</code> has not changed.</p>
+<p>So if you're building up <code>Dynamic</code>s and tearing them down again, remember that <code>holdUniqDyn</code> might help you out.</p>
+<div id="exercise-unique">
+
+</div>

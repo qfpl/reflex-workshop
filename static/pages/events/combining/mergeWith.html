@@ -1,0 +1,13 @@
+<p>In this exercise we are working with two <code>Event t Int</code>s which always fire at the same time.</p>
+<div id="demonstration-events">
+
+</div>
+<p>The goal is to produce an <code>Event t Int</code> which fires at the same time as these inputs, where the value of the output <code>Event</code> is the sum of the two input <code>Event</code>s.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">mergeWithExercise ::</span> <span class="dt">Reflex</span> t
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                  <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+                  <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+mergeWithExercise eIn1 eIn2 <span class="fu">=</span>
+  never</code></pre></div>
+<p>to make this happen.</p>

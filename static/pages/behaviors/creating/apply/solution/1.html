@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">applySolution ::</span> (<span class="dt">Reflex</span> t, <span class="dt">MonadHold</span> t m)
+              <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+              <span class="ot">-&gt;</span> m (<span class="dt">Behavior</span> t <span class="dt">Int</span>, <span class="dt">Behavior</span> t <span class="dt">Int</span>)
+applySolution eIn <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    e2 <span class="fu">=</span> (<span class="ot">`div`</span> <span class="dv">2</span>) <span class="fu">&lt;$&gt;</span> eIn
+    e3 <span class="fu">=</span> (<span class="ot">`div`</span> <span class="dv">3</span>) <span class="fu">&lt;$&gt;</span> eIn
+    
+    
+  pure (_ , _ )</code></pre></div>
+<p>We can get away with just dividing the input <code>Event</code> by 2 and 3 ...</p>

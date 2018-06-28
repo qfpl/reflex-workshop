@@ -1,0 +1,10 @@
+<p>In this exercise we have a <code>Behavior t Int</code> and an <code>Event t ()</code> which fires whenever a button is pressed.</p>
+<p>The goal is to produce an <code>Event t Int</code> which fires whenever the button is pressed, with a value that is <code>5</code> times the value of the input <code>Behavior</code> at that instant.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">tagExercise ::</span> <span class="dt">Reflex</span> t
+            <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+tagExercise bIn eIn <span class="fu">=</span>
+  never</code></pre></div>
+<p>to make this happen.</p>

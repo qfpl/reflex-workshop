@@ -1,0 +1,17 @@
+<p>Sometimes we want to create an <code>Event</code> that is based on another <code>Event</code>, but which doesn't always fire when the input <code>Event</code> fires.</p>
+<p>The most straight-forward way to do this is with the <code>ffilter</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">ffilter ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>which takes predicate which is used to decide whether the output <code>Event</code> should fire.</p>
+<div id="exercise-ffilter">
+
+</div>
+<p>We can combine the transforming and filtering of an <code>Event</code> with <code>fmapMaybe</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybe ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">Maybe</span> b) <span class="ot">-&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t b</code></pre></div>
+<p>What is the type of <code>fmapMaybe id</code>? It can be pretty handy...</p>
+<p>We can inhibit an <code>Event</code> from firing in the same frame as another <code>Event</code>:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">difference ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Event</span> t a <span class="ot">-&gt;</span> <span class="dt">Event</span> t b <span class="ot">-&gt;</span> <span class="dt">Event</span> t a</code></pre></div>
+<p>We can break an <code>Event</code> or <code>Either</code>s into a pair of <code>Event</code>s corresponding to which of the <code>Left</code> and <code>Right</code> constructors were used:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fanEither ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Event</span> t (<span class="dt">Either</span> a b) <span class="ot">-&gt;</span> (<span class="dt">Event</span> t a, <span class="dt">Event</span> t b)</code></pre></div>
+<div id="exercise-fmapMaybe">
+
+</div>

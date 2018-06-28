@@ -1,0 +1,15 @@
+<p>There are several handy typeclass instances for <code>Behavior</code>s</p>
+<p>One of the most commonly used instances is the <code>Functor</code> instance:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(&lt;$&gt;) ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t b</code></pre></div>
+<p>which lets us transform a <code>Behavior</code> at every point in time.</p>
+<div id="exercise-fmap">
+
+</div>
+<p>Another commonly used instance is the <code>Applicative</code> instance which gives us:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">pure<span class="ot">  ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a
+<span class="ot">(&lt;*&gt;) ::</span> <span class="dt">Reflex</span> t <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t a <span class="ot">-&gt;</span> <span class="dt">Behavior</span> t b</code></pre></div>
+<p>This allows us to create <code>Behavior</code>s with a single value at all point in time, and to apply <code>Behavior</code>s of functions to <code>Behavior</code>s of arguments.</p>
+<div id="exercise-apply">
+
+</div>
+<p>There is also a <code>Monad</code> instance -- which we will look at soon -- as well as instances for <code>Num</code>, <code>Semigroup</code>, <code>Monoid</code> and <code>IsString</code>.</p>

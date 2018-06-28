@@ -1,0 +1,11 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoTextRead ::</span> <span class="dt">MonadWidget</span> t m
+             <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+             <span class="ot">-&gt;</span> <span class="dt">Text</span>
+             <span class="ot">-&gt;</span> <span class="dt">Workflow</span> t m (<span class="dt">Event</span> t (<span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Text</span>), <span class="dt">Event</span> t ())
+todoTextRead dComplete iText <span class="fu">=</span> <span class="dt">Workflow</span> <span class="fu">$</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    dCompleteClass <span class="fu">=</span> bool <span class="st">&quot;&quot;</span> <span class="st">&quot; completed&quot;</span> <span class="fu">&lt;$&gt;</span> dComplete
+  (e, _) <span class="ot">&lt;-</span> elDynClass&#39; <span class="st">&quot;div&quot;</span> (pure <span class="st">&quot;p-1&quot;</span> <span class="fu">&lt;&gt;</span> dCompleteClass) <span class="fu">$</span>
+    text iText
+  pure ((never, never), todoTextWrite dComplete iText <span class="fu">&lt;$</span> domEvent <span class="dt">Dblclick</span> e)</code></pre></div>
+<p>... but we need to detect double clicks to change over to the text-editing <code>Workflow</code>.</p>

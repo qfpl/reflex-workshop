@@ -1,0 +1,10 @@
+<p>In this exercise, your goal is to wrap another widget in a <code>div</code>.</p>
+<p>The div should have the &quot;text-uppercase&quot; class, and should have the &quot;invisible&quot; class on it whenever the input <code>Dynamic</code> has the value <code>True</code>. Both of these classes come from Bootstrap 4, which is available to you through all of these exercises.</p>
+<p>You should fill out this function:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">classExercise ::</span> <span class="dt">MonadWidget</span> t m
+              <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+              <span class="ot">-&gt;</span> m a
+              <span class="ot">-&gt;</span> m a
+classExercise dIn w <span class="fu">=</span>
+  w</code></pre></div>
+<p>to make this happen.</p>

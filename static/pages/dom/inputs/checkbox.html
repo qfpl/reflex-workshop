@@ -1,0 +1,12 @@
+<p>The goal of this exercise is to add a checkbox to the TODO item to track the completion state of the item.</p>
+<p>If the item is in the completed state, the <code>div</code> containing the text of the item should have the &quot;completed&quot; class added to it.</p>
+<p>Your <code>todoItem</code> function should change from this type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t ())</code></pre></div>
+<p>to this type:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoItem ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">TodoItem</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">TodoItem</span> <span class="ot">-&gt;</span> <span class="dt">TodoItem</span>), <span class="dt">Event</span> t ())</code></pre></div>
+<p>and your test harness should report on the number of times each of these <code>Event</code>s fire.</p>
+<p>If you spot ways to reduce duplication or increase modularity, go for it. It might be helpful to reread the section on &quot;Components&quot; if you want to really push that.</p>

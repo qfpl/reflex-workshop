@@ -1,0 +1,7 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">tagExercise ::</span> <span class="dt">Reflex</span> t
+            <span class="ot">=&gt;</span> <span class="dt">Behavior</span> t <span class="dt">Int</span>
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t ()
+            <span class="ot">-&gt;</span> <span class="dt">Event</span> t <span class="dt">Int</span>
+tagExercise bIn eIn <span class="fu">=</span>
+  (<span class="fu">*</span> <span class="dv">5</span>) <span class="fu">&lt;$&gt;</span> bIn <span class="fu">&lt;@</span> eIn</code></pre></div>
+<p>... which we can also do with an operator.</p>

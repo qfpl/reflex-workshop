@@ -1,0 +1,14 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeSolution ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeSolution eIn <span class="fu">=</span>
+              note <span class="st">&quot;Not an Int&quot;</span> <span class="fu">.</span> convert <span class="fu">&lt;$&gt;</span> eIn
+  
+  
+  
+ 
+ 
+ 
+ 
+  </code></pre></div>
+<p>... but instead we convert it to an <code>Event t (Either Text Int)</code> ...</p>

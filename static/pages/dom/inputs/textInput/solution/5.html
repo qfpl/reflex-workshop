@@ -1,0 +1,20 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">todoText ::</span> <span class="dt">MonadWidget</span> t m
+         <span class="ot">=&gt;</span> <span class="dt">Dynamic</span> t <span class="dt">Bool</span>
+         <span class="ot">-&gt;</span> <span class="dt">Text</span>
+         <span class="ot">-&gt;</span> m (<span class="dt">Event</span> t (<span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Text</span>), <span class="dt">Event</span> t ())
+todoText dComplete iText <span class="fu">=</span> <span class="kw">do</span>
+  divClass <span class="st">&quot;p-1&quot;</span> <span class="fu">$</span> <span class="kw">do</span>
+    <span class="kw">let</span>
+      dCompleteClass <span class="fu">=</span>
+        bool mempty (<span class="st">&quot;class&quot;</span> <span class="fu">=:</span> <span class="st">&quot;completed&quot;</span>) <span class="fu">&lt;$&gt;</span> dComplete
+    ti <span class="ot">&lt;-</span> textInput <span class="fu">$</span>
+      def <span class="fu">&amp;</span> textInputConfig_initialValue <span class="fu">.~</span> iText
+          <span class="fu">&amp;</span> attributes <span class="fu">.~</span> dCompleteClass
+    <span class="kw">let</span>
+      eEnter  <span class="fu">=</span> keypress <span class="dt">Enter</span> ti
+      bText   <span class="fu">=</span> current <span class="fu">$</span> value ti
+      eText   <span class="fu">=</span> Text.strip <span class="fu">&lt;$&gt;</span> bText <span class="fu">&lt;@</span> eEnter
+      eChange <span class="fu">=</span> const <span class="fu">&lt;$&gt;</span> ffilter (not <span class="fu">.</span> Text.null) eText
+      eRemove <span class="fu">=</span> ()    <span class="fu">&lt;$</span>  ffilter        Text.null  eText
+    pure (eChange, eRemove)</code></pre></div>
+<p>We turn that <code>Event</code> into the change and removal <code>Event</code>s and return them.</p>

@@ -1,0 +1,14 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fmapMaybeSolution ::</span> <span class="dt">Reflex</span> t 
+                  <span class="ot">=&gt;</span> <span class="dt">Event</span> t <span class="dt">Text</span> 
+                  <span class="ot">-&gt;</span> (<span class="dt">Event</span> t <span class="dt">Text</span>, <span class="dt">Event</span> t <span class="dt">Int</span>)
+fmapMaybeSolution eIn <span class="fu">=</span>
+  <span class="kw">let</span>
+    eOut   <span class="fu">=</span> <span class="co">-- Event t Int</span>
+      fmapMaybe convert eIn
+
+
+  <span class="kw">in</span>
+    (_     , eOut)
+    
+    </code></pre></div>
+<p>This deals with the success case straight away.</p>

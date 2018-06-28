@@ -1,0 +1,19 @@
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">workflowSolution ::</span> <span class="dt">MonadWidget</span> t m
+                 <span class="ot">=&gt;</span> <span class="dt">Event</span> t ()
+                 <span class="ot">-&gt;</span> m (<span class="dt">Dynamic</span> t <span class="dt">Int</span>)
+workflowSolution eChange <span class="fu">=</span> <span class="kw">do</span>
+  <span class="kw">let</span>
+    wReset <span class="fu">=</span> <span class="dt">Workflow</span> <span class="fu">$</span> <span class="kw">do</span>
+      eClick <span class="ot">&lt;-</span> button <span class="st">&quot;Wait...&quot;</span>
+      pure (const <span class="dv">0</span> <span class="fu">&lt;$</span> eClick, wAdd <span class="fu">&lt;$</span> eChange)
+
+    wAdd <span class="fu">=</span> <span class="dt">Workflow</span> <span class="fu">$</span> <span class="kw">do</span>
+      eClick <span class="ot">&lt;-</span> button <span class="st">&quot;Click me&quot;</span>
+      pure ((<span class="fu">+</span> <span class="dv">1</span>) <span class="fu">&lt;$</span> eClick, wReset <span class="fu">&lt;$</span> eChange)
+
+  deScore <span class="ot">&lt;-</span> workflow wReset
+  <span class="kw">let</span>
+    eScore <span class="fu">=</span> switchDyn deScore
+
+  foldDyn (<span class="fu">$</span>) <span class="dv">0</span> eScore</code></pre></div>
+<p>... and then kick the workflow off with from the waiting state.</p>
