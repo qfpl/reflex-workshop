@@ -42,11 +42,8 @@ mkMenu' :: (MonadWidget t m, RouteWriter t RouteFragment m, HasRoute t RouteFrag
         -> ReaderT [RouteFragment] m ()
 mkMenu' sections = do
   dRoute <- lift allRouteSegments
-  iRoute <- ask
-  let
-    rootCls = bool "" " list-group-root" . null $ iRoute
-    cls = "list-group flex-column" <> rootCls
-  divClass cls $
+
+  elClass "nav" "nav nav-pills navbar-light bg-light flex-column justify-content-start" $
     traverse_ mkMenuSection sections
 
   dRoute' <- holdUniqDyn dRoute
@@ -66,7 +63,7 @@ mkMenuSection s = do
     hasChildren = not . null . _sSubSections $ s
     mkAttrs a =
       "href" =: ("#/" <> routeToText route) <>
-      "class" =: ("list-group-item list-group-item-action " <> bool "" "active" a)
+      "class" =: ("nav-link" <> bool " ml-3 my-1" "" (null iRoute) <> bool "" " active" a)
 
   elDynAttr "a" (mkAttrs <$> dActive) $ do
     let
