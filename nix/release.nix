@@ -1,5 +1,7 @@
-{ nixpkgs ? import <nixpkgs> {}}:
+{ oldNixpkgs ? import <nixpkgs> {}}:
 let
+  reflex-platform = import ../deps/reflex-platform.nix {};
+  nixpkgs = reflex-platform.nixpkgs;
   inherit (nixpkgs) pkgs;
 
   mkStatic = b : import ../content { local = b; };
@@ -49,6 +51,19 @@ let
       };
 
   workshopOb = import "${workshop}" {};
+
+  workshop-shell = 
+   pkgs.stdenv.mkDerivation {
+     name = "workshop-shell";
+     src = ../.;
+     buildInputs = workshopOb.shells.ghc.buildInputs;
+     stdenv = pkgs.stdenv;
+     builder = pkgs.writeScript "builder.sh" ''
+       source $stdenv/setup
+       mkdir "$out"
+       echo "$buildInputs" > "$out/deps"
+     ''; 
+   };
 
   workshop-vm-config = {
       imports = [
@@ -100,10 +115,23 @@ let
         emacs
         vim
 
+        # cabal2nix
+        # curl
+        # nix-prefetch-scripts
+        # nodejs
+        # pkgconfig
+        # closurecompiler
+        # reflex-platform.ghc.cabal-install
+        # reflex-platform.ghc.ghcid
+        # reflex-platform.ghc.hasktags
+        # reflex-platform.ghc.hlint
+        # (reflex-platform.nixpkgs.haskell.lib.justStaticExecutables reflex-platform.ghc.ghc-mod)
+        # reflex-platform.ghc.stylish-haskell
+
         workshopBase
-        obelisk.shell
         obelisk.command
         workshop
+        workshop-shell
       ];
 
       nix.binaryCaches = [
@@ -131,8 +159,8 @@ let
       };
   };
 
-  hydraJob = (import "${nixpkgs.path}/lib").hydraJob;
-  workshop-vm = hydraJob ((import "${nixpkgs.path}/nixos/lib/eval-config.nix" {
+  hydraJob = (import "${oldNixpkgs.path}/lib").hydraJob;
+  workshop-vm = hydraJob ((import "${oldNixpkgs.path}/nixos/lib/eval-config.nix" {
       modules = [ workshop-vm-config ];
     }).config.system.build.virtualBoxOVA);
 
@@ -162,6 +190,6 @@ let
       };
 in
   { 
-    inherit workshop-vm tutorial; 
+    inherit workshop-vm tutorial workshop-shell; 
     obelisk-command = obelisk.command;
   }
