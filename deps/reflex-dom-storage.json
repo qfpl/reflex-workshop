@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/qfpl/reflex-dom-storage",
-  "rev": "1c98efc2b7e7f3672e2655946317db67619e4ffb",
-  "date": "2018-06-27T09:17:18+10:00",
-  "sha256": "0prc6iajmka9nprvrkz9phrmikfv3k2h1z3blxdyf06rwn5ax6x9",
+  "rev": "03a2bd8b17a0c3ec55dd74d960ec098d48be8a94",
+  "date": "2018-08-05T18:17:01+10:00",
+  "sha256": "1sqv0m7g9w9ivgpky7isdpiif1bqia4axg49kqzwifdvv9vyx91h",
   "fetchSubmodules": true
 }

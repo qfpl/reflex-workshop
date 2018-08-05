@@ -17,8 +17,7 @@ let
     '';
   };
 
-  obelisk = 
-    import (pkgs.fetchFromGitHub (pkgs.lib.importJSON ../.obelisk/impl/github.json)) {};
+  obelisk = import ../.obelisk/impl {};
 
   workshopBase = import ../. {};
 

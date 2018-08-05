@@ -7,3 +7,4 @@ result-ios
 ghcid-output.txt
 static
 cabal.project.local
+.dir-locals.el
