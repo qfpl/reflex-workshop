@@ -7,7 +7,7 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 module Util.Template (
-    template
+    mkTemplate
   ) where
 
 import Control.Monad (void)
@@ -21,8 +21,8 @@ import Reflex.Dom.Template
 
 import Util.Bootstrap
 
-template :: MonadWidget t m => Rule m -> Text -> m (Event t ())
-template rule template = do
+mkTemplate :: MonadWidget t m => Rule m -> Text -> m (Event t ())
+mkTemplate rule template = do
   ePostBuild <- getPostBuild
   eTemplate <- loadTemplate (rule <> sourceCodeRule) (template <$ ePostBuild)
   let

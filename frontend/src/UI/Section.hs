@@ -44,7 +44,7 @@ mkSection :: ( MonadWidget t m
 mkSection s = do
   let
     rule = exerciseRule (_sExercises s) <> demonstrationRule (_sDemonstrations s)
-  eDone <- template rule (_sContentPath s)
+  eDone <- mkTemplate rule (_sContentPath s)
 
   dmES <- askStorageTag ExerciseTag
   eDelay <- delay 0.1 eDone

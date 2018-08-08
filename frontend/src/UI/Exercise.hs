@@ -149,7 +149,7 @@ problem p = do
         text "To get set up to work through these exercises, click "
         elAttr "a" ("href" =: "https://github.com/qfpl/reflex-workshop") $ text "here"
         text "."
-  void $ template (demonstrationRule (_pDemonstrations p)) (_pPage p)
+  void $ mkTemplate (demonstrationRule (_pDemonstrations p)) (_pPage p)
 
 progress :: (MonadWidget t m, MonadReader Interactivity m)
          => Progress m
@@ -199,4 +199,4 @@ solution n ex =
         solButton "Previous" pred (/= 0)
         solButton "Next" succ (/= lastIx)
 
-      void . el "div" $ template mempty (ts !! n)
+      void . el "div" $ mkTemplate mempty (ts !! n)
