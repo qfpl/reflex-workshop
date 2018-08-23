@@ -2,7 +2,5 @@ TAGS
 dist
 dist-newstyle
 cabal.project.local
-result
-result-2
+result*
 .dir-locals.el
-position.txt

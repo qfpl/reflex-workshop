@@ -1,0 +1,7 @@
+table, th, td {
+    border: 1px solid black;
+}
+
+.nav-link .fa {
+    margin-right: 5px;
+}
