@@ -1,4 +1,4 @@
-# YOW! Lambda Jam Reflex Workshop
+# Reflex Workshop
 
 ## Getting set up
 
