@@ -7,26 +7,6 @@
   - The file is around 1.6 GB in size, so you probably don't want to download this from your mobile phone
 - Import the OVA into VirtualBox
   - The menu option should be something like: File > Import Appliance
-- Start the VM
-- From within the VM
-  - Open a terminal
-  - Checkout this repository
-
-    ```
-    git clone https://github.com/qfpl/reflex-workshop
-    ```
-
-## Updating the repository
-
-To do this:
-
-- Start the VM
-- From within the VM
-  - Open a terminal
-    ```
-    cd reflex-workshop
-    git pull
-    ```
 
 ## Editors and tools
 
