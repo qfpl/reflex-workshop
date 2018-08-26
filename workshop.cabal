@@ -23,6 +23,7 @@ library
                , dependent-map
                , ghcjs-dom
                , jsaddle
+               , reflex-dom-contrib
                , reflex-dom-nested-routing
                , reflex-dom-storage
                , reflex-dom-template

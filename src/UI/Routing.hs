@@ -20,7 +20,6 @@ import qualified Data.Map as Map
 import Reflex.Dom.Core
 import Reflex.Dom.Routing.Nested
 import Reflex.Dom.Routing.Writer
-
 import Reflex.Dom.Storage.Class
 
 import State
@@ -49,4 +48,5 @@ mkMain sections d = do
           Just s -> mkMain (_sSubSections s) $ mkSection s
           -- TODO replace this with an error page?
           Nothing -> tellRedirectLocally [Page "events"]
-      _ -> d
+      _ ->
+        d

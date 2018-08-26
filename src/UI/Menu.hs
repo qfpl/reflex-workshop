@@ -8,11 +8,12 @@ Portability : non-portable
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE RecursiveDo #-}
 module UI.Menu (
     mkMenu
   ) where
 
-import Control.Monad (void, forM_)
+import Control.Monad (void, forM)
 import Data.Bool (bool)
 import Data.Foldable (traverse_)
 import Data.List (isPrefixOf)
@@ -51,17 +52,14 @@ mkMenu sections =
           "aria-label" =: "Toggle navigation"
     elAttr "button" navbarToggleAttrs . elClass "span" "navbar-toggler-icon" $ blank
     elAttr "div" ("id" =: "navDropdown" <> "class" =: "collapse navbar-collapse") .
-      elClass "ul" "navbar-nav" $ do
+      elClass "ul" "navbar-nav" $ mdo
 
-        let attrs i =
-              "id" =: i <>
-              "href" =: "" <>
-              "target" =: "_self" <>
-              "class" =: "nav-link dropdown-toggle" <>
-              "data-toggle" =: "dropdown" <>
+        dRoute <- allRouteSegments
+
+        let attrs =
+              "class" =: "nav-link btn dropdown-toggle" <>
               "aria-haspopup" =: "true" <>
               "aria-expanded" =: "false"
-        dRoute <- allRouteSegments
 
         let
           findSection (h:_) = headMay . filter ((== h) . _sRoute)
@@ -74,12 +72,21 @@ mkMenu sections =
 
           dSubSection = findSubSection <$> dRoute <*> dSection
 
-        elClass "li" "nav-item active dropdown" $ do
-          elAttr "a" (attrs "section-link") $
+        dShowSection <- elClass "li" "nav-item active dropdown" $ mdo
+          (elShow, _) <- elAttr' "a" attrs $
             dynText $ maybe "Whoops!" _sName <$> dSection
+          let eShow = domEvent Click elShow
+          dChangeShow <- toggle False eShow
+          dShow <- holdDyn False . leftmost $
+            [ updated dChangeShow
+            , False <$ eHide
+            , False <$ (ffilter id . updated $ dShowSubSection)
+            ]
+          let
+            dClass = ("dropdown-menu" <>) . bool "" " show" <$> dShow
 
-          elAttr "div" ("class" =: "dropdown-menu" <> "aria-labelledby" =: "section-link") .
-            forM_ sections $ \s ->
+          eHides <- elDynClass "div" dClass $
+            forM sections $ \s ->
               let
                 href =
                   ("#/" <>) . routeToText . pure . _sRoute $ s
@@ -87,15 +94,29 @@ mkMenu sections =
                   bool "" " active" . maybe False ((== _sRoute s) . _sRoute) <$> dSection
                 dAttr = pure ("href" =: href) <>
                        ("class" =:) . ("dropdown-item" <>) <$> dActive
-              in
-                elDynAttr "a" dAttr $
+              in do
+                (elHide, _) <- elDynAttr' "a" dAttr $
                   text $ _sName s
+                pure $ domEvent Click elHide
 
-        elClass "li" "nav-item active dropdown" $ do
-          elAttr "a" (attrs "subsection-link") $
+          let eHide = leftmost eHides
+
+          pure dChangeShow
+
+        dShowSubSection <- elClass "li" "nav-item active dropdown" $ mdo
+          (elShow, _) <- elAttr' "a" attrs $
             dynText $ maybe "Introduction" _sName <$> dSubSection
+          let eShow = domEvent Click elShow
+          dChangeShow <- toggle False eShow
+          dShow <- holdDyn False . leftmost $
+            [ updated dChangeShow
+            , False <$ eHide
+            , False <$ (ffilter id . updated $ dShowSection)
+            ]
+          let
+            dClass = ("dropdown-menu" <>) . bool "" " show" <$> dShow
 
-          elAttr "div" ("class" =: "dropdown-menu" <> "aria-labelledBy" =: "subsection-link") $ do
+          eHide <- elDynClass "div" dClass $ do
             let
               dIntroHref = ("href" =:) . maybe "" (("#/" <>) . routeToText . pure . _sRoute) <$> dSection
               dIntroActive = bool "" " active" . isNothing <$> dSubSection
@@ -103,15 +124,19 @@ mkMenu sections =
             elDynAttr "a" (dIntroHref <> dIntroClass) $
               text "Introduction"
 
-            void . simpleList (maybe [] _sSubSections <$> dSection) $ \ds ->
+            de <- simpleList (maybe [] _sSubSections <$> dSection) $ \ds ->
               let
                 r = routeToText . pure . _sRoute
                 dHref = ("href" =:) <$> mconcat [pure "#/", maybe "" r <$> dSection, pure "/" , r <$> ds]
                 dActive = (\s1 -> bool "" " active" . maybe False ((== _sRoute s1) . _sRoute)) <$> ds <*> dSubSection
                 dClass = ("class" =:) . ("dropdown-item" <>) <$> dActive
-              in
-                elDynAttr "a" (dClass <> dHref) $
+              in do
+                (elHide, _) <- elDynAttr' "a" (dClass <> dHref) $
                   dynText $ _sName <$> ds
+                pure $ domEvent Click elHide
+            pure . switchDyn . fmap leftmost $ de
+
+          pure dChangeShow
 
         dRoute' <- holdUniqDyn dRoute
         tellStorageRemove ExerciseTag . void . updated $ dRoute'
