@@ -5,6 +5,7 @@
 - Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - Download the OVA file from [here](https://hydra.qfpl.io/job/reflex-workshop/reflex-workshop/reflex-workshop-vm/latest/download/1) (Right click and select "Save As")
   - The file is around 1.6 GB in size, so you probably don't want to download this from your mobile phone
+  - sudo is installed and configured and the password for the `workshop` user is `workshop`
 - Import the OVA into VirtualBox
   - The menu option should be something like: File > Import Appliance
 
