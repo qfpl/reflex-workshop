@@ -9,7 +9,7 @@ library
                , reflex-dom
                , text
                , reflex
-               , errors >= 2.2 && < 2.3
+               , errors >= 2.2 && < 2.4
                , mtl
                , bytestring
                , aeson

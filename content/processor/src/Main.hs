@@ -5,9 +5,13 @@ import Data.List (isPrefixOf)
 
 import System.Environment
 
+import Data.Text (Text)
+import qualified Data.Text as Text
+
 import System.FilePath
 import System.Directory
 import Text.Pandoc
+import Text.Pandoc.Highlighting (pygments)
 
 data Dirs = Dirs { inputDir :: FilePath, outputDir :: FilePath }
 
@@ -43,35 +47,41 @@ processFile d@(Dirs from to) f =
 processMdFile :: Dirs -> FilePath -> IO ()
 processMdFile (Dirs from to) fp = do
   sIn <- readFile $ from </> fp
-  writeFile (to </> takeBaseName fp <.> "html") (mdToHtml sIn)
+  et <- runIO . mdToHtml . Text.pack $ sIn
+  case et of
+    Left e -> print e
+    Right t -> writeFile (to </> takeBaseName fp <.> "html") (Text.unpack t)
 
-mdToHtml :: String -> String
-mdToHtml md =
-  case readMarkdown def md of
-    Left e -> show e
-    Right x -> writeHtmlString (def { writerHighlight = True}) x
+mdToHtml :: PandocMonad m => Text -> m Text
+mdToHtml md = do
+  x <- readMarkdown def md
+  writeHtml5String (def { writerHighlightStyle = Just pygments}) x
 
 processMdsFile :: Dirs -> FilePath -> IO ()
 processMdsFile (Dirs from to) fp = do
   sIn <- readFile $ from </> fp
   let base = to </> takeBaseName fp </> "solution"
   createDirectoryIfMissing True base
-  let sOut = zip [0..] . mdsToHtml $ sIn
-  forM_ sOut $ \(i, s) ->
-    writeFile (base </> show i <.> "html") s
+  ets <- runIO $ mdsToHtml . Text.pack $ sIn
+  case ets of
+    Left e -> print e
+    Right ts -> do
+      let sOut = zip [0..] . fmap Text.unpack $ ts
+      forM_ sOut $ \(i, s) ->
+        writeFile (base </> show i <.> "html") s
 
-separator :: String -> Bool
-separator = isPrefixOf "==="
+separator :: Text -> Bool
+separator = Text.isPrefixOf (Text.pack "===")
 
-separate :: [String] -> (String, [String])
+separate :: [Text] -> (Text, [Text])
 separate s =
   let
     (a, b) = break separator s
     (_, c) = span  separator b
   in
-    (unlines a, c)
+    (Text.unlines a, c)
 
-gatherSingle :: [String] -> [String]
+gatherSingle :: [Text] -> [Text]
 gatherSingle [] = []
 gatherSingle ss =
   let
@@ -79,8 +89,8 @@ gatherSingle ss =
   in
     a : gatherSingle b
 
-mdsToHtml :: String -> [String]
+mdsToHtml :: PandocMonad m => Text -> m [Text]
 mdsToHtml =
-  fmap mdToHtml .
+  traverse mdToHtml .
   gatherSingle .
-  lines
+  Text.lines

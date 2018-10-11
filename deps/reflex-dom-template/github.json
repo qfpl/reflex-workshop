@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/qfpl/reflex-dom-template",
-  "rev": "65d5fc87fe9bf8ba743a7ad2f5fd836d35377439",
-  "date": "2018-07-13T13:42:11+10:00",
-  "sha256": "1x0hx9bhvp6shwii7xai45f9zghb2jkv7yp8sqhw5scl8z6i4pl6",
-  "fetchSubmodules": true
+  "rev": "52bb3970d0cb7c569565fc738b5c637063e6cb52",
+  "date": "2018-10-10T10:49:55+10:00",
+  "sha256": "0s23986rbck31y54gs9qrkh7vjsfi1xnzjhwqlbbc13nw09hrwr0",
+  "fetchSubmodules": false
 }
