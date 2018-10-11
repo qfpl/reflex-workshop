@@ -1,7 +1,8 @@
 {
-  "url": "https://github.com/reflex-frp/reflex-dom-contrib",
-  "rev": "bb0acb9a4a66fddb0bc72ab9bc0d376b4ee2bf1d",
-  "date": "2018-08-24T16:23:08-04:00",
-  "sha256": "07w6h6a1cp7m5rxqs164m64wqzn92ps7kj18njy5jbnl1s2gkmff",
+  "owner": "dalaing",
+  "repo": "reflex-dom-contrib",
+  "rev": "60e3038e432f6e2d77821d5815470b9527e09478",
+  "date": "2018-10-11T11:56:49+10:00",
+  "sha256": "17ki3vnq4r4rhhl4yxkg82k2ybvw9xli950q8h6pmjb0qfmg27i9",
   "fetchSubmodules": false
 }
