@@ -11,7 +11,7 @@ both `eIn` and `eOut` are always firing in the same frame, and here
 ```haskell
   eOut = (* 100) <$> ffilter even eIn
 ```
-we have `eOut` firing only in frames where `eIn` is firing.
+we have `eOut` firing only in some of the frames where `eIn` is firing.
 
 As `Event`s are modified and passed through our program, we might lose track of whether a given `Event` may or may not be firing in the same frame.
 That is a good thing!
