@@ -46,7 +46,7 @@ let
     hindent
     hoogle
     stylish-haskell
-    (nixpkgs.haskell.lib.justStaticExecutables ghc-mod)
+    # (nixpkgs.haskell.lib.justStaticExecutables ghc-mod)
 
     workshop-pkg
   ]);
