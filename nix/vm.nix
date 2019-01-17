@@ -1,4 +1,4 @@
-{ oldNixpkgs ? import <nixpkgs> {}}:
+{ oldNixpkgs ? <nixpkgs>}:
 let
   reflex-platform = import ../deps/reflex-platform {};
   nixpkgs = reflex-platform.nixpkgs;
@@ -52,9 +52,7 @@ let
   ]);
 
   workshop-vm-config = {
-      imports = [
-        ./virtualbox-image.nix
-      ];
+      imports = [ "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix" ];
 
       virtualbox = {
         baseImageSize = 15 * 1024;
@@ -123,8 +121,8 @@ let
       };
   };
 
-  hydraJob = (import "${oldNixpkgs.path}/lib").hydraJob;
-  workshop-vm = hydraJob ((import "${oldNixpkgs.path}/nixos/lib/eval-config.nix" {
+  hydraJob = (import "${oldNixpkgs}/lib").hydraJob;
+  workshop-vm = hydraJob ((import "${oldNixpkgs}/nixos/lib/eval-config.nix" {
       modules = [ workshop-vm-config ];
     }).config.system.build.virtualBoxOVA);
 in

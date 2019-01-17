@@ -1,8 +1,7 @@
 {
-  "owner": "dalaing",
-  "repo": "reflex-dom-contrib",
-  "rev": "60e3038e432f6e2d77821d5815470b9527e09478",
-  "date": "2018-10-11T11:56:49+10:00",
-  "sha256": "17ki3vnq4r4rhhl4yxkg82k2ybvw9xli950q8h6pmjb0qfmg27i9",
+  "url": "https://github.com/reflex-frp/reflex-dom-contrib",
+  "rev": "2a0eb6105ba68de4ca9be309c38ff902093b923e",
+  "date": "2019-01-01T09:08:03-05:00",
+  "sha256": "1zzkwx4mjy550ydgijv901iqb807vy18v91vz5hi443l8s6kjvzk",
   "fetchSubmodules": false
 }

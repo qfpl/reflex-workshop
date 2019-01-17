@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/ghcjs/jsaddle",
-  "rev": "b423436565fce7f69a65d843c71fc52dc455bf54",
-  "date": "2018-08-14T12:02:24-04:00",
-  "sha256": "09plndkh5wnbqi34x3jpaz0kjdjgyf074faf5xk97rsm81vhz8kk",
+  "rev": "a9acbcf966ea9fa14d36813da3e94d75bd9acf76",
+  "date": "2019-01-09T00:44:03+13:00",
+  "sha256": "1h9kr5ykpc3nyvhyh7jn1fn9yx248gd2rpwqhp79ag2vcqnm2l2r",
   "fetchSubmodules": false
 }
