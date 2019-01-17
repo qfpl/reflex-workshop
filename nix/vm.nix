@@ -52,7 +52,7 @@ let
   ]);
 
   workshop-vm-config = {
-      imports = [ "${nixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix" ];
+      imports = [ "${oldNixpkgs}/nixos/modules/virtualisation/virtualbox-image.nix" ];
 
       virtualbox = {
         baseImageSize = 15 * 1024;
