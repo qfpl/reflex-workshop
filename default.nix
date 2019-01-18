@@ -17,8 +17,6 @@ let
         super.callPackage (import ./deps/reflex-dom-storage {}) {};
       reflex-dom-template = 
         super.callPackage (import ./deps/reflex-dom-template {}) {};
-      jsaddle-warp = 
-        pkgs.haskell.lib.dontCheck (super.callCabal2nix "jsaddle-warp" "${import ./deps/jsaddle {}}/jsaddle-warp" {});
     };
   };
   drv = haskellPackages.callPackage ./workshop.nix {};
