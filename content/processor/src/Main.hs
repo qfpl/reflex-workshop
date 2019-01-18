@@ -1,5 +1,7 @@
 module Main where
 
+import qualified GHC.IO.Encoding as E
+
 import Control.Monad (when, forM_)
 import Data.List (isPrefixOf)
 
@@ -17,6 +19,7 @@ data Dirs = Dirs { inputDir :: FilePath, outputDir :: FilePath }
 
 main :: IO ()
 main = do
+  E.setLocaleEncoding E.utf8
   a <- getArgs
   case a of
     [f, t] -> processDir (Dirs f t)
@@ -54,7 +57,7 @@ processMdFile (Dirs from to) fp = do
 
 mdToHtml :: PandocMonad m => Text -> m Text
 mdToHtml md = do
-  x <- readMarkdown def md
+  x <- readMarkdown (def { readerExtensions = pandocExtensions }) md
   writeHtml5String (def { writerHighlightStyle = Just pygments}) x
 
 processMdsFile :: Dirs -> FilePath -> IO ()

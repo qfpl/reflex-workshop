@@ -87,7 +87,7 @@ let
       environment.systemPackages =
         tools ++ [haskell-tools];
 
-      # environment.variables.WORKSHOP_ASSETS = $workshop-assets;
+      # environment.variables.WORKSHOP_ASSETS = $reflex-workshop-assets;
 
       systemd.services.workshop-setup = {
         description = "Setup workshop";

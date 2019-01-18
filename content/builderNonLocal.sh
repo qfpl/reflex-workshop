@@ -3,6 +3,8 @@
 source $stdenv/setup
 PATH=$nix/bin:$processor/bin:$PATH
 
+export LANG=en_US.UTF-8
+
 cd $src
 mkdir $out
 
