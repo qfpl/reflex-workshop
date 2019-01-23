@@ -6,9 +6,14 @@ Part of your code should look like this:
     ...
 
   let
-    eListChange = leftmost [eRemoves, eInsert]
+    eListChange =
+      leftmost [eRemoves, eInsert]
+    dItems =
+      fmap Map.elems .
+      joinDynThroughMap $
+      dmd
 
-  pure $ joinDynThroughMap dmd
+  pure dItems
 ```
 
 You should make the changes to `todoListModelExercise` required to make this happen.

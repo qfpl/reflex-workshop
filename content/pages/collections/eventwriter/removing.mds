@@ -24,7 +24,7 @@ We start with something like what we had before.
 ```haskell
 todoListModelSolution :: MonadWidget t m
                       => [TodoItem]
-                      -> m (Dynamic t (Map Int TodoItem))
+                      -> m (Dynamic t [TodoItem])
 todoListModelSolution items = mdo
   eItem <- addItem
   eAdd  <- numberOccurrencesFrom (length items) eItem
@@ -37,9 +37,14 @@ todoListModelSolution items = mdo
     foldDyn ($) item eChange
 
   let
-    eListChange = leftmost [          eInsert]
+    eListChange =
+      leftmost [eRemoves, eInsert]
+    dItems =
+      fmap Map.elems .
+      joinDynThroughMap $
+      dmd
 
-  pure $ joinDynThroughMap dmd
+  pure dItems
 ```
 
 We use `tellEvent` to start accumulating a `listHoldWithKey`-compatible `Event` from all of the remove `Event`s in the collection.
@@ -47,7 +52,7 @@ We use `tellEvent` to start accumulating a `listHoldWithKey`-compatible `Event` 
 ```haskell
 todoListModelSolution :: MonadWidget t m
                       => [TodoItem]
-                      -> m (Dynamic t (Map Int TodoItem))
+                      -> m (Dynamic t [TodoItem])
 todoListModelSolution items = mdo
   eItem <- addItem
   eAdd  <- numberOccurrencesFrom (length items) eItem
@@ -60,9 +65,14 @@ todoListModelSolution items = mdo
     foldDyn ($) item eChange
 
   let
-    eListChange = leftmost [eRemoves, eInsert]
+    eListChange =
+      leftmost [eRemoves, eInsert]
+    dItems =
+      fmap Map.elems .
+      joinDynThroughMap $
+      dmd
 
-  pure $ joinDynThroughMap dmd
+  pure dItems
 ```
 
 We then use `runEventWriterT` after `listHoldWithKey` to get hold of that combined `Event`.
