@@ -68,7 +68,7 @@ elDynAttr :: MonadWidget t m
           -> m a
 ```
 
-There is a helper function which provides an inline version of `Map.singleton`:
+There is a helper function which provides an infix version of `Map.singleton`:
 ```haskell
 (=:) :: Ord k => k -> v -> Map k v
 (=:) = Map.singleton
