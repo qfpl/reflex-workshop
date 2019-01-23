@@ -14,8 +14,8 @@ import Reflex
 
 fmapConstExercise3 :: Reflex t => Event t () -> Event t Int
 fmapConstExercise3 eIn =
-  3 <$ eIn
+  never
 
 fmapConstExercise5 :: Reflex t => Event t () -> Event t Int
 fmapConstExercise5 eIn =
-  5 <$ eIn
+  never
