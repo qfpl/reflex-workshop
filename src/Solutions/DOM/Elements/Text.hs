@@ -6,11 +6,11 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Solutions.DOM.Elements.Text (
     textSolution
   ) where
 
-import Data.Text (Text)
 import qualified Data.Text as Text
 
 import Reflex.Dom.Core

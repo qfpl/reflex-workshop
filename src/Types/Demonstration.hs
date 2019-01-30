@@ -13,8 +13,6 @@ import Control.Lens.TH (makeLenses)
 
 import Data.Text (Text)
 
-import Reflex.Dom.Core (Widget)
-
 data Demonstration m =
   Demonstration {
     _dName :: Text

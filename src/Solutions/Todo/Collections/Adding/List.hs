@@ -7,6 +7,7 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE GADTs #-}
 module Solutions.Todo.Collections.Adding.List where
 
 import Control.Monad

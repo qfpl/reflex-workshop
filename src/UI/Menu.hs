@@ -15,17 +15,10 @@ module UI.Menu (
 
 import Control.Monad (void, forM)
 import Data.Bool (bool)
-import Data.Foldable (traverse_)
-import Data.List (isPrefixOf)
 import Data.Maybe (isNothing)
 import Data.Semigroup ((<>))
 
 import Control.Error (headMay)
-
-import Control.Monad.Trans (lift, liftIO)
-import Control.Monad.Reader (ReaderT, runReaderT, local, ask)
-
-import qualified Data.Text as Text
 
 import Reflex.Dom.Core
 import Reflex.Dom.Routing.Nested
@@ -83,9 +76,9 @@ mkMenu sections =
             , False <$ (ffilter id . updated $ dShowSubSection)
             ]
           let
-            dClass = ("dropdown-menu" <>) . bool "" " show" <$> dShow
+            dmClass = ("dropdown-menu" <>) . bool "" " show" <$> dShow
 
-          eHides <- elDynClass "div" dClass $
+          eHides <- elDynClass "div" dmClass $
             forM sections $ \s ->
               let
                 href =
@@ -114,9 +107,9 @@ mkMenu sections =
             , False <$ (ffilter id . updated $ dShowSection)
             ]
           let
-            dClass = ("dropdown-menu" <>) . bool "" " show" <$> dShow
+            dmClass = ("dropdown-menu" <>) . bool "" " show" <$> dShow
 
-          eHide <- elDynClass "div" dClass $ do
+          eHide <- elDynClass "div" dmClass $ do
             let
               dIntroHref = ("href" =:) . maybe "" (("#/" <>) . routeToText . pure . _sRoute) <$> dSection
               dIntroActive = bool "" " active" . isNothing <$> dSubSection
@@ -129,9 +122,9 @@ mkMenu sections =
                 r = routeToText . pure . _sRoute
                 dHref = ("href" =:) <$> mconcat [pure "#/", maybe "" r <$> dSection, pure "/" , r <$> ds]
                 dActive = (\s1 -> bool "" " active" . maybe False ((== _sRoute s1) . _sRoute)) <$> ds <*> dSubSection
-                dClass = ("class" =:) . ("dropdown-item" <>) <$> dActive
+                diClass = ("class" =:) . ("dropdown-item" <>) <$> dActive
               in do
-                (elHide, _) <- elDynAttr' "a" (dClass <> dHref) $
+                (elHide, _) <- elDynAttr' "a" (diClass <> dHref) $
                   dynText $ _sName <$> ds
                 pure $ domEvent Click elHide
             pure . switchDyn . fmap leftmost $ de

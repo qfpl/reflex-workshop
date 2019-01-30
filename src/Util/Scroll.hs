@@ -5,6 +5,7 @@ Maintainer  : dave.laing.80@gmail.com
 Stability   : experimental
 Portability : non-portable
 -}
+{-# LANGUAGE GADTs #-}
 module Util.Scroll (
     scrollTo
   ) where

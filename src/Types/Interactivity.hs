@@ -11,10 +11,6 @@ module Types.Interactivity (
   , getInteractivity
   ) where
 
-import Data.Bool (bool)
-import Text.Read (readMaybe)
-import Data.Text (unpack)
-
 data Interactivity =
     Interactive
   | NonInteractive

@@ -6,11 +6,10 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Components (
     componentsSection
   ) where
-
-import qualified Data.Map as Map
 
 import Reflex.Dom.Core
 

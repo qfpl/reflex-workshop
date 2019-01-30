@@ -5,6 +5,7 @@ Maintainer  : dave.laing.80@gmail.com
 Stability   : experimental
 Portability : non-portable
 -}
+{-# LANGUAGE GADTs #-}
 module Solutions.Todo.Collections.Displaying.List where
 
 import Control.Monad
@@ -21,6 +22,6 @@ todoListSolution :: MonadWidget t m
                  -> m ()
 todoListSolution items = do
   let
-    m = Map.fromList . zip [0..] $ items
+    m = Map.fromList . zip [(0 :: Int)..] $ items
   void . listHoldWithKey m never $
     const todoItem

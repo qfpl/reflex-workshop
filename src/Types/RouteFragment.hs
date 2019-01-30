@@ -18,8 +18,6 @@ module Types.RouteFragment (
 import Data.Semigroup ((<>))
 import GHC.Generics
 
-import Control.Lens
-
 import Data.Text (Text)
 import qualified Data.Text as Text
 

@@ -6,19 +6,15 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Solutions.Todo.DOM.Inputs.Checkbox.Item where
 
-import Control.Monad
 import Data.Bool
-import Data.Monoid
 
 import Control.Lens
 
 import Data.Text (Text)
-import qualified Data.Text as Text
-
-import Data.Map (Map)
-import qualified Data.Map as Map
 
 import Reflex.Dom.Core
 
@@ -67,13 +63,14 @@ todoItem item =
 
     pure (eChange, eRemove)
 
-firings :: MonadWidget t m
+firings :: forall t m a. 
+           MonadWidget t m
         => Text
         -> Event t a
         -> m ()
 firings label e =
   el "div" $ do
-    dCount <- count e
+    dCount :: Dynamic t Int <- count e
 
     text label
     text " has been fired "

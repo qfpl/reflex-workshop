@@ -16,8 +16,6 @@ import Data.Text (Text)
 
 import Control.Lens
 
-import Types.RouteFragment
-
 data ExerciseStage =
     StageHidden
   | StageProblem

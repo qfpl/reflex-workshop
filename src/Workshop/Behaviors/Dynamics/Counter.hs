@@ -7,6 +7,7 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Dynamics.Counter (
     exCounter
   ) where

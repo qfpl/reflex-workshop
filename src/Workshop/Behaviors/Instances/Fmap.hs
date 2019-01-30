@@ -6,21 +6,16 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Instances.Fmap (
     exFmap
   ) where
 
-import Control.Monad (void)
-
-import qualified Data.Map as Map
-
-import Data.Text (Text)
 import qualified Data.Text as Text
 
 import Reflex.Dom.Core
 
 import Types.Exercise
-import Types.Demonstration
 
 import Exercises.Behaviors.Instances.Fmap
 import Solutions.Behaviors.Instances.Fmap

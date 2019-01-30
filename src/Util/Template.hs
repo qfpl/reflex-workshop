@@ -6,11 +6,11 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Util.Template (
     mkTemplate
   ) where
 
-import Control.Monad (void)
 import Data.Semigroup ((<>))
 
 import qualified Data.Map as Map
@@ -22,9 +22,9 @@ import Reflex.Dom.Template
 import Util.Bootstrap
 
 mkTemplate :: MonadWidget t m => Rule m -> Text -> m (Event t ())
-mkTemplate rule template = do
+mkTemplate rule t = do
   ePostBuild <- getPostBuild
-  eTemplate <- loadTemplate (rule <> sourceCodeRule) (template <$ ePostBuild)
+  eTemplate <- loadTemplate (rule <> sourceCodeRule) (t <$ ePostBuild)
   let
     (eError, eSuccess) = fanEither eTemplate
     loadingDiv = divClass "alert alert-secondary" $ text "Loading..." >> getPostBuild
@@ -34,8 +34,8 @@ mkTemplate rule template = do
 
 sourceCodeRule :: MonadWidget t m => Rule m
 sourceCodeRule =
-  Rule $ \el childFn ->
-    case el of
+  Rule $ \l childFn ->
+    case l of
       RTElement t a es ->
         case t of
           "div" -> do

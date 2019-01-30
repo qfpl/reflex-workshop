@@ -16,15 +16,10 @@ module UI.Exercise (
     exerciseRule
   ) where
 
-import Control.Monad (void, join, when, forM_)
+import Control.Monad (void, when)
 import Data.Bool (bool)
-import Data.Foldable (traverse_)
-import Data.Function (on)
-import Data.Maybe (fromMaybe)
 import Data.Semigroup ((<>))
-import GHC.Generics
 
-import Control.Monad.Trans (liftIO, lift)
 import Control.Monad.Reader (MonadReader, ask)
 
 import Control.Lens
@@ -35,24 +30,17 @@ import qualified Data.Text as Text
 import Data.Map (Map)
 import qualified Data.Map as Map
 
-import Data.Aeson (ToJSON, FromJSON)
-
 import Reflex.Dom.Core
-import GHCJS.DOM.Types (MonadJSM, liftJSM)
 
-import Reflex.Dom.Routing.Nested
-import Reflex.Dom.Storage.Base
 import Reflex.Dom.Storage.Class
 import Reflex.Dom.Template
 
 import State
 import State.Exercise
 import Types.Exercise
-import Types.RouteFragment
 import Types.Interactivity
 import UI.Demonstration
 import Util.Bootstrap
-import Util.Scroll
 import Util.Template
 
 exerciseRule :: (MonadWidget t m, HasStorage t AppTags m, MonadReader Interactivity m)
@@ -69,7 +57,7 @@ exerciseRule m = elIdRule "div" $ \i -> do
 mkExercise :: (MonadWidget t m, HasStorage t AppTags m, MonadReader Interactivity m)
          => Exercise m
          -> m ()
-mkExercise ex = elAttr "div" ("id" =: ("exercise-" <> _eId ex)) $ do
+mkExercise ex = elAttr "div" ("id" =: ("exercise-" <> _exId ex)) $ do
   dmExState <- askStorageTag ExerciseTag
   void . dyn $ mkExerciseState ex <$> dmExState
 
@@ -79,14 +67,14 @@ mkExerciseState :: (MonadWidget t m, HasStorage t AppTags m, MonadReader Interac
                 -> m ()
 mkExerciseState ex mst =
   let
-    matches = maybe False ((== (_eId ex)) . esId) mst
+    matches = maybe False ((== (_exId ex)) . esId) mst
     stage = if matches then maybe StageHidden esStage mst else StageHidden
   in
     case stage of
       StageProblem ->
-        withTabs ex stage . problem . _eProblem $ ex
+        withTabs ex stage . problem . _exProblem $ ex
       StageProgress ->
-        withTabs ex stage . progress . _eProgress $ ex
+        withTabs ex stage . progress . _exProgress $ ex
       StageSolution n ->
         withTabs ex stage . solution n $ ex
       StageHidden ->
@@ -99,11 +87,11 @@ withTabs :: (MonadWidget t m, HasStorage t AppTags m, MonadReader Interactivity 
           -> m ()
 withTabs ex stage w = divClass "card m-2" . divClass "card-body p-2" $ do
   let
-    tab label value check = elClass "li" "nav-item" $ do
+    tab label v check = elClass "li" "nav-item" $ do
       let
         cls = ("nav-link" <>) . bool "" " active" . check $ stage
       (e, _) <- elClass' "a" cls $ text label
-      pure $ value <$ domEvent Click e
+      pure $ v <$ domEvent Click e
 
   i <- ask
   let progressTitle = case i of
@@ -120,7 +108,7 @@ withTabs ex stage w = divClass "card m-2" . divClass "card-body p-2" $ do
       eChange = leftmost [eGoal, eProgress, eSolution]
     pure (eChange, eHide)
 
-  tellStorageInsert ExerciseTag $ ExerciseState (_eId ex) <$> eChange
+  tellStorageInsert ExerciseTag $ ExerciseState (_exId ex) <$> eChange
   tellStorageRemove ExerciseTag $ void eHide
 
   divClass "m-1" w
@@ -132,8 +120,8 @@ withoutTabs ex = divClass "m-2" . elClass "ul" "nav nav-pills nav-fill" $ do
   elClass "li" "nav-item" $ do
     (e, _) <- elClass' "a" "nav-link active" $ do
       text "Exercise: "
-      text $ _eName ex
-    tellStorageInsert ExerciseTag $ ExerciseState (_eId ex) StageProblem <$ domEvent Click e
+      text $ _exName ex
+    tellStorageInsert ExerciseTag $ ExerciseState (_exId ex) StageProblem <$ domEvent Click e
 
 problem :: (MonadWidget t m, MonadReader Interactivity m)
         => Problem m
@@ -155,8 +143,8 @@ problem p = do
 progress :: (MonadWidget t m, MonadReader Interactivity m)
          => Progress m
          -> m ()
-progress (ProgressSetup display setup expected actual) = do
-  x <- if display
+progress (ProgressSetup d setup expected actual) = do
+  x <- if d
       then do
         el "div" $ text "With the input:"
         card $ setup
@@ -182,14 +170,14 @@ solution :: (MonadWidget t m, HasStorage t AppTags m)
          -> m ()
 solution n ex =
   let
-    Solution ts = _eSolution ex
+    Solution ts = _exSolution ex
     lastIx = length ts - 1
     solButton label fn check =
       if check n
       then do
-        (el, _) <- elAttr' "button" ("type" =: "button" <> "class" =: "btn btn-primary") $ text label
-        let e = domEvent Click el
-        tellStorageInsert ExerciseTag $ ExerciseState (_eId ex) (StageSolution (fn n)) <$ e
+        (l, _) <- elAttr' "button" ("type" =: "button" <> "class" =: "btn btn-primary") $ text label
+        let e = domEvent Click l
+        tellStorageInsert ExerciseTag $ ExerciseState (_exId ex) (StageSolution (fn n)) <$ e
       else
         elAttr "button" ("type" =: "button" <> "class" =: "btn btn-primary" <> "disabled" =: "") $ text label
   in

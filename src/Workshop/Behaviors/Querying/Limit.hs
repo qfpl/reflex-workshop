@@ -7,11 +7,10 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Querying.Limit (
     exLimit
   ) where
-
-import qualified Data.Text as Text
 
 import Reflex.Dom
 

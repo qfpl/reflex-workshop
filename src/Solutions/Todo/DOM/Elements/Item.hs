@@ -6,18 +6,13 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Solutions.Todo.DOM.Elements.Item where
 
-import Control.Monad
 import Data.Bool
 
 import Control.Lens
-
-import Data.Text (Text)
-import qualified Data.Text as Text
-
-import Data.Map (Map)
-import qualified Data.Map as Map
 
 import Reflex.Dom.Core
 
@@ -35,14 +30,15 @@ todoItem item =
     divClass "p-1" $
       button "x"
 
-todoItemSolution :: MonadWidget t m
+todoItemSolution :: forall t m.
+                    MonadWidget t m
                  => TodoItem
                  -> m ()
 todoItemSolution item = do
   eRemove <- el "div" $
     todoItem item
 
-  dCount <- count eRemove
+  dCount :: Dynamic t Int <- count eRemove
 
   el "div" $ do
     text "Remove has been pressed "

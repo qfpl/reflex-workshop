@@ -6,6 +6,7 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Dynamics.Unique (
     exUnique
   ) where
@@ -17,7 +18,6 @@ import qualified Data.Text as Text
 import Reflex.Dom
 
 import Types.Exercise
-import Util.Bootstrap
 
 import Exercises.Behaviors.Dynamics.Unique
 import Solutions.Behaviors.Dynamics.Unique

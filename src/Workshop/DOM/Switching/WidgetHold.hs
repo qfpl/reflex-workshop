@@ -6,6 +6,8 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Workshop.DOM.Switching.WidgetHold (
     exWidgetHold
   ) where
@@ -17,11 +19,12 @@ import Types.Exercise
 import Exercises.DOM.Switching.WidgetHold
 import Solutions.DOM.Switching.WidgetHold
 
-mkIn :: MonadWidget t m
+mkIn :: forall t m.
+        MonadWidget t m
      => m (Event t Bool)
 mkIn = do
   eTick <- tickLossyFromPostBuildTime 1
-  dCount <- count eTick
+  dCount :: Dynamic t Int <- count eTick
 
   let
     eTick' = (`mod` 6) . negate <$> updated dCount

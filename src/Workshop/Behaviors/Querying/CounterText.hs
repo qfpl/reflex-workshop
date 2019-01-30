@@ -7,12 +7,12 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Querying.CounterText (
     exCounterText
   ) where
 
 import Data.Text (Text)
-import qualified Data.Text as Text
 
 import Reflex.Dom
 

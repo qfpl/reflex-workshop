@@ -18,7 +18,6 @@ import Data.Aeson (toJSON, parseJSON)
 import Data.Dependent.Map (Some(..))
 import Data.GADT.Compare
 
-import Reflex.Dom.Storage.Base
 import Data.GADT.Aeson
 
 import State.Exercise

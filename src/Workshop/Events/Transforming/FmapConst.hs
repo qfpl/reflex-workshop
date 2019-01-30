@@ -9,6 +9,7 @@ Portability : non-portable
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Events.Transforming.FmapConst (
     exFmapConst
   ) where

@@ -7,6 +7,8 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Workshop.DOM.Switching.HigherOrder (
     exHigherOrder
   ) where
@@ -21,11 +23,12 @@ import Util.Bootstrap
 import Exercises.DOM.Switching.HigherOrder
 import Solutions.DOM.Switching.HigherOrder
 
-mkIn :: MonadWidget t m
+mkIn :: forall t m. 
+        MonadWidget t m
      => m (Dynamic t Bool)
 mkIn = do
   eTick <- tickLossyFromPostBuildTime 1
-  dCount <- count eTick
+  dCount :: Dynamic t Int <- count eTick
 
   let
     eTick' = (`mod` 6) . negate <$> updated dCount

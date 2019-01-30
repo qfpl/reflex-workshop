@@ -7,13 +7,13 @@ Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE GADTs #-}
 module Solutions.Todo.Collections.Model.List where
 
 import Control.Lens
 
 import qualified Data.Text as Text
 
-import Data.Map (Map)
 import qualified Data.Map as Map
 
 import Reflex.Dom.Core

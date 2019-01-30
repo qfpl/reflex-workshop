@@ -7,6 +7,7 @@ Portability : non-portable
 -}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE GADTs #-}
 module Types.Section where
 
 import Data.Text (Text)

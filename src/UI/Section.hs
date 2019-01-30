@@ -7,13 +7,12 @@ Portability : non-portable
 -}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module UI.Section (
     mkSection
   ) where
 
-import Control.Applicative ((<|>))
 import Control.Monad (void)
-import Data.Function (on)
 import Data.Semigroup ((<>))
 
 import Control.Monad.Reader (MonadReader)
@@ -22,7 +21,6 @@ import Reflex.Dom
 import Reflex.Dom.Routing.Nested
 import Reflex.Dom.Routing.Writer
 import Reflex.Dom.Storage.Class
-import Reflex.Dom.Template
 
 import State
 import State.Exercise

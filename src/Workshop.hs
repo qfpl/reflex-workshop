@@ -9,8 +9,6 @@ module Workshop (
     workshop
   ) where
 
-import Reflex.Dom.Core (MonadWidget)
-
 import Types.Section
 
 import Workshop.Events

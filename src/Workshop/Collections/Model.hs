@@ -6,9 +6,12 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Collections.Model (
     exModel
   ) where
+
+import Control.Monad (void)
 
 import Control.Lens
 
@@ -34,8 +37,9 @@ mk fn tis = divClass "row" $ do
 
   divClass "col" $ do
     el "div" . text $ "Completed items"
-    el "ul" . simpleList dComplete $
+    void . el "ul" . simpleList dComplete $
       el "li" . dynText
+        
 
   pure ()
 

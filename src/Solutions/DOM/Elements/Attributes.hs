@@ -6,12 +6,12 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Solutions.DOM.Elements.Attributes (
     attributesSolution
   ) where
 
 import Data.Bool
-import Data.Monoid
 
 import Reflex.Dom.Core
 

@@ -6,11 +6,10 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module UI.Demonstration (
    demonstrationRule
   ) where
-
-import Data.Semigroup ((<>))
 
 import Data.Text (Text)
 import qualified Data.Text as Text

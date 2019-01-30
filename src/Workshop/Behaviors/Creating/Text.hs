@@ -6,6 +6,7 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Workshop.Behaviors.Creating.Text (
     exText
   ) where
@@ -19,7 +20,6 @@ import Control.Lens
 import Reflex.Dom
 
 import Types.Exercise
-import Util.Bootstrap
 
 import Exercises.Behaviors.Creating.Text
 import Solutions.Behaviors.Creating.Text

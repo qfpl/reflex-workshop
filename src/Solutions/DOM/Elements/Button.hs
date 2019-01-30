@@ -6,13 +6,12 @@ Stability   : experimental
 Portability : non-portable
 -}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE GADTs #-}
 module Solutions.DOM.Elements.Button (
     buttonSolution
   ) where
 
 import Reflex.Dom.Core
-
-import Util.Bootstrap
 
 buttonSolution :: MonadWidget t m
                => m ()
@@ -28,7 +27,7 @@ buttonSolution = do
           (+ 1) <$ eAdd
         , const 0 <$ eReset
         ]
-  dCount <- foldDyn ($) 0 eChange
+  dCount <- foldDyn ($) (0 :: Int) eChange
 
   el "div" $
     display dCount
