@@ -2,9 +2,9 @@
 let
   reflex-workshop = import ../. {};
   reflex-workshop-assets = import ../content {};
-  reflex-workshop-vm = import ../nix/vm.nix { oldNixpkgs = nixpkgs; };
+  # reflex-workshop-vm = import ../nix/vm.nix { oldNixpkgs = nixpkgs; };
   jobs = {
-    inherit reflex-workshop reflex-workshop-assets reflex-workshop-vm;
+    inherit reflex-workshop reflex-workshop-assets; # reflex-workshop-vm;
   };
 in
   jobs
