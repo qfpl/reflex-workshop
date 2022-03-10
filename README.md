@@ -40,9 +40,28 @@ appliance. Now that the QFPL Hydra no longer exists, you will have to
 build it yourself if you want it.
 
 `nix build -f nix/vm.nix` will build the appliance, but be warned: it
-will take a few hours and peak at about **25GiB** of disk usage. Mount
-a large, empty directory over `/tmp` before building - your tmpfs
-won't cut it.
+will take a while and peak at about **25GiB** of disk usage. If you
+have a `tmpfs` mounted on `/tmp`, you will run out of space. I usually
+do something like this:
+
+```shell
+  # On a multi-user nix install, build commands are passed
+  # through the nix daemon. We switch to root to avoid this.
+  # On a single-user nix install, working as root is probably
+  # not necessary.
+$ sudo -i
+
+# mkdir /vmtmp
+
+  # --no-link stops the creation of a `result` symlink owned by root.
+# TMPDIR=/vmtmp nix build -f /path/to/vm.nix --no-link -L
+
+# rmdir /vmtmp
+
+  # As your normal user, re-run the build (which will be quick), to get
+  # the link to the .ova from the nix store:
+$ nix build -f /path/to/vm.nix
+```
 
 ## Getting set up
 
