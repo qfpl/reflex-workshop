@@ -1,0 +1,74 @@
+{
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "82e5cd1ad3c387863f0545d7591512e76ab0fc41",
+        "sha256": "090l219mzc0gi33i3psgph6s2pwsc8qy4lyrqjdj4qzkvmaj65a7",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/82e5cd1ad3c387863f0545d7591512e76ab0fc41.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "reflex-dom-contrib": {
+        "branch": "master",
+        "description": null,
+        "homepage": null,
+        "owner": "reflex-frp",
+        "repo": "reflex-dom-contrib",
+        "rev": "bc1b3c0ea689621a0d04b162c9c5ce83497b3ff5",
+        "sha256": "0fflq23sr5gxnf2piy3qxdq2aj7bhqacy3skxnw83m01xxq7clnl",
+        "type": "tarball",
+        "url": "https://github.com/reflex-frp/reflex-dom-contrib/archive/bc1b3c0ea689621a0d04b162c9c5ce83497b3ff5.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "reflex-dom-nested-routing": {
+        "branch": "master",
+        "description": "Nested client-side routing for Reflex-DOM",
+        "homepage": null,
+        "owner": "3noch",
+        "repo": "reflex-dom-nested-routing",
+        "rev": "c49c75c693de8516d1b19314be500482bea9426c",
+        "sha256": "00bmakqm9893h8l3w7l1r1fjkpyffifcaicqmj2q5wwlfvm96hbf",
+        "type": "tarball",
+        "url": "https://github.com/3noch/reflex-dom-nested-routing/archive/c49c75c693de8516d1b19314be500482bea9426c.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "reflex-dom-storage": {
+        "branch": "master",
+        "description": null,
+        "homepage": null,
+        "owner": "qfpl",
+        "repo": "reflex-dom-storage",
+        "rev": "5b39a385456587d051b4907f98a8f408c6720f18",
+        "sha256": "1lzr1ibhibxkrnn9vn76vs31nmsxyw5bwjj4yrki68zvgr2s9fzw",
+        "type": "tarball",
+        "url": "https://github.com/qfpl/reflex-dom-storage/archive/5b39a385456587d051b4907f98a8f408c6720f18.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "reflex-dom-template": {
+        "branch": "master",
+        "description": null,
+        "homepage": null,
+        "owner": "qfpl",
+        "repo": "reflex-dom-template",
+        "rev": "99e569b15e2611a4171afe2deedf851a46d8482f",
+        "sha256": "04sjasrixx96fycdxf3llbd49ziyfn6d9b3zi7gjqy4dg2ifm26j",
+        "type": "tarball",
+        "url": "https://github.com/qfpl/reflex-dom-template/archive/99e569b15e2611a4171afe2deedf851a46d8482f.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "reflex-platform": {
+        "branch": "develop",
+        "description": "A curated package set and set of tools that let you build Haskell packages so they can run on a variety of platforms. reflex-platform is built on top of the nix package manager.",
+        "homepage": "https://reflex-frp.org",
+        "owner": "reflex-frp",
+        "repo": "reflex-platform",
+        "rev": "4a38aedb20ae0a39b5d26745becc1c5e5924c092",
+        "sha256": "04dpxd5bsa73rsnf540ji8yr0gppp0iydma7phx2nv17dqrxw8jz",
+        "type": "tarball",
+        "url": "https://github.com/reflex-frp/reflex-platform/archive/4a38aedb20ae0a39b5d26745becc1c5e5924c092.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

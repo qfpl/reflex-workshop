@@ -1,11 +1,10 @@
-{ reflex-platform ? import ./../../deps/reflex-platform {}
-, compiler   ? "ghc"
-} :
+{ compiler ? "ghc" }:
 let
-
+  sources = import ../../nix/sources.nix {};
+  reflex-platform = import sources.reflex-platform {};
   pkgs = reflex-platform.nixpkgs.pkgs;
-  ghc = reflex-platform.${compiler};
 
+  ghc = reflex-platform.${compiler};
   modifiedHaskellPackages = ghc.override {
     overrides = self: super: {
       pandoc = pkgs.haskell.lib.doJailbreak super.pandoc;

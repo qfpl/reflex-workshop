@@ -1,7 +1,8 @@
-{ nixpkgs ? import <nixpkgs> {} 
-, local ? true
-}:
+{ local ? true }:
 let
+  sources = import ../nix/sources.nix {};
+  reflex-platform = import sources.reflex-platform {};
+  inherit (reflex-platform) nixpkgs;
   inherit (nixpkgs) pkgs;
 in
 with pkgs; stdenv.mkDerivation {

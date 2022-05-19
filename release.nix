@@ -1,0 +1,1 @@
+{ vm = import ./vm.nix; }
