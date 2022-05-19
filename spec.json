@@ -1,0 +1,27 @@
+{
+  "reflex-workshop": {
+    "enabled": 1,
+    "hidden": false,
+    "description": "QFPL Reflex Workshop VM",
+    "nixexprinput": "reflex-workshop",
+    "nixexprpath": "release.nix",
+    "checkinterval": 300,
+    "schedulingshares": 100,
+    "enableemail": false,
+    "enable_dynamic_run_command": false,
+    "emailoverride": "",
+    "keepnr": 1,
+    "inputs": {
+      "nixpkgs": {
+        "type": "git",
+        "value": "https://github.com/nixos/nixpkgs nixos-18.09",
+        "emailresponsible": false
+      },
+      "reflex-workshop": {
+        "type": "git",
+        "value": "https://github.com/qfpl/reflex-workshop",
+        "emailresponsible": false
+      }
+    }
+  }
+}

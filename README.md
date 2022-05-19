@@ -35,14 +35,14 @@ nix-shell
 
 ## VirtualBox Appliance
 
-`nix/vm.nix` is a nix expression that builds a VirtualBox
-appliance. Now that the QFPL Hydra no longer exists, you will have to
-build it yourself if you want it.
+`vm.nix` is a nix expression that builds a VirtualBox appliance. Now
+that the QFPL Hydra no longer exists, you will have to build it
+yourself if you want it.
 
-`nix build -f nix/vm.nix` will build the appliance, but be warned: it
-will take a while and peak at about **25GiB** of disk usage. If you
-have a `tmpfs` mounted on `/tmp`, you will run out of space. I usually
-do something like this:
+`nix build -f vm.nix` will build the appliance, but be warned: it will
+take a while and peak at about **25GiB** of disk usage. If you have a
+`tmpfs` mounted on `/tmp`, you will run out of space. I usually do
+something like this:
 
 ```shell
   # On a multi-user nix install, build commands are passed
