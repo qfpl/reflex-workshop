@@ -1,5 +1,5 @@
-{ mkDerivation, pkgs, aeson, base, bytestring, containers, dependent-map
-, dependent-sum, errors, exception-transformers, filepath
+{ mkDerivation, newNixpkgs, aeson, base, bytestring, containers
+, dependent-map, dependent-sum, errors, exception-transformers, filepath
 , ghcjs-dom, jsaddle, jsaddle-warp, lens, mtl, ref-tf, reflex
 , reflex-dom, reflex-dom-contrib, reflex-dom-nested-routing
 , reflex-dom-storage, reflex-dom-template, stdenv, text
@@ -8,7 +8,11 @@
 mkDerivation {
   pname = "workshop";
   version = "0.1";
-  src = pkgs.lib.cleanSource ./.;
+  src = newNixpkgs.lib.cleanSourceWith {
+    src = ./.;
+    name = "reflex-workshop-source";
+    filter = newNixpkgs.lib.cleanSourceFilter;
+  };
   libraryHaskellDepends = [
     aeson base bytestring containers dependent-map dependent-sum errors
     exception-transformers filepath ghcjs-dom jsaddle jsaddle-warp lens

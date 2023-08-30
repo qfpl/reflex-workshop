@@ -22,6 +22,6 @@ let
         super.callPackage (sources.reflex-dom-template.outPath) {};
     };
   };
-  drv = haskellPackages.callPackage ./workshop.nix {};
+  drv = haskellPackages.callPackage ./workshop.nix { newNixpkgs = import sources.nixpkgs {}; };
 in
   drv
