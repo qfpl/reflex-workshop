@@ -1,19 +1,16 @@
 let
   sources = import ./nix/sources.nix {};
+  newNixpkgs = import sources.nixpkgs {};
   reflex-platform = import sources.reflex-platform {};
   inherit (reflex-platform) nixpkgs;
   inherit (nixpkgs) pkgs;
 
   workshop-pkg = import ./. {};
   reflex-workshop-assets = import ./content {};
-  reflex-workshop = pkgs.stdenv.mkDerivation {
+  reflex-workshop = newNixpkgs.lib.cleanSourceWith {
+    src = ./.;
     name = "reflex-workshop-source";
-    src = pkgs.lib.cleanSource ./.;
-    phases = ["installPhase"];
-    installPhase = ''
-      mkdir $out
-      cp -r $src/* $out/
-    '';
+    filter = newNixpkgs.lib.cleanSourceFilter;
   };
 
   tools = with pkgs; [

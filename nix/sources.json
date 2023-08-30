@@ -11,6 +11,18 @@
         "url": "https://github.com/nmattia/niv/archive/82e5cd1ad3c387863f0545d7591512e76ab0fc41.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nixpkgs": {
+        "branch": "nixos-23.05",
+        "description": "Nix Packages collection & NixOS",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ea5234e7073d5f44728c499192544a84244bf35a",
+        "sha256": "1iqfglh1fdgqxm7n4763k1cipna68sa0cb3azm2gdzhr374avcvk",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/ea5234e7073d5f44728c499192544a84244bf35a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "reflex-dom-contrib": {
         "branch": "master",
         "description": null,
