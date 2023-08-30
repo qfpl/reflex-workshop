@@ -1,4 +1,4 @@
-{ mkDerivation, aeson, base, bytestring, containers, dependent-map
+{ mkDerivation, pkgs, aeson, base, bytestring, containers, dependent-map
 , dependent-sum, errors, exception-transformers, filepath
 , ghcjs-dom, jsaddle, jsaddle-warp, lens, mtl, ref-tf, reflex
 , reflex-dom, reflex-dom-contrib, reflex-dom-nested-routing
@@ -8,7 +8,7 @@
 mkDerivation {
   pname = "workshop";
   version = "0.1";
-  src = ./.;
+  src = pkgs.lib.cleanSource ./.;
   libraryHaskellDepends = [
     aeson base bytestring containers dependent-map dependent-sum errors
     exception-transformers filepath ghcjs-dom jsaddle jsaddle-warp lens
